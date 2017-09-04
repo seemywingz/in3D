@@ -37,14 +37,10 @@ func initOpenGL() uint32 {
 	log.Println("OpenGL version", version)
 
 	vertexShader, err := compileShader(vertexShaderSource, gl.VERTEX_SHADER)
-	if err != nil {
-		panic(err)
-	}
+	gt.EoE("Error Compiling Vertex Shader", err)
 
 	fragmentShader, err := compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER)
-	if err != nil {
-		panic(err)
-	}
+	gt.EoE("Error Compiling Fragment Shader", err)
 
 	prog := gl.CreateProgram()
 	gl.AttachShader(prog, vertexShader)

@@ -8,8 +8,8 @@ import (
 )
 
 const (
-	width  = 500
-	height = 500
+	width  = 800
+	height = 600
 
 	vertexShaderSource = `
 		#version 410
@@ -29,11 +29,7 @@ const (
 )
 
 var (
-	triangle = []float32{
-		0, 0.5, 0,
-		-0.5, -0.5, 0,
-		0.5, -0.5, 0,
-	}
+	t Triangle
 )
 
 func main() {
@@ -43,9 +39,10 @@ func main() {
 	defer glfw.Terminate()
 	program := initOpenGL()
 
-	vao := makeVao(triangle)
+	t = Triangle.New(t)
+
 	for !window.ShouldClose() {
-		draw(vao, window, program)
+		draw(t.Vao, window, program)
 	}
 }
 
@@ -54,7 +51,7 @@ func draw(vao uint32, window *glfw.Window, program uint32) {
 	gl.UseProgram(program)
 
 	gl.BindVertexArray(vao)
-	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(triangle)/3))
+	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(t.Points)/3))
 
 	glfw.PollEvents()
 	window.SwapBuffers()
