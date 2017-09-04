@@ -11,22 +11,6 @@ const (
 	width  = 800
 	height = 600
 	title  = "go-gl Boiler"
-
-	vertexShaderSource = `
-		#version 410
-		in vec3 vp;
-		void main() {
-			gl_Position = vec4(vp, 1.0);
-		}
-	` + "\x00"
-
-	fragmentShaderSource = `
-		#version 410
-		out vec4 frag_colour;
-		void main() {
-			frag_colour = vec4(1, 1, 1, 1.0);
-		}
-	` + "\x00"
 )
 
 var (
@@ -42,7 +26,7 @@ func main() {
 
 	initGL()
 
-	triangels = append(triangels, Triangle{}.New())
+	triangels = append(triangels, Triangle{}.New(1, 1, 1))
 
 	for !window.ShouldClose() {
 		draw()
