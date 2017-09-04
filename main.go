@@ -9,7 +9,7 @@ import (
 
 const (
 	width  = 800
-	height = 600
+	height = 800
 	title  = "go-gl Boiler"
 )
 
@@ -26,17 +26,23 @@ func main() {
 
 	initGL()
 
-	points := []float32{
-		0, 0.5, 0,
+	square := []float32{
+		-0.5, 0.5, 0,
 		-0.5, -0.5, 0,
 		0.5, -0.5, 0,
+
+		-0.5, 0.5, 0,
+		0.5, 0.5, 0,
+		0.5, -0.5, 0,
 	}
-	// points := []float32{
+
+	// triangle := []float32{
 	// 	0, 0.5, 0,
 	// 	-0.5, -0.5, 0,
 	// 	0.5, -0.5, 0,
 	// }
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(1, 0, 1, points))
+
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(1, 0, 1, square))
 
 	for !window.ShouldClose() {
 		draw()
