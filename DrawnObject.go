@@ -6,31 +6,23 @@ import (
 	"github.com/go-gl/gl/v4.1-core/gl"
 )
 
-// Square : a struct to hold openGL triangle data
-type DrawnObject struct {
+// DrawnObject : interface for opengl drawable object
+type DrawnObject interface {
+	Draw()
+}
+
+// DrawnObjectData : a struct to hold openGL object data
+type DrawnObjectData struct {
 	Vao     *uint32
 	Program uint32
 	Points  []float32
 }
 
-var (
-	vao    uint32
-	points = []float32{
-		0, 0.5, 0,
-		-0.5, -0.5, 0,
-		0.5, -0.5, 0,
-	}
-)
-
-// New : Create a new Square
-func (d DrawnObject) New(r, g, b float32) DrawnObject {
+// New : Create a new object
+func (d DrawnObjectData) New(r, g, b float32, points []float32) DrawnObjectData {
 	rs := strconv.FormatFloat(float64(r), 'f', 6, 32)
 	rg := strconv.FormatFloat(float64(g), 'f', 6, 32)
 	rb := strconv.FormatFloat(float64(b), 'f', 6, 32)
-
-	if vao == 0 {
-		vao = makeVao(points)
-	}
 
 	vertexShaderSource := `
   		#version 410
@@ -49,11 +41,12 @@ func (d DrawnObject) New(r, g, b float32) DrawnObject {
   	` + "\x00"
 
 	program := createGLprogram(vertexShaderSource, fragmentShaderSource)
-	return DrawnObject{&vao, program, points}
+	vao := makeVao(points)
+	return DrawnObjectData{&vao, program, points}
 }
 
 // Draw : draw the triangle
-func (d DrawnObject) Draw() {
+func (d DrawnObjectData) Draw() {
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(*d.Vao)
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Points)/3))

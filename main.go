@@ -26,7 +26,17 @@ func main() {
 
 	initGL()
 
-	drawnObjects = append(drawnObjects, DrawnObject{}.New(1, 0, 1))
+	points := []float32{
+		0, 0.5, 0,
+		-0.5, -0.5, 0,
+		0.5, -0.5, 0,
+	}
+	// points := []float32{
+	// 	0, 0.5, 0,
+	// 	-0.5, -0.5, 0,
+	// 	0.5, -0.5, 0,
+	// }
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(1, 0, 1, points))
 
 	for !window.ShouldClose() {
 		draw()
