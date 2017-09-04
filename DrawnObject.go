@@ -13,7 +13,7 @@ type DrawnObject interface {
 
 // DrawnObjectData : a struct to hold openGL object data
 type DrawnObjectData struct {
-	Vao     *uint32
+	Vao     uint32
 	Program uint32
 	Points  []float32
 }
@@ -42,12 +42,12 @@ func (d DrawnObjectData) New(r, g, b float32, points []float32) DrawnObjectData 
 
 	program := createGLprogram(vertexShaderSource, fragmentShaderSource)
 	vao := makeVao(points)
-	return DrawnObjectData{&vao, program, points}
+	return DrawnObjectData{vao, program, points}
 }
 
 // Draw : draw the triangle
 func (d DrawnObjectData) Draw() {
 	gl.UseProgram(d.Program)
-	gl.BindVertexArray(*d.Vao)
+	gl.BindVertexArray(d.Vao)
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Points)/3))
 }
