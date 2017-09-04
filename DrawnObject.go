@@ -1,14 +1,27 @@
 package main
 
 import (
-	"strconv"
-
 	"github.com/go-gl/gl/v4.1-core/gl"
+	gt "github.com/seemywingz/gtils"
 )
 
 // DrawnObject : interface for opengl drawable object
 type DrawnObject interface {
 	Draw()
+}
+
+// Color : struct to store RGB colors as float32
+type Color struct {
+	R float32
+	G float32
+	B float32
+}
+
+// Position : struct to store 3D coords
+type Position struct {
+	X float32
+	Y float32
+	Z float32
 }
 
 // DrawnObjectData : a struct to hold openGL object data
@@ -19,16 +32,12 @@ type DrawnObjectData struct {
 }
 
 // New : Create a new object
-func (d DrawnObjectData) New(r, g, b float32, points []float32) DrawnObjectData {
-	rs := strconv.FormatFloat(float64(r), 'f', 6, 32)
-	rg := strconv.FormatFloat(float64(g), 'f', 6, 32)
-	rb := strconv.FormatFloat(float64(b), 'f', 6, 32)
-
+func (d DrawnObjectData) New(color Color, points []float32) DrawnObjectData {
 	vertexShaderSource := `
   		#version 410
   		in vec3 vp;
   		void main() {
-  			gl_Position = vec4(vp, 1.0);
+  			gl_Position = vec4(vp, 10.0);
   		}
   	` + "\x00"
 
@@ -36,7 +45,7 @@ func (d DrawnObjectData) New(r, g, b float32, points []float32) DrawnObjectData 
   		#version 410
   		out vec4 frag_colour;
   		void main() {
-  			frag_colour = vec4(` + rs + `, ` + rg + `, ` + rb + `, 1.0);
+  			frag_colour = vec4(` + gt.FtoA(color.R) + `, ` + gt.FtoA(color.G) + `, ` + gt.FtoA(color.B) + `, 1.0);
   		}
   	` + "\x00"
 
@@ -49,5 +58,6 @@ func (d DrawnObjectData) New(r, g, b float32, points []float32) DrawnObjectData 
 func (d DrawnObjectData) Draw() {
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
+
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Points)/3))
 }
