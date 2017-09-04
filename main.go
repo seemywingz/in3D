@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"runtime"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
@@ -10,6 +11,7 @@ import (
 const (
 	width  = 800
 	height = 600
+	title  = "go-gl Boiler"
 
 	vertexShaderSource = `
 		#version 410
@@ -29,26 +31,31 @@ const (
 )
 
 var (
+	window    *glfw.Window
 	triangels []Triangle
 )
 
 func main() {
 	runtime.LockOSThread()
 
-	window := initGlfw(width, height, "Go-GL Boiler")
+	window = initGlfw(width, height, title)
 	defer glfw.Terminate()
-	program := initOpenGL()
+
+	if err := gl.Init(); err != nil {
+		panic(err)
+	}
+	version := gl.GoStr(gl.GetString(gl.VERSION))
+	log.Println("OpenGL version", version)
 
 	triangels = append(triangels, Triangle{}.New())
 
 	for !window.ShouldClose() {
-		draw(window, program)
+		draw()
 	}
 }
 
-func draw(window *glfw.Window, program uint32) {
+func draw() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-	gl.UseProgram(program)
 
 	for _, obj := range triangels {
 		obj.Draw()

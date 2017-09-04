@@ -12,9 +12,7 @@ import (
 
 // initGlfw initializes glfw and returns a Window to use.
 func initGlfw(width, height int, title string) *glfw.Window {
-	err := glfw.Init()
-	gt.EoE("Error Initializing GLFW", err)
-
+	gt.EoE("Error Initializing GLFW", glfw.Init())
 	glfw.WindowHint(glfw.Resizable, glfw.False)
 	glfw.WindowHint(glfw.ContextVersionMajor, 4)
 	glfw.WindowHint(glfw.ContextVersionMinor, 1)
@@ -28,14 +26,13 @@ func initGlfw(width, height int, title string) *glfw.Window {
 	return window
 }
 
-// initOpenGL initializes OpenGL and returns an intiialized program.
-func initOpenGL() uint32 {
-	if err := gl.Init(); err != nil {
-		panic(err)
-	}
+func initGL() {
+	gt.EoE("Error Initializing OpenGL", gl.Init())
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	log.Println("OpenGL version", version)
+}
 
+func createGLprogram(vertexShaderSource, fragmentShaderSource string) uint32 {
 	vertexShader, err := compileShader(vertexShaderSource, gl.VERTEX_SHADER)
 	gt.EoE("Error Compiling Vertex Shader", err)
 

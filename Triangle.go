@@ -4,8 +4,9 @@ import "github.com/go-gl/gl/v4.1-core/gl"
 
 // Triangle : a struct to hold openGL triangle data
 type Triangle struct {
-	Points []float32
-	Vao    *uint32
+	Vao     *uint32
+	Program uint32
+	Points  []float32
 }
 
 var (
@@ -22,11 +23,13 @@ func (t Triangle) New() Triangle {
 	if vao == 0 {
 		vao = makeVao(points)
 	}
-	return Triangle{points, &vao}
+	program := createGLprogram(vertexShaderSource, fragmentShaderSource)
+	return Triangle{&vao, program, points}
 }
 
 // Draw : draw the triangle
 func (t Triangle) Draw() {
+	gl.UseProgram(t.Program)
 	gl.BindVertexArray(*t.Vao)
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(t.Points)/3))
 }
