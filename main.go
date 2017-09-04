@@ -29,7 +29,7 @@ const (
 )
 
 var (
-	t Triangle
+	triangels []Triangle
 )
 
 func main() {
@@ -39,19 +39,20 @@ func main() {
 	defer glfw.Terminate()
 	program := initOpenGL()
 
-	t = Triangle.New(t)
+	triangels = append(triangels, Triangle{}.New())
 
 	for !window.ShouldClose() {
-		draw(t.Vao, window, program)
+		draw(window, program)
 	}
 }
 
-func draw(vao uint32, window *glfw.Window, program uint32) {
+func draw(window *glfw.Window, program uint32) {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 	gl.UseProgram(program)
 
-	gl.BindVertexArray(vao)
-	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(t.Points)/3))
+	for _, obj := range triangels {
+		obj.Draw()
+	}
 
 	glfw.PollEvents()
 	window.SwapBuffers()
