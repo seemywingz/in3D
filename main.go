@@ -26,24 +26,24 @@ func main() {
 
 	initGL()
 
-	square := []float32{
-		-0.5, 0.5, 0,
-		-0.5, -0.5, 0,
-		0.5, -0.5, 0,
-
-		-0.5, 0.5, 0,
-		0.5, 0.5, 0,
-		0.5, -0.5, 0,
-	}
+	// square := []float32{
+	// 	-0.5, 0.5, 0,
+	// 	-0.5, -0.5, 0,
+	// 	0.5, -0.5, 0,
+	//
+	// 	-0.5, 0.5, 0,
+	// 	0.5, 0.5, 0,
+	// 	0.5, -0.5, 0,
+	// }
 
 	triangle := []float32{
-		0, 1, 0,
+		0, 0.5, 0,
 		-0.5, -0.5, 0,
 		0.5, -0.5, 0,
 	}
 
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Color{1, 0, 1}, square))
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Color{0, 0, 1}, triangle))
+	// drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Color{1, 0, 1}, square))
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 10}, Color{0, 0, 1}, triangle))
 
 	for !window.ShouldClose() {
 		draw()

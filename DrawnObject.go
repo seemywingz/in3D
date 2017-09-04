@@ -29,15 +29,16 @@ type DrawnObjectData struct {
 	Vao     uint32
 	Program uint32
 	Points  []float32
+	Position
 }
 
 // New : Create a new object
-func (d DrawnObjectData) New(color Color, points []float32) DrawnObjectData {
+func (d DrawnObjectData) New(p Position, c Color, points []float32) DrawnObjectData {
 	vertexShaderSource := `
   		#version 410
   		in vec3 vp;
   		void main() {
-  			gl_Position = vec4(vp, 10.0);
+  			gl_Position = vec4(vp, ` + gt.FtoA(p.Z) + `);
   		}
   	` + "\x00"
 
@@ -45,13 +46,13 @@ func (d DrawnObjectData) New(color Color, points []float32) DrawnObjectData {
   		#version 410
   		out vec4 frag_colour;
   		void main() {
-  			frag_colour = vec4(` + gt.FtoA(color.R) + `, ` + gt.FtoA(color.G) + `, ` + gt.FtoA(color.B) + `, 1.0);
+  			frag_colour = vec4(` + gt.FtoA(c.R) + `, ` + gt.FtoA(c.G) + `, ` + gt.FtoA(c.B) + `, 1.0);
   		}
   	` + "\x00"
 
 	program := createGLprogram(vertexShaderSource, fragmentShaderSource)
 	vao := makeVao(points)
-	return DrawnObjectData{vao, program, points}
+	return DrawnObjectData{vao, program, points, Position{}}
 }
 
 // Draw : draw the triangle
