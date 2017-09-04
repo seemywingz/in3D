@@ -43,7 +43,7 @@ func main() {
 	}
 
 	// drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Color{1, 0, 1}, square))
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 10}, Color{0, 0, 1}, triangle))
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 1}, Color{0, 0, 1}, triangle))
 
 	for !window.ShouldClose() {
 		draw()

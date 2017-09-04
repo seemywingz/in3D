@@ -39,11 +39,12 @@ func createGLprogram(vertexShaderSource, fragmentShaderSource string) uint32 {
 	fragmentShader, err := compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER)
 	gt.EoE("Error Compiling Fragment Shader", err)
 
-	prog := gl.CreateProgram()
-	gl.AttachShader(prog, vertexShader)
-	gl.AttachShader(prog, fragmentShader)
-	gl.LinkProgram(prog)
-	return prog
+	program := gl.CreateProgram()
+	gl.AttachShader(program, vertexShader)
+	gl.AttachShader(program, fragmentShader)
+
+	gl.LinkProgram(program)
+	return program
 }
 
 // makeVao initializes and returns a vertex array from the points provided.
