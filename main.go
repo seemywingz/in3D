@@ -14,8 +14,8 @@ const (
 )
 
 var (
-	window    *glfw.Window
-	triangels []Triangle
+	window       *glfw.Window
+	drawnObjects []DrawnObject
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 
 	initGL()
 
-	triangels = append(triangels, Triangle{}.New(1, 1, 1))
+	drawnObjects = append(drawnObjects, DrawnObject{}.New(1, 0, 1))
 
 	for !window.ShouldClose() {
 		draw()
@@ -36,7 +36,7 @@ func main() {
 func draw() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
-	for _, obj := range triangels {
+	for _, obj := range drawnObjects {
 		obj.Draw()
 	}
 
