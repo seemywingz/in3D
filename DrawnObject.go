@@ -36,9 +36,9 @@ type DrawnObjectData struct {
 func (d DrawnObjectData) New(p Position, c Color, points []float32) DrawnObjectData {
 	vertexShaderSource := `
   		#version 410
-  		in vec4 vp;
+  		in vec3 vp;
   		void main() {
-  			gl_Position = vec4(vp);
+  			gl_Position = vec4(vp, 1);
   		}
   	` + "\x00"
 
@@ -52,7 +52,7 @@ func (d DrawnObjectData) New(p Position, c Color, points []float32) DrawnObjectD
 
 	program := createGLprogram(vertexShaderSource, fragmentShaderSource)
 	vao := makeVao(points)
-	return DrawnObjectData{vao, program, points, Position{}}
+	return DrawnObjectData{vao, program, points, p}
 }
 
 // Draw : draw the triangle
