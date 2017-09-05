@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"strings"
 
@@ -9,6 +10,13 @@ import (
 	"github.com/go-gl/glfw/v3.2/glfw"
 	gt "github.com/seemywingz/gtils"
 )
+
+// readShaderFile : read the shader file and return null terminated string
+func readShaderFile(filePath string) string {
+	data, err := ioutil.ReadFile(filePath)
+	gt.EoE("Error Reading Shader File", err)
+	return string(data) + "\x00"
+}
 
 // initGlfw initializes glfw and returns a Window to use.
 func initGlfw(width, height int, title string) *glfw.Window {
