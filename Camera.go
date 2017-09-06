@@ -40,7 +40,7 @@ func (c Camera) New() Camera {
 	defer free()
 	mvpid := gl.GetUniformLocation(shaders[0], *mvPointer)
 
-	//Projection matrix : 45° Field of View, width:heigh ratio, display range : 0.1 unit <-> 100 units
+	//Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 100 units
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), width/height, 0.1, 100)
 	//model matrix : and identity matrix (model will be at te origin)
 	model := mgl32.Ident4()
