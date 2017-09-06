@@ -45,7 +45,7 @@ func main() {
 	initGL()
 	loadShaders()
 
-	camera = Camera{}.New(Position{0, 0, -5})
+	camera = Camera{}.New(Position{0, 0, -10})
 
 	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 1}, Color{0, 0, 1}, triangle, shaders[0]))
 

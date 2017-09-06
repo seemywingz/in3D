@@ -44,12 +44,11 @@ func (Camera) New(position Position) Camera {
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), width/height, 0.1, 100)
 	//model matrix : and identity matrix (model will be at te origin)
 	model := mgl32.Ident4()
-	view := mgl32.Ident4()
-	// view := mgl32.LookAt(
-	// 	c.X, c.Y, c.Z, //Camera is at (x, y, z), in world space
-	// 	0, 0, 0, //and looks at the origin
-	// 	0, 1, 0, //head is up (set to 0, -1, 0 to look upside-down)
-	// )
+	view := mgl32.LookAt(
+		position.X, position.Y, position.Z, //Camera is at (x, y, z), in world space
+		0, 0, 0, //and looks at the origin
+		0, 1, 0, //head is up (set to 0, -1, 0 to look upside-down)
+	)
 	mvp := projection.Mul4(view.Mul4(model))
 
 	return Camera{projection, model, view, mvp, mvpid, position}
