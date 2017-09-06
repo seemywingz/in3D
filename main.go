@@ -16,6 +16,21 @@ const (
 var (
 	window       *glfw.Window
 	drawnObjects []DrawnObject
+	camera       Camera
+	triangle     = []float32{
+		0, 0.5, 0,
+		-0.5, -0.5, 0,
+		0.5, -0.5, 0,
+	}
+	square = []float32{
+		-0.5, 0.5, 0,
+		-0.5, -0.5, 0,
+		0.5, -0.5, 0,
+
+		-0.5, 0.5, 0,
+		0.5, 0.5, 0,
+		0.5, -0.5, 0,
+	}
 )
 
 func main() {
@@ -26,23 +41,9 @@ func main() {
 
 	initGL()
 
-	// square := []float32{
-	// 	-0.5, 0.5, 0,
-	// 	-0.5, -0.5, 0,
-	// 	0.5, -0.5, 0,
-	//
-	// 	-0.5, 0.5, 0,
-	// 	0.5, 0.5, 0,
-	// 	0.5, -0.5, 0,
-	// }
+	camera = Camera{}.New()
+	drawnObjects = append(drawnObjects, camera)
 
-	triangle := []float32{
-		0, 0.5, 0,
-		-0.5, -0.5, 0,
-		0.5, -0.5, 0,
-	}
-
-	// drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Color{1, 0, 1}, square))
 	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 1}, Color{0, 0, 1}, triangle))
 
 	for !window.ShouldClose() {

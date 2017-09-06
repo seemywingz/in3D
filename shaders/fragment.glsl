@@ -1,5 +1,9 @@
 #version 410
-out vec4 frag_colour;
+
+// Hard Code Color for Now
+uniform vec4 inputColour = vec4(1,1,1,1);
+out vec4 fragColour;
+
 void main() {
-  frag_colour = vec4(1,1,1,1);
+  fragColour = inputColour;
 }
