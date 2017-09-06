@@ -27,14 +27,13 @@ func initGlfw(width, height int, title string) *glfw.Window {
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 
-	window, err := glfw.CreateWindow(width, height, title, nil, nil)
-	window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
-	window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
-
+	newWindow, err := glfw.CreateWindow(width, height, title, nil, nil)
 	gt.EoE("Error Creating GLFW Window", err)
-	window.MakeContextCurrent()
+	newWindow.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+	newWindow.SetInputMode(glfw.StickyMouseButtonsMode, 1)
+	newWindow.MakeContextCurrent()
 
-	return window
+	return newWindow
 }
 
 func initGL() {

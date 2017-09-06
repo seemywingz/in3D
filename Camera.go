@@ -17,32 +17,30 @@ type Camera struct {
 	MVP        mgl32.Mat4
 	MVPID      int32
 	Position
+	CameraData
 }
 
-var (
-	xangle float32
-	yangle float32
-	lastX  float64
-	lastY  float64
-)
+// CameraData : struct to hold CameraData
+type CameraData struct {
+	Xangle float32
+	Yangle float32
+	LastX  float64
+	LastY  float64
+}
 
 // MouseControls : control the camera via the mouse
-func (Camera) MouseControls() {
+func (c *Camera) MouseControls() {
 	x, y := window.GetCursorPos()
-	if lastX == 0 && lastY == 0 {
-		lastX = x
-		lastY = y
-	}
-	yangle += -float32(lastX - x)
-	xangle += -float32(lastY - y)
+	c.Yangle += -float32(c.LastX - x)
+	c.Xangle += -float32(c.LastY - y)
 	if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
 		fmt.Println("Click")
 	}
-	lastX = x
-	lastY = y
+	c.LastX = x
+	c.LastY = y
 }
 
-// KeyControls :
+// KeyControls : control the camera via the keyboard
 func (c *Camera) KeyControls() {
 	if window.GetKey(glfw.KeyEscape) == glfw.Press {
 		os.Exit(1)
@@ -76,8 +74,8 @@ func (c *Camera) Update() {
 	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
 	model := translateMatrix.Mul4(c.Model)
 
-	xrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(xangle), mgl32.Vec3{1, 0, 0})
-	yrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(yangle), mgl32.Vec3{0, 1, 0})
+	xrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.Xangle), mgl32.Vec3{1, 0, 0})
+	yrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.Yangle), mgl32.Vec3{0, 1, 0})
 	c.View = xrotMatrix.Mul4(yrotMatrix.Mul4(c.Model))
 
 	c.MVP = c.Projection.Mul4(c.View.Mul4(model))
@@ -102,5 +100,10 @@ func (Camera) New(position Position) Camera {
 	)
 	mvp := projection.Mul4(view.Mul4(model))
 
-	return Camera{projection, model, view, mvp, mvpid, position}
+	cam := Camera{projection, model, view, mvp, mvpid, position, CameraData{}}
+	x, y := window.GetCursorPos()
+	cam.LastX = x
+	cam.LastY = y
+
+	return cam
 }
