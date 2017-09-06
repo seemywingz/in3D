@@ -57,7 +57,7 @@ func main() {
 		z := float32(rand.Intn(max-min) + min)
 		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, triangle, shaders[0]))
 	}
-	// drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{1, 0, -50}, triangle, shaders[0]))
+	camera.PointerLock = true
 
 	for !window.ShouldClose() {
 		camera.Update()

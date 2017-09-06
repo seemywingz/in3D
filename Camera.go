@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
@@ -21,10 +22,11 @@ type Camera struct {
 
 // CameraData : struct to hold CameraData
 type CameraData struct {
-	XRotation float32
-	YRotation float32
-	LastX     float64
-	LastY     float64
+	XRotation   float32
+	YRotation   float32
+	LastX       float64
+	LastY       float64
+	PointerLock bool
 }
 
 // Position : struct to store 3D coords
@@ -36,33 +38,49 @@ type Position struct {
 
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
-	x, y := window.GetCursorPos()
-
-	sensitivity := float32(0.1)
-	c.YRotation += -float32(c.LastX-x) * sensitivity
-	c.XRotation += -float32(c.LastY-y) * sensitivity
-
-	xmax := float32(90)
-	if c.XRotation < -xmax {
-		c.XRotation = -xmax
-	}
-	if c.XRotation > xmax {
-		c.XRotation = xmax
-	}
 
 	if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
 		fmt.Println("Click")
+		if !c.PointerLock {
+			x, y := window.GetCursorPos()
+			c.LastX = x
+			c.LastY = y
+		}
 		window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+		c.PointerLock = true
 	}
-	c.LastX = x
-	c.LastY = y
+
+	if window.GetMouseButton(glfw.MouseButton1) == glfw.Release {
+		window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
+		c.PointerLock = false
+	}
+
+	if c.PointerLock {
+		x, y := window.GetCursorPos()
+
+		sensitivity := float32(0.1)
+		c.YRotation += -float32(c.LastX-x) * sensitivity
+		c.XRotation += -float32(c.LastY-y) * sensitivity
+
+		xmax := float32(90)
+		if c.XRotation < -xmax {
+			c.XRotation = -xmax
+		}
+		if c.XRotation > xmax {
+			c.XRotation = xmax
+		}
+
+		c.LastX = x
+		c.LastY = y
+	}
 }
 
 // KeyControls : control the camera via the keyboard
 func (c *Camera) KeyControls() {
 	if window.GetKey(glfw.KeyEscape) == glfw.Press {
-		// os.Exit(1)
-		window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
+		os.Exit(1)
+		// camera.PointerLock = false
+		// window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 	}
 	// Press w
 	if window.GetKey(glfw.KeyW) == glfw.Press {
