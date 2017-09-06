@@ -32,8 +32,9 @@ type CameraData struct {
 func (c *Camera) MouseControls() {
 	x, y := window.GetCursorPos()
 
-	c.Yangle += -float32(c.LastX - x)
-	c.Xangle += -float32(c.LastY - y)
+	sensitivity := float32(0.1)
+	c.Yangle += -float32(c.LastX-x) * sensitivity
+	c.Xangle += -float32(c.LastY-y) * sensitivity
 
 	xmax := float32(40)
 	if c.Xangle < -xmax {
