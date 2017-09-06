@@ -51,6 +51,14 @@ func (c *Camera) MouseControls() {
 		c.Xangle = xmax
 	}
 
+	ymax := float32(90)
+	if c.Xangle < -ymax {
+		c.Xangle = -ymax
+	}
+	if c.Xangle > ymax {
+		c.Xangle = ymax
+	}
+
 	if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
 		fmt.Println("Click")
 	}

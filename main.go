@@ -14,10 +14,10 @@ const (
 )
 
 var (
-	window       *glfw.Window
-	drawnObjects []DrawnObject
 	camera       Camera
 	shaders      []uint32
+	window       *glfw.Window
+	drawnObjects []DrawnObject
 
 	triangle = []float32{
 		0, 0.5, 0,
