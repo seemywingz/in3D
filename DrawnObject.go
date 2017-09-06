@@ -34,7 +34,6 @@ type DrawnObjectData struct {
 
 // New : Create a new object
 func (DrawnObjectData) New(position Position, color Color, points []float32, program uint32) *DrawnObjectData {
-
 	return &DrawnObjectData{
 		makeVao(points),
 		program,
@@ -42,7 +41,6 @@ func (DrawnObjectData) New(position Position, color Color, points []float32, pro
 		position,
 		color,
 	}
-
 }
 
 // Draw : draw the triangle
