@@ -32,7 +32,7 @@ type DrawnObjectData struct {
 	Color
 }
 
-// New : Create a new object
+// New : Create new DrawnObjectData
 func (DrawnObjectData) New(position Position, color Color, points []float32, program uint32) *DrawnObjectData {
 	return &DrawnObjectData{
 		makeVao(points),
@@ -43,7 +43,7 @@ func (DrawnObjectData) New(position Position, color Color, points []float32, pro
 	}
 }
 
-// Draw : draw the triangle
+// Draw : draw the vertecies
 func (d *DrawnObjectData) Draw() {
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)

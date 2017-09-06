@@ -74,6 +74,7 @@ func handleKeys() {
 	}
 	// Press A
 	if window.GetKey(glfw.KeyA) == glfw.Press {
+		yangle--
 	}
 	// Press s
 	if window.GetKey(glfw.KeyS) == glfw.Press {
@@ -81,6 +82,15 @@ func handleKeys() {
 	}
 	// Press d
 	if window.GetKey(glfw.KeyD) == glfw.Press {
+		yangle++
+	}
+	// Press q
+	if window.GetKey(glfw.KeyQ) == glfw.Press {
+		xangle--
+	}
+	// Press e
+	if window.GetKey(glfw.KeyE) == glfw.Press {
+		xangle++
 	}
 }
 

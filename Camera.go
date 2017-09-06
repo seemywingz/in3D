@@ -15,14 +15,20 @@ type Camera struct {
 	Position
 }
 
+var (
+	xangle float32
+	yangle float32
+)
+
 // Update : update camera
 func (c *Camera) Update() {
-	// c.Z -= 0.1
-	// c.X -= 0.1
-
 	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
 	model := translateMatrix.Mul4(c.Model)
-	// TODO: update view from camera rotation
+
+	xrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(xangle), mgl32.Vec3{1, 0, 0})
+	yrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(yangle), mgl32.Vec3{0, 1, 0})
+	c.View = xrotMatrix.Mul4(yrotMatrix.Mul4(c.Model))
+
 	c.MVP = c.Projection.Mul4(c.View.Mul4(model))
 	gl.UniformMatrix4fv(0, 1, false, &c.MVP[0])
 }
