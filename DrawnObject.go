@@ -15,15 +15,21 @@ type DrawnObjectData struct {
 	Program uint32
 	Points  []float32
 	Position
+	Translation int32
 }
 
 // New : Create new DrawnObjectData
 func (DrawnObjectData) New(position Position, points []float32, program uint32) *DrawnObjectData {
+	ptr, free := gl.Strs("translation")
+	defer free()
+	loc := gl.GetUniformLocation(program, *ptr)
+
 	return &DrawnObjectData{
 		makeVao(points),
 		program,
 		points,
 		position,
+		loc,
 	}
 }
 
@@ -31,5 +37,8 @@ func (DrawnObjectData) New(position Position, points []float32, program uint32) 
 func (d *DrawnObjectData) Draw() {
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
+
+	gl.Uniform4f(d.Translation, d.X, d.Y, d.Z, 1.0)
+
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Points)/3))
 }

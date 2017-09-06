@@ -46,7 +46,8 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, -10})
 
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 1}, triangle, shaders[0]))
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 0}, triangle, shaders[0]))
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{1, 0, -50}, triangle, shaders[0]))
 
 	for !window.ShouldClose() {
 		camera.Update()
