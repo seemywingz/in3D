@@ -21,10 +21,10 @@ type Camera struct {
 
 // CameraData : struct to hold CameraData
 type CameraData struct {
-	Xangle float32
-	Yangle float32
-	LastX  float64
-	LastY  float64
+	XRotation float32
+	YRotation float32
+	LastX     float64
+	LastY     float64
 }
 
 // Position : struct to store 3D coords
@@ -39,23 +39,15 @@ func (c *Camera) MouseControls() {
 	x, y := window.GetCursorPos()
 
 	sensitivity := float32(0.1)
-	c.Yangle += -float32(c.LastX-x) * sensitivity
-	c.Xangle += -float32(c.LastY-y) * sensitivity
+	c.YRotation += -float32(c.LastX-x) * sensitivity
+	c.XRotation += -float32(c.LastY-y) * sensitivity
 
-	xmax := float32(40)
-	if c.Xangle < -xmax {
-		c.Xangle = -xmax
+	xmax := float32(90)
+	if c.XRotation < -xmax {
+		c.XRotation = -xmax
 	}
-	if c.Xangle > xmax {
-		c.Xangle = xmax
-	}
-
-	ymax := float32(90)
-	if c.Xangle < -ymax {
-		c.Xangle = -ymax
-	}
-	if c.Xangle > ymax {
-		c.Xangle = ymax
+	if c.XRotation > xmax {
+		c.XRotation = xmax
 	}
 
 	if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
@@ -102,8 +94,8 @@ func (c *Camera) Update() {
 	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
 	model := translateMatrix.Mul4(c.Model)
 
-	xrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.Xangle), mgl32.Vec3{1, 0, 0})
-	yrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.Yangle), mgl32.Vec3{0, 1, 0})
+	xrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.XRotation), mgl32.Vec3{1, 0, 0})
+	yrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.YRotation), mgl32.Vec3{0, 1, 0})
 	c.View = xrotMatrix.Mul4(yrotMatrix.Mul4(c.Model))
 
 	c.MVP = c.Projection.Mul4(c.View.Mul4(model))
