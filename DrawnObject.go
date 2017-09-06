@@ -37,8 +37,6 @@ func (DrawnObjectData) New(position Position, points []float32, program uint32) 
 func (d *DrawnObjectData) Draw() {
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
-
 	gl.Uniform4f(d.Translation, d.X, d.Y, d.Z, 1.0)
-
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Points)/3))
 }
