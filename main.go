@@ -52,8 +52,10 @@ func main() {
 	for i := 0; i < 200; i++ {
 		rand.Seed(time.Now().UnixNano())
 		x := float32(rand.Intn(max-min) + min)
+		// y := float32(rand.Intn(max-min) + min)
+		y := float32(0)
 		z := float32(rand.Intn(max-min) + min)
-		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, 0, z}, triangle, shaders[0]))
+		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, triangle, shaders[0]))
 	}
 	// drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{1, 0, -50}, triangle, shaders[0]))
 
