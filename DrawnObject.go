@@ -29,17 +29,15 @@ type DrawnObjectData struct {
 	Program uint32
 	Points  []float32
 	Position
-	Color
 }
 
 // New : Create new DrawnObjectData
-func (DrawnObjectData) New(position Position, color Color, points []float32, program uint32) *DrawnObjectData {
+func (DrawnObjectData) New(position Position, points []float32, program uint32) *DrawnObjectData {
 	return &DrawnObjectData{
 		makeVao(points),
 		program,
 		points,
 		position,
-		color,
 	}
 }
 
