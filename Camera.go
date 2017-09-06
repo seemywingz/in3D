@@ -31,8 +31,18 @@ type CameraData struct {
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
 	x, y := window.GetCursorPos()
+
 	c.Yangle += -float32(c.LastX - x)
 	c.Xangle += -float32(c.LastY - y)
+
+	xmax := float32(40)
+	if c.Xangle < -xmax {
+		c.Xangle = -xmax
+	}
+	if c.Xangle > xmax {
+		c.Xangle = xmax
+	}
+
 	if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
 		fmt.Println("Click")
 	}
