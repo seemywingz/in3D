@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
@@ -61,6 +60,7 @@ func (c *Camera) MouseControls() {
 
 	if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
 		fmt.Println("Click")
+		window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
 	}
 	c.LastX = x
 	c.LastY = y
@@ -69,7 +69,8 @@ func (c *Camera) MouseControls() {
 // KeyControls : control the camera via the keyboard
 func (c *Camera) KeyControls() {
 	if window.GetKey(glfw.KeyEscape) == glfw.Press {
-		os.Exit(1)
+		// os.Exit(1)
+		window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 	}
 	// Press w
 	if window.GetKey(glfw.KeyW) == glfw.Press {
