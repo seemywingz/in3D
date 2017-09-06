@@ -5,6 +5,7 @@ import (
 )
 
 var (
+	z    float32
 	view = mgl32.LookAt(
 		0, 0, 1, //Camera is at (0, 0, -1), in world space
 		0, 0, 0, //and looks at the origin
@@ -22,7 +23,11 @@ type Camera struct {
 // Draw : makes camera a DrawnObject interface and updates each tick
 func (c Camera) Draw() {
 	// fmt.Println("camera")
-
+	z += 0.1
+	translateMatrix := mgl32.Translate3D(0.5, -0.2, z)
+	c.Model = translateMatrix.Mul4(c.Model)
+	c.MVP = c.Projection.Mul4(view.Mul4(c.Model))
+	// fmt.Println(c.MVP)
 }
 
 // New : return new Camera

@@ -17,7 +17,9 @@ var (
 	window       *glfw.Window
 	drawnObjects []DrawnObject
 	camera       Camera
-	triangle     = []float32{
+	shaders      []uint32
+
+	triangle = []float32{
 		0, 0.5, 0,
 		-0.5, -0.5, 0,
 		0.5, -0.5, 0,
@@ -40,19 +42,29 @@ func main() {
 	defer glfw.Terminate()
 
 	initGL()
+	loadShaders()
 
 	camera = Camera{}.New()
-	drawnObjects = append(drawnObjects, camera)
 
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 1}, Color{0, 0, 1}, triangle))
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 1}, Color{0, 0, 1}, triangle, shaders[0]))
 
 	for !window.ShouldClose() {
 		draw()
 	}
 }
 
+func loadShaders() {
+	shaders = append(
+		shaders,
+		createGLprogram(
+			readShaderFile("./shaders/vertex.glsl"),
+			readShaderFile("./shaders/fragment.glsl"),
+		))
+}
+
 func draw() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+	camera.Draw()
 
 	for _, obj := range drawnObjects {
 		obj.Draw()

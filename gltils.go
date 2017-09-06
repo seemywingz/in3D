@@ -36,6 +36,11 @@ func initGlfw(width, height int, title string) *glfw.Window {
 
 func initGL() {
 	gt.EoE("Error Initializing OpenGL", gl.Init())
+	//enable depth test
+	gl.Enable(gl.DEPTH_TEST)
+	//accept fragment if it close to the camera than the former one
+	gl.DepthFunc(gl.LESS)
+
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	log.Println("OpenGL version", version)
 }
