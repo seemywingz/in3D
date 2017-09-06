@@ -28,7 +28,7 @@ func (c *Camera) Update() {
 }
 
 // New : return new Camera
-func (c Camera) New(position Position) Camera {
+func (Camera) New(position Position) Camera {
 
 	mvPointer, free := gl.Strs("MVP")
 	defer free()
