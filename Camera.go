@@ -81,6 +81,7 @@ func (c *Camera) KeyControls() {
 func (c *Camera) Update() {
 	c.MouseControls()
 	c.KeyControls()
+
 	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
 	model := translateMatrix.Mul4(c.Model)
 
@@ -89,7 +90,7 @@ func (c *Camera) Update() {
 	c.View = xrotMatrix.Mul4(yrotMatrix.Mul4(c.Model))
 
 	c.MVP = c.Projection.Mul4(c.View.Mul4(model))
-	gl.UniformMatrix4fv(0, 1, false, &c.MVP[0])
+	gl.UniformMatrix4fv(c.MVPID, 1, false, &c.MVP[0])
 }
 
 // New : return new Camera
