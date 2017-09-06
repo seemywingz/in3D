@@ -20,6 +20,7 @@ type DrawnObjectData struct {
 
 // New : Create new DrawnObjectData
 func (DrawnObjectData) New(position Position, points []float32, program uint32) *DrawnObjectData {
+
 	ptr, free := gl.Strs("translation")
 	defer free()
 	loc := gl.GetUniformLocation(program, *ptr)

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"math/rand"
 	"runtime"
+	"time"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
@@ -46,8 +48,12 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, -10})
 
-	for i := 0; i < 20; i++ {
-		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{float32(i), 0, -10}, triangle, shaders[0]))
+	min, max := -200, 200
+	for i := 0; i < 200; i++ {
+		rand.Seed(time.Now().UnixNano())
+		x := float32(rand.Intn(max-min) + min)
+		z := float32(rand.Intn(max-min) + min)
+		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, 0, z}, triangle, shaders[0]))
 	}
 	// drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{1, 0, -50}, triangle, shaders[0]))
 
