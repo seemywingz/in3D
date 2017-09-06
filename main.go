@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"runtime"
 
@@ -50,6 +51,7 @@ func main() {
 	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 1}, Color{0, 0, 1}, triangle, shaders[0]))
 
 	for !window.ShouldClose() {
+		handleMouse()
 		handleKeys()
 		draw()
 	}
@@ -62,6 +64,14 @@ func loadShaders() {
 			readShaderFile("./shaders/vertex.glsl"),
 			readShaderFile("./shaders/fragment.glsl"),
 		))
+}
+
+func handleMouse() {
+	x, y := window.GetCursorPos()
+	fmt.Println(x, y)
+	if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
+		fmt.Println("Click")
+	}
 }
 
 func handleKeys() {

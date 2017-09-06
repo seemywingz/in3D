@@ -28,6 +28,9 @@ func initGlfw(width, height int, title string) *glfw.Window {
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 
 	window, err := glfw.CreateWindow(width, height, title, nil, nil)
+	window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+	window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
+
 	gt.EoE("Error Creating GLFW Window", err)
 	window.MakeContextCurrent()
 
