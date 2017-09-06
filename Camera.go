@@ -39,18 +39,7 @@ type Position struct {
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
 
-	if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
-		fmt.Println("Click")
-		if !c.PointerLock {
-			x, y := window.GetCursorPos()
-			c.LastX = x
-			c.LastY = y
-		}
-		window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
-		c.PointerLock = true
-	}
-
-	if window.GetMouseButton(glfw.MouseButton1) == glfw.Release {
+	if c.PointerLock && window.GetMouseButton(glfw.MouseButton1) == glfw.Release {
 		window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 		c.PointerLock = false
 	}
@@ -72,6 +61,15 @@ func (c *Camera) MouseControls() {
 
 		c.LastX = x
 		c.LastY = y
+	} else {
+		if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
+			fmt.Println("Click")
+			x, y := window.GetCursorPos()
+			c.LastX = x
+			c.LastY = y
+			window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+			c.PointerLock = true
+		}
 	}
 }
 
