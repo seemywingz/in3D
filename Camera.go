@@ -26,7 +26,7 @@ type Camera struct {
 func (c *Camera) Update() {
 	// gl.UseProgram(shaders[0])
 	c.Z -= 0.1
-	// fmt.Println(c.Z)
+	c.X -= 0.1
 	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
 	model := translateMatrix.Mul4(c.Model)
 	// TODO: update MVP including camera rotation i.e: c.MVP = c.Projection.Mul4(view.Mul4(model))

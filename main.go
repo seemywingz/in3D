@@ -64,6 +64,7 @@ func loadShaders() {
 
 func draw() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
 	camera.Update()
 
 	for _, obj := range drawnObjects {
