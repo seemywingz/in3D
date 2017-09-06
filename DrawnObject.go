@@ -9,20 +9,6 @@ type DrawnObject interface {
 	Draw()
 }
 
-// Color : struct to store RGB colors as float32
-type Color struct {
-	R float32
-	G float32
-	B float32
-}
-
-// Position : struct to store 3D coords
-type Position struct {
-	X float32
-	Y float32
-	Z float32
-}
-
 // DrawnObjectData : a struct to hold openGL object data
 type DrawnObjectData struct {
 	Vao     uint32

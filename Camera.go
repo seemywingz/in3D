@@ -28,6 +28,13 @@ type CameraData struct {
 	LastY  float64
 }
 
+// Position : struct to store 3D coords
+type Position struct {
+	X float32
+	Y float32
+	Z float32
+}
+
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
 	x, y := window.GetCursorPos()
