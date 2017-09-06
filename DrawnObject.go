@@ -27,7 +27,6 @@ type Position struct {
 type DrawnObjectData struct {
 	Vao     uint32
 	Program uint32
-	MV      int32
 	Points  []float32
 	Position
 	Color
@@ -36,14 +35,9 @@ type DrawnObjectData struct {
 // New : Create a new object
 func (d DrawnObjectData) New(position Position, color Color, points []float32, program uint32) DrawnObjectData {
 
-	mvPointer, free := gl.Strs("MVP")
-	defer free()
-	mv := gl.GetUniformLocation(program, *mvPointer)
-
 	return DrawnObjectData{
 		makeVao(points),
 		program,
-		mv,
 		points,
 		position,
 		color,
@@ -55,8 +49,5 @@ func (d DrawnObjectData) New(position Position, color Color, points []float32, p
 func (d DrawnObjectData) Draw() {
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
-
-	gl.UniformMatrix4fv(d.MV, 1, false, &camera.MVP[0])
-
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Points)/3))
 }

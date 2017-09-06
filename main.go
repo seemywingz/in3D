@@ -9,7 +9,7 @@ import (
 
 const (
 	width  = 800
-	height = 800
+	height = 600
 	title  = "go-gl Boiler"
 )
 
