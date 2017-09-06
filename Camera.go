@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
@@ -40,6 +39,7 @@ type Position struct {
 func (c *Camera) MouseControls() {
 
 	if c.PointerLock && window.GetMouseButton(glfw.MouseButton1) == glfw.Release {
+		// fmt.Println("PointerLock Disabled")
 		window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 		c.PointerLock = false
 	}
@@ -61,9 +61,9 @@ func (c *Camera) MouseControls() {
 
 		c.LastX = x
 		c.LastY = y
-	} else {
+	} else { // no PointerLock
 		if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
-			fmt.Println("Click")
+			// fmt.Println("PointerLock Enabled")
 			x, y := window.GetCursorPos()
 			c.LastX = x
 			c.LastY = y
@@ -77,8 +77,6 @@ func (c *Camera) MouseControls() {
 func (c *Camera) KeyControls() {
 	if window.GetKey(glfw.KeyEscape) == glfw.Press {
 		os.Exit(1)
-		// camera.PointerLock = false
-		// window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 	}
 	// Press w
 	if window.GetKey(glfw.KeyW) == glfw.Press {
@@ -125,9 +123,8 @@ func (Camera) New(position Position) Camera {
 	defer free()
 	mvpid := gl.GetUniformLocation(shaders[0], *mvPointer)
 
-	//Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 100 units
+	//Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), width/height, 0.1, 1000)
-	//model matrix : and identity matrix (model will be at te origin)
 	model := mgl32.Ident4()
 	view := mgl32.LookAt(
 		position.X, position.Y, position.Z, //Camera is at (x, y, z), in world space
