@@ -38,9 +38,7 @@ func (d DrawnObjectData) New(position Position, color Color, points []float32, p
 
 	mvPointer, free := gl.Strs("MVP")
 	defer free()
-	mv := gl.GetUniformLocation(d.Program, *mvPointer)
-	mv = 0
-	// mvID := int32(0) //:= gl.GetUniformLocation(program, *mvPointer)
+	mv := gl.GetUniformLocation(program, *mvPointer)
 
 	return DrawnObjectData{
 		makeVao(points),
