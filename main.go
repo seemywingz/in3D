@@ -66,12 +66,24 @@ func loadShaders() {
 		))
 }
 
+var (
+	lastX float64
+	lastY float64
+)
+
 func handleMouse() {
 	x, y := window.GetCursorPos()
-	fmt.Println(x, y)
+	if lastX == 0 && lastY == 0 {
+		lastX = x
+		lastY = y
+	}
+	yangle += -float32(lastX - x)
+	xangle += -float32(lastY - y)
 	if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
 		fmt.Println("Click")
 	}
+	lastX = x
+	lastY = y
 }
 
 func handleKeys() {
@@ -84,7 +96,6 @@ func handleKeys() {
 	}
 	// Press A
 	if window.GetKey(glfw.KeyA) == glfw.Press {
-		yangle--
 	}
 	// Press s
 	if window.GetKey(glfw.KeyS) == glfw.Press {
@@ -92,15 +103,12 @@ func handleKeys() {
 	}
 	// Press d
 	if window.GetKey(glfw.KeyD) == glfw.Press {
-		yangle++
 	}
 	// Press q
 	if window.GetKey(glfw.KeyQ) == glfw.Press {
-		xangle--
 	}
 	// Press e
 	if window.GetKey(glfw.KeyE) == glfw.Press {
-		xangle++
 	}
 }
 
