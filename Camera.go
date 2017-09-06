@@ -6,12 +6,11 @@ import (
 )
 
 var (
-	z    float32
-	view = mgl32.LookAt(
-		0, 0, 1, //Camera is at (0, 0, -1), in world space
-		0, 0, 0, //and looks at the origin
-		0, 1, 0, //head is up (set to 0, -1, 0 to look upside-down)
-	)
+// view = mgl32.LookAt(
+// 	0, 0, 1, //Camera is at (0, 0, -1), in world space
+// 	0, 0, 0, //and looks at the origin
+// 	0, 1, 0, //head is up (set to 0, -1, 0 to look upside-down)
+// )
 )
 
 // Camera : struct to store camera matrices
@@ -20,21 +19,23 @@ type Camera struct {
 	Model      mgl32.Mat4
 	MVP        mgl32.Mat4
 	MVPID      int32
+	Position
 }
 
-// Draw : makes camera a DrawnObject interface and updates each tick
-func (c Camera) Draw() {
+// Update : update camera
+func (c *Camera) Update() {
 	// gl.UseProgram(shaders[0])
-	z -= 0.01
-	translateMatrix := mgl32.Translate3D(0.5, -0.2, z)
+	c.Z -= 0.1
+	// fmt.Println(c.Z)
+	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
 	model := translateMatrix.Mul4(c.Model)
-	// c.MVP = c.Projection.Mul4(view.Mul4(model))
+	// TODO: update MVP including camera rotation i.e: c.MVP = c.Projection.Mul4(view.Mul4(model))
 	c.MVP = c.Projection.Mul4(model)
 	gl.UniformMatrix4fv(0, 1, false, &c.MVP[0])
 }
 
 // New : return new Camera
-func (c Camera) New() Camera {
+func (c Camera) New(position Position) Camera {
 
 	mvPointer, free := gl.Strs("MVP")
 	defer free()
@@ -45,7 +46,7 @@ func (c Camera) New() Camera {
 	//model matrix : and identity matrix (model will be at te origin)
 	model := mgl32.Ident4()
 	//our ModelViewProjection : multiplication of our 3 matrices
-	mvp := projection.Mul4(view.Mul4(model))
+	mvp := projection.Mul4(model)
 
-	return Camera{projection, model, mvp, mvpid}
+	return Camera{projection, model, mvp, mvpid, position}
 }

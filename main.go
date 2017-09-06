@@ -44,7 +44,7 @@ func main() {
 	initGL()
 	loadShaders()
 
-	camera = Camera{}.New()
+	camera = Camera{}.New(Position{0, 0, -2})
 
 	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, 1}, Color{0, 0, 1}, triangle, shaders[0]))
 
@@ -64,7 +64,7 @@ func loadShaders() {
 
 func draw() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-	camera.Draw()
+	camera.Update()
 
 	for _, obj := range drawnObjects {
 		obj.Draw()
