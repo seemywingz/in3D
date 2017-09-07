@@ -11,7 +11,6 @@ import (
 // Camera : struct to store camera matrices
 type Camera struct {
 	Projection mgl32.Mat4
-	Model      mgl32.Mat4
 	View       mgl32.Mat4
 	MVP        mgl32.Mat4
 	MVPID      int32
@@ -37,12 +36,6 @@ type Position struct {
 
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
-
-	// if c.PointerLock && window.GetMouseButton(glfw.MouseButton1) == glfw.Release {
-	// 	// fmt.Println("PointerLock Disabled")
-	// 	window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
-	// 	c.PointerLock = false
-	// }
 
 	if c.PointerLock {
 		x, y := window.GetCursorPos()
@@ -138,11 +131,11 @@ func (c *Camera) Update() {
 	c.KeyControls()
 
 	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
-	model := translateMatrix.Mul4(c.Model)
+	model := translateMatrix.Mul4(mgl32.Ident4())
 
 	xrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.XRotation), mgl32.Vec3{1, 0, 0})
 	yrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.YRotation), mgl32.Vec3{0, 1, 0})
-	c.View = xrotMatrix.Mul4(yrotMatrix.Mul4(c.Model))
+	c.View = xrotMatrix.Mul4(yrotMatrix.Mul4(mgl32.Ident4()))
 
 	c.MVP = c.Projection.Mul4(c.View.Mul4(model))
 	gl.UniformMatrix4fv(c.MVPID, 1, false, &c.MVP[0])
@@ -157,15 +150,14 @@ func (Camera) New(position Position) Camera {
 
 	//Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), width/height, 0.1, 1000)
-	model := mgl32.Ident4()
 	view := mgl32.LookAt(
 		position.X, position.Y, position.Z, //Camera is at (x, y, z), in world space
 		0, 0, 0, //and looks at the origin
 		0, 1, 0, //head is up (set to 0, -1, 0 to look upside-down)
 	)
-	mvp := projection.Mul4(view.Mul4(model))
+	mvp := projection.Mul4(view.Mul4(mgl32.Ident4()))
 
-	cam := Camera{projection, model, view, mvp, mvpid, position, CameraData{}}
+	cam := Camera{projection, view, mvp, mvpid, position, CameraData{}}
 	x, y := window.GetCursorPos()
 	cam.LastX = x
 	cam.LastY = y
