@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"os"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
@@ -80,17 +81,31 @@ func (c *Camera) KeyControls() {
 	}
 	// Press w
 	if window.GetKey(glfw.KeyW) == glfw.Press {
-		camera.Z += 0.1
+		// fmt.Println("x:", c.X, "y:", c.Y, "z:", c.Z)
+		// fmt.Println("xr:", c.XRotation, "yr:", c.YRotation, "zr:", c.Z)
+		// move forward
+		c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
+		c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 	}
 	// Press A
 	if window.GetKey(glfw.KeyA) == glfw.Press {
+		// Move left
+		c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
+		c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
+		c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
 	}
 	// Press s
 	if window.GetKey(glfw.KeyS) == glfw.Press {
-		camera.Z -= 0.1
+		// Move Backward
+		c.X += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
+		c.Z -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
+		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
 	}
 	// Press d
 	if window.GetKey(glfw.KeyD) == glfw.Press {
+		// Move Right
+		c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
+		c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 	}
 	// Press q
 	if window.GetKey(glfw.KeyQ) == glfw.Press {
