@@ -2,7 +2,6 @@ package main
 
 import (
 	"math"
-	"os"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
@@ -39,11 +38,11 @@ type Position struct {
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
 
-	if c.PointerLock && window.GetMouseButton(glfw.MouseButton1) == glfw.Release {
-		// fmt.Println("PointerLock Disabled")
-		window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
-		c.PointerLock = false
-	}
+	// if c.PointerLock && window.GetMouseButton(glfw.MouseButton1) == glfw.Release {
+	// 	// fmt.Println("PointerLock Disabled")
+	// 	window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
+	// 	c.PointerLock = false
+	// }
 
 	if c.PointerLock {
 		x, y := window.GetCursorPos()
@@ -64,42 +63,52 @@ func (c *Camera) MouseControls() {
 		c.LastY = y
 	} else { // no PointerLock
 		if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
-			// fmt.Println("PointerLock Enabled")
-			x, y := window.GetCursorPos()
-			c.LastX = x
-			c.LastY = y
-			window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
-			c.PointerLock = true
+			c.EnablePointerLock()
 		}
 	}
+}
+
+// EnablePointerLock :
+func (c *Camera) EnablePointerLock() {
+	// fmt.Println("PointerLock Enabled")
+	x, y := window.GetCursorPos()
+	c.LastX = x
+	c.LastY = y
+	window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+	c.PointerLock = true
+}
+
+// DisablePointerLock :
+func (c *Camera) DisablePointerLock() {
+	window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
+	c.PointerLock = false
 }
 
 // KeyControls : control the camera via the keyboard
 func (c *Camera) KeyControls() {
 	if window.GetKey(glfw.KeyEscape) == glfw.Press {
-		os.Exit(1)
+		// os.Exit(1)
+		c.DisablePointerLock()
 	}
 	// Press w
 	if window.GetKey(glfw.KeyW) == glfw.Press {
-		// fmt.Println("x:", c.X, "y:", c.Y, "z:", c.Z)
-		// fmt.Println("xr:", c.XRotation, "yr:", c.YRotation, "zr:", c.Z)
 		// move forward
 		c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
+		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
 	}
 	// Press A
 	if window.GetKey(glfw.KeyA) == glfw.Press {
 		// Move left
 		c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
-		c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
 	}
 	// Press s
 	if window.GetKey(glfw.KeyS) == glfw.Press {
 		// Move Backward
 		c.X += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
-		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
+		c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
 	}
 	// Press d
 	if window.GetKey(glfw.KeyD) == glfw.Press {

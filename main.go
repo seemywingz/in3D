@@ -49,11 +49,11 @@ func main() {
 	camera = Camera{}.New(Position{0, 0, -10})
 
 	min, max := -200, 200
-	for i := 0; i < 200; i++ {
+	for i := 0; i < 2000; i++ {
 		rand.Seed(time.Now().UnixNano())
 		x := float32(rand.Intn(max-min) + min)
-		// y := float32(rand.Intn(max-min) + min)
-		y := float32(0)
+		y := float32(rand.Intn(max-min) + min)
+		// y := float32(0)
 		z := float32(rand.Intn(max-min) + min)
 		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, triangle, shaders[0]))
 	}
