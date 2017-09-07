@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"strings"
 
@@ -10,13 +9,6 @@ import (
 	"github.com/go-gl/glfw/v3.2/glfw"
 	gt "github.com/seemywingz/gtils"
 )
-
-// readShaderFile : read the shader file and return null terminated string
-func readShaderFile(filePath string) string {
-	data, err := ioutil.ReadFile(filePath)
-	gt.EoE("Error Reading Shader File", err)
-	return string(data) + "\x00"
-}
 
 // initGlfw initializes glfw and returns a Window to use.
 func initGlfw(width, height int, title string) *glfw.Window {
@@ -45,21 +37,6 @@ func initGL() {
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	log.Println("OpenGL version", version)
-}
-
-func createGLprogram(vertexShaderSource, fragmentShaderSource string) uint32 {
-	vertexShader, err := compileShader(vertexShaderSource, gl.VERTEX_SHADER)
-	gt.EoE("Error Compiling Vertex Shader", err)
-
-	fragmentShader, err := compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER)
-	gt.EoE("Error Compiling Fragment Shader", err)
-
-	program := gl.CreateProgram()
-	gl.AttachShader(program, vertexShader)
-	gl.AttachShader(program, fragmentShader)
-
-	gl.LinkProgram(program)
-	return program
 }
 
 // makeVao initializes and returns a vertex array from the points provided.
@@ -100,4 +77,19 @@ func compileShader(source string, shaderType uint32) (uint32, error) {
 	}
 
 	return shader, nil
+}
+
+func createGLprogram(vertexShaderSource, fragmentShaderSource string) uint32 {
+	vertexShader, err := compileShader(vertexShaderSource, gl.VERTEX_SHADER)
+	gt.EoE("Error Compiling Vertex Shader", err)
+
+	fragmentShader, err := compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER)
+	gt.EoE("Error Compiling Fragment Shader", err)
+
+	program := gl.CreateProgram()
+	gl.AttachShader(program, vertexShader)
+	gl.AttachShader(program, fragmentShader)
+
+	gl.LinkProgram(program)
+	return program
 }

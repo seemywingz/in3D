@@ -75,10 +75,7 @@ func randObject(points []float32) {
 func loadShaders() {
 	shaders = append(
 		shaders,
-		createGLprogram(
-			readShaderFile("./shaders/vertex.glsl"),
-			readShaderFile("./shaders/fragment.glsl"),
-		))
+		createGLprogram(basicVertexSRC, basicFragmentSRC))
 }
 
 func draw() {
