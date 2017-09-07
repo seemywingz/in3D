@@ -116,6 +116,14 @@ func (c *Camera) KeyControls() {
 		c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 	}
+	// Press space
+	if window.GetKey(glfw.KeySpace) == glfw.Press {
+		if window.GetKey(glfw.KeyLeftShift) == glfw.Press {
+			c.Y++
+		} else {
+			c.Y--
+		}
+	}
 	// Press q
 	if window.GetKey(glfw.KeyQ) == glfw.Press {
 	}
