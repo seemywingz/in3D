@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/go-gl/gl/v4.1-core/gl"
 )
 
@@ -22,13 +24,14 @@ type DrawnObjectData struct {
 // New : Create new DrawnObjectData
 func (DrawnObjectData) New(position Position, points []float32, program uint32) *DrawnObjectData {
 
-	ptrT, freeT := gl.Strs("translation")
+	ptrT, freeT := gl.Strs("trans")
 	defer freeT()
 	transloc := gl.GetUniformLocation(program, *ptrT)
 
-	ptrR, freeR := gl.Strs("rotation")
+	ptrR, freeR := gl.Strs("rot")
 	defer freeR()
 	rotloc := gl.GetUniformLocation(program, *ptrR)
+	fmt.Println(rotloc)
 
 	return &DrawnObjectData{
 		makeVao(points),
@@ -46,11 +49,13 @@ var n float32
 func (d *DrawnObjectData) Draw() {
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
-	n += 0.001
-	// xrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(n), mgl32.Vec3{1, 0, 0})
-	// yrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(n), mgl32.Vec3{0, 1, 0})
-	// model := xrotMatrix.Mul4(yrotMatrix.Mul4(mgl32.Ident4()))
+	n += 0.1
+	if n > 180 {
+		n = 0
+	}
+
 	gl.Uniform4f(d.Translation, d.X, d.Y, d.Z, 1.0)
-	// gl.UniformMatrix4fv(d.Rotation, 1, false, &model[0])
+	gl.Uniform4f(d.Rotation, n, d.Y, d.Z, 1.0)
+
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Points)/3))
 }

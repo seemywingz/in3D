@@ -48,11 +48,7 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, -10})
 
-	for i := 0; i < 100; i++ {
-		for j := 0; j < 100; j++ {
-			drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{float32(i * 2), float32(j * 2), 0}, triangle, shaders[0]))
-		}
-	}
+	randObject(1, -5, 5, triangle)
 
 	camera.PointerLock = true
 	for !window.ShouldClose() {
@@ -61,9 +57,8 @@ func main() {
 	}
 }
 
-func randObject(points []float32) {
-	min, max := -200, 200
-	for i := 0; i < 2000; i++ {
+func randObject(numberOfObjects, min, max int, points []float32) {
+	for i := 0; i < numberOfObjects; i++ {
 		rand.Seed(time.Now().UnixNano())
 		x := float32(rand.Intn(max-min) + min)
 		y := float32(rand.Intn(max-min) + min)
@@ -73,9 +68,7 @@ func randObject(points []float32) {
 }
 
 func loadShaders() {
-	shaders = append(
-		shaders,
-		createGLprogram(basicVertexSRC, basicFragmentSRC))
+	shaders = append(shaders, createGLprogram(basicVertexSRC, basicFragmentSRC))
 }
 
 func draw() {
