@@ -48,7 +48,7 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, -10})
 
-	randObject(1, -5, 5, triangle)
+	randObject(1000, -200, 200, triangle)
 
 	camera.PointerLock = true
 	for !window.ShouldClose() {

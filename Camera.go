@@ -12,7 +12,6 @@ import (
 type Camera struct {
 	Projection mgl32.Mat4
 	View       mgl32.Mat4
-	MVP        mgl32.Mat4
 	MVPID      int32
 	Position
 	CameraData
@@ -137,8 +136,8 @@ func (c *Camera) Update() {
 	yrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.YRotation), mgl32.Vec3{0, 1, 0})
 	c.View = xrotMatrix.Mul4(yrotMatrix.Mul4(mgl32.Ident4()))
 
-	c.MVP = c.Projection.Mul4(c.View.Mul4(model))
-	gl.UniformMatrix4fv(c.MVPID, 1, false, &c.MVP[0])
+	MVP := c.Projection.Mul4(c.View.Mul4(model))
+	gl.UniformMatrix4fv(c.MVPID, 1, false, &MVP[0])
 }
 
 // New : return new Camera
@@ -155,9 +154,8 @@ func (Camera) New(position Position) Camera {
 		0, 0, 0, //and looks at the origin
 		0, 1, 0, //head is up (set to 0, -1, 0 to look upside-down)
 	)
-	mvp := projection.Mul4(view.Mul4(mgl32.Ident4()))
 
-	cam := Camera{projection, view, mvp, mvpid, position, CameraData{}}
+	cam := Camera{projection, view, mvpid, position, CameraData{}}
 	x, y := window.GetCursorPos()
 	cam.LastX = x
 	cam.LastY = y
