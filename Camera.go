@@ -135,7 +135,6 @@ func (c *Camera) Update() {
 	xrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.XRotation), mgl32.Vec3{1, 0, 0})
 	yrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.YRotation), mgl32.Vec3{0, 1, 0})
 	c.View = xrotMatrix.Mul4(yrotMatrix.Mul4(mgl32.Ident4()))
-
 	MVP := c.Projection.Mul4(c.View.Mul4(model))
 	gl.UniformMatrix4fv(c.MVPID, 1, false, &MVP[0])
 }
@@ -156,9 +155,7 @@ func (Camera) New(position Position) Camera {
 	)
 
 	cam := Camera{projection, view, mvpid, position, CameraData{}}
-	x, y := window.GetCursorPos()
-	cam.LastX = x
-	cam.LastY = y
+	cam.LastX, cam.LastY = window.GetCursorPos()
 
 	return cam
 }

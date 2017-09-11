@@ -17,10 +17,10 @@ const (
 	layout(location = 0) in vec3 pos;
 
 	uniform mat4 MVP;
-	uniform mat4 uRotation;
-	uniform vec4 uTranslation;
+	uniform vec4 translation;
+	uniform mat4 foo;
 
 	void main(){
-		gl_Position =  MVP * uRotation * (vec4(pos, 1.0) + uTranslation);
+		gl_Position =  MVP * (vec4(pos, 1.0) + translation);
 	}` + "\x00"
 )

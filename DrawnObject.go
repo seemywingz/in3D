@@ -23,13 +23,13 @@ type DrawnObjectData struct {
 // New : Create new DrawnObjectData
 func (DrawnObjectData) New(position Position, points []float32, program uint32) *DrawnObjectData {
 
-	ptrT, freeT := gl.Strs("uTranslation")
-	defer freeT()
-	transloc := gl.GetUniformLocation(program, *ptrT)
-
-	ptrR, freeR := gl.Strs("uRotation")
+	ptrR, freeR := gl.Strs("foo")
 	defer freeR()
 	rotloc := gl.GetUniformLocation(program, *ptrR)
+
+	ptrT, freeT := gl.Strs("translation")
+	defer freeT()
+	transloc := gl.GetUniformLocation(program, *ptrT)
 
 	return &DrawnObjectData{
 		makeVao(points),
@@ -51,12 +51,17 @@ func (d *DrawnObjectData) Draw() {
 		n = 0
 	}
 
+	m := mgl32.Translate3D(d.X, d.Y, d.Z)
+
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(n))
-	rotation := yrotMatrix.Mul4(mgl32.Ident4())
+	rotation := yrotMatrix.Mul4(m)
+	// println(d.Rotation)
 
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
+
 	gl.Uniform4f(d.Translation, d.X, d.Y, d.Z, 1.0)
 	gl.UniformMatrix4fv(d.Rotation, 1, false, &rotation[0])
+
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Points)/3))
 }
