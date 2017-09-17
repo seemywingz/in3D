@@ -21,7 +21,6 @@ const (
 
 	void main(){
 		vec4 p = vec4(pos, 1.0);
-		vec4 c = vec4(p.x - p.x, p.y - p.y, p.z - p.z, 1.0);
 		gl_Position =  MVP * (localRotation) * (p);
 	}` + "\x00"
 )
