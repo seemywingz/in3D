@@ -45,7 +45,7 @@ func (DrawnObjectData) New(position Position, points []float32, texture uint32, 
 	}
 }
 
-func (d *DrawnObjectData) rotate() mgl32.Mat4 {
+func (d *DrawnObjectData) rotate() *mgl32.Mat4 {
 	// translate to obj position
 	m := mgl32.Translate3D(d.X, d.Y, d.Z)
 	// rotataton
@@ -54,14 +54,13 @@ func (d *DrawnObjectData) rotate() mgl32.Mat4 {
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.XRotation))
 	rotation := m.Mul4(yrotMatrix.Mul4(xrotMatrix))
-	return rotation
+	return &rotation
 }
 
 // Draw : draw the vertecies
 func (d *DrawnObjectData) Draw() {
-	rotation := d.rotate()
 	gl.UseProgram(d.Program)
-	gl.UniformMatrix4fv(d.ModelMatrix, 1, false, &rotation[0])
+	gl.UniformMatrix4fv(d.ModelMatrix, 1, false, &d.rotate()[0])
 	gl.BindVertexArray(d.Vao)
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.BindTexture(gl.TEXTURE_2D, d.Texture)
