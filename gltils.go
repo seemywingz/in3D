@@ -6,6 +6,7 @@ import (
 	"image"
 	"image/draw"
 	_ "image/jpeg"
+	_ "image/png"
 	"os"
 	"strings"
 

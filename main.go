@@ -11,20 +11,18 @@ import (
 )
 
 var (
-	title        = "go-gl Boiler"
 	camera       Camera
-	shaders      []uint32
 	window       *glfw.Window
+	shaders      []uint32
 	drawnObjects []DrawnObject
-	boxTexture   uint32
 )
 
 func main() {
 	runtime.LockOSThread()
 
-	var windowWidth = 00
-	var windowHeight = 00
-	window = initGlfw(windowWidth, windowHeight, title)
+	var windowWidth = 800
+	var windowHeight = 600
+	window = initGlfw(windowWidth, windowHeight, "go-gl Boiler")
 	defer glfw.Terminate()
 
 	initGL()
@@ -32,14 +30,16 @@ func main() {
 	loadLights()
 
 	gt.SetDirPath("github.com/seemywingz/go-gl_boiler")
-	boxTexture = newTexture("textures/square.jpg")
-
+	boxTexture := newTexture("textures/square.jpg")
 	defer gl.DeleteTextures(1, &boxTexture)
+
+	lifionTexture := newTexture("textures/lifion.png")
+	defer gl.DeleteTextures(1, &lifionTexture)
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	randObject(1000, -200, 200, cube)
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, cube, shaders[0]))
+	randObject(1000, -200, 200, cube, boxTexture)
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, cube, lifionTexture, shaders[0]))
 
 	for !window.ShouldClose() {
 		camera.Update()
@@ -57,13 +57,13 @@ func loadLights() {
 	// gl.Enable(gl.LIGHT0)
 }
 
-func randObject(numberOfObjects, min, max int, points []float32) {
+func randObject(numberOfObjects, min, max int, points []float32, texture uint32) {
 	for i := 0; i < numberOfObjects; i++ {
 		rand.Seed(time.Now().UnixNano())
 		x := float32(rand.Intn(max-min) + min)
 		y := float32(rand.Intn(max-min) + min)
 		z := float32(rand.Intn(max-min) + min)
-		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, shaders[0]))
+		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, texture, shaders[0]))
 	}
 }
 

@@ -17,7 +17,7 @@ type DrawnObjectData struct {
 	Points  []float32
 	Position
 	ModelMatrix int32
-	Texture     int32
+	Texture     uint32
 	DrawnObjectDefaults
 }
 
@@ -28,16 +28,11 @@ type DrawnObjectDefaults struct {
 }
 
 // New : Create new DrawnObjectData
-func (DrawnObjectData) New(position Position, points []float32, program uint32) *DrawnObjectData {
+func (DrawnObjectData) New(position Position, points []float32, texture uint32, program uint32) *DrawnObjectData {
 
 	ptr, free1 := gl.Strs("MODEL")
 	defer free1()
 	ModelMatrix := gl.GetUniformLocation(program, *ptr)
-
-	ptr, free2 := gl.Strs("tex")
-	defer free2()
-	Texture := gl.GetUniformLocation(program, *ptr)
-	// println(texture)
 
 	return &DrawnObjectData{
 		makeVao(points, program),
@@ -45,7 +40,7 @@ func (DrawnObjectData) New(position Position, points []float32, program uint32) 
 		points,
 		position,
 		ModelMatrix,
-		Texture,
+		texture,
 		DrawnObjectDefaults{},
 	}
 }
@@ -66,7 +61,7 @@ func (d *DrawnObjectData) Draw() {
 	gl.UniformMatrix4fv(d.ModelMatrix, 1, false, &rotation[0])
 	gl.BindVertexArray(d.Vao)
 	gl.ActiveTexture(gl.TEXTURE0)
-	gl.BindTexture(gl.TEXTURE_2D, boxTexture)
+	gl.BindTexture(gl.TEXTURE_2D, d.Texture)
 
 	gl.DrawArrays(gl.TRIANGLES, 0, 6*2*3)
 }
