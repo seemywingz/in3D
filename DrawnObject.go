@@ -49,8 +49,9 @@ func (d *DrawnObjectData) Draw() {
 	m := mgl32.Translate3D(d.X, d.Y, d.Z)
 
 	// rotataton
-	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(n))
-	rotation := m.Mul4(yrotMatrix)
+	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(camera.YRotation))
+	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(n))
+	rotation := m.Mul4(yrotMatrix.Mul4(xrotMatrix))
 
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)

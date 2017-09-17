@@ -132,8 +132,8 @@ func (c *Camera) Update() {
 	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
 	model := translateMatrix.Mul4(mgl32.Ident4())
 
-	xrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.XRotation), mgl32.Vec3{1, 0, 0})
-	yrotMatrix := mgl32.HomogRotate3D(mgl32.DegToRad(c.YRotation), mgl32.Vec3{0, 1, 0})
+	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(c.XRotation))
+	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(c.YRotation))
 	c.View = xrotMatrix.Mul4(yrotMatrix.Mul4(mgl32.Ident4()))
 	MVP := c.Projection.Mul4(c.View.Mul4(model))
 	gl.UniformMatrix4fv(c.MVPID, 1, false, &MVP[0])
