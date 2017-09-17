@@ -137,5 +137,20 @@ func createGLprogram(vertexShaderSource, fragmentShaderSource string) uint32 {
 	gl.AttachShader(program, fragmentShader)
 
 	gl.LinkProgram(program)
+
+	var status int32
+	gl.GetProgramiv(program, gl.LINK_STATUS, &status)
+	if status == gl.FALSE {
+		var logLength int32
+		gl.GetProgramiv(program, gl.INFO_LOG_LENGTH, &logLength)
+
+		log := strings.Repeat("\x00", int(logLength+1))
+		gl.GetProgramInfoLog(program, logLength, nil, gl.Str(log))
+
+		gt.EoE("Error Linking Shader Program", fmt.Errorf("failed to link program: %v", log))
+	}
+
+	gl.DeleteShader(vertexShader)
+	gl.DeleteShader(fragmentShader)
 	return program
 }
