@@ -17,6 +17,12 @@ type DrawnObjectData struct {
 	Points  []float32
 	Position
 	LocalMVP int32
+	DrawnObjectDefaults
+}
+
+type DrawnObjectDefaults struct {
+	XRotation float32
+	YRotation float32
 }
 
 // New : Create new DrawnObjectData
@@ -32,25 +38,19 @@ func (DrawnObjectData) New(position Position, points []float32, program uint32) 
 		points,
 		position,
 		lmvploc,
+		DrawnObjectDefaults{},
 	}
 }
-
-var n float32
 
 // Draw : draw the vertecies
 func (d *DrawnObjectData) Draw() {
 
-	n += 0.001
-	if n > 360 {
-		n = 0
-	}
-
 	// translate to obj position
 	m := mgl32.Translate3D(d.X, d.Y, d.Z)
-
 	// rotataton
-	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(camera.YRotation))
-	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(n))
+	d.YRotation++
+	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
+	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.XRotation))
 	rotation := m.Mul4(yrotMatrix.Mul4(xrotMatrix))
 
 	gl.UseProgram(d.Program)

@@ -33,7 +33,9 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, -10})
 
-	randObject(1000, -200, 200, cube)
+	// randObject(1, -200, 200, cube)
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -1}, cube, shaders[0]))
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -10}, cube, shaders[0]))
 
 	camera.PointerLock = true
 	for !window.ShouldClose() {
