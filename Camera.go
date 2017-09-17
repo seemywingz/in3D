@@ -146,8 +146,8 @@ func (Camera) New(position Position, pointerLock bool) Camera {
 	mvpid := gl.GetUniformLocation(shaders[0], *mvPointer)
 
 	// Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
-	mode := glfw.GetPrimaryMonitor().GetVideoMode()
-	ratio := float32(mode.Width) / float32(mode.Height)
+	w, h := window.GetSize()
+	ratio := float32(w) / float32(h)
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), ratio, 0.1, 1000)
 
 	// Create new Camera instance
