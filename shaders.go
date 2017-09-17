@@ -4,15 +4,15 @@ const (
 	basicFragmentSRC = `
 	#version 410
 
-  in vec2 Texture;
+  in vec2 inTXT;
 
-  out vec4 color;
+  out vec4 outCLR;
 
   uniform sampler2D tex;
 
   void main() {
   	//color = texture(tex, Texture);
-  	color = vec4(1,0,1,1);
+  	outCLR = vec4(1,0,1,1);
   }` + "\x00"
 
 	basicVertexSRC = `
