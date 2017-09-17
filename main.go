@@ -22,8 +22,8 @@ var (
 func main() {
 	runtime.LockOSThread()
 
-	var windowWidth = 800
-	var windowHeight = 600
+	var windowWidth = 00
+	var windowHeight = 00
 	window = initGlfw(windowWidth, windowHeight, title)
 	defer glfw.Terminate()
 
