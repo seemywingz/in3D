@@ -6,7 +6,6 @@ import (
 	"image"
 	"image/draw"
 	_ "image/jpeg"
-	"log"
 	"os"
 	"strings"
 
@@ -77,7 +76,7 @@ func initGL() {
 	gl.DepthFunc(gl.LESS)
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))
-	log.Println("OpenGL version", version)
+	println("OpenGL version", version)
 }
 
 // makeVao initializes and returns a vertex array from the points provided.
