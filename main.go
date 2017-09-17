@@ -20,7 +20,7 @@ var (
 	shaders      []uint32
 	window       *glfw.Window
 	drawnObjects []DrawnObject
-	texture      uint32
+	boxTexture   uint32
 )
 
 func main() {
@@ -33,8 +33,8 @@ func main() {
 	loadShaders()
 	loadLights()
 
-	texture = newTexture("textures/square.jpg")
-	defer gl.DeleteTextures(1, &texture)
+	boxTexture = newTexture("textures/square.jpg")
+	defer gl.DeleteTextures(1, &boxTexture)
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 

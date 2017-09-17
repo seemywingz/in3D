@@ -8,10 +8,10 @@ const (
 
   out vec4 outCLR;
 
-  uniform sampler2D tex;
+  uniform sampler2D texSampler;
 
   void main() {
-  	//color = texture(tex, Texture);
+  	//outCLR = texture(texSampler, inTXT);
   	outCLR = vec4(1,0,1,1);
   }` + "\x00"
 
