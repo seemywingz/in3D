@@ -4,14 +4,14 @@ const (
 	basicFragmentSRC = `
 	#version 410
 
-  in vec2 inTXT;
+  in vec2 fragTXT;
 
   out vec4 outCLR;
 
   uniform sampler2D texSampler;
 
   void main() {
-  	//outCLR = texture(texSampler, inTXT);
+  	//outCLR = texture(texSampler, fragTXT);
   	outCLR = vec4(1,0,1,1);
   }` + "\x00"
 
@@ -19,15 +19,15 @@ const (
 	#version 410 core
 
 	in vec4 inPOS;
-  in vec2 inTXT;
 
-  out vec2 outTXT;
+  in vec2 vertTXT;
+  out vec2 fragTXT;
 
 	uniform mat4 MVP;
-	uniform mat4 localRotation;
+	uniform mat4 MODEL;
 
 	void main(){
-		gl_Position =  MVP * localRotation * inPOS;
-		outTXT = inTXT;
+		fragTXT = vertTXT;
+		gl_Position =  MVP * MODEL * inPOS;
 	}` + "\x00"
 )
