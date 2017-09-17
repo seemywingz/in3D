@@ -11,7 +11,6 @@ import (
 // Camera : struct to store camera matrices
 type Camera struct {
 	Projection mgl32.Mat4
-	View       mgl32.Mat4
 	MVPID      int32
 	Position
 	CameraData
@@ -134,8 +133,8 @@ func (c *Camera) Update() {
 
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(c.XRotation))
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(c.YRotation))
-	c.View = xrotMatrix.Mul4(yrotMatrix.Mul4(mgl32.Ident4()))
-	MVP := c.Projection.Mul4(c.View.Mul4(model))
+	view := xrotMatrix.Mul4(yrotMatrix.Mul4(mgl32.Ident4()))
+	MVP := c.Projection.Mul4(view.Mul4(model))
 	gl.UniformMatrix4fv(c.MVPID, 1, false, &MVP[0])
 }
 
@@ -146,15 +145,11 @@ func (Camera) New(position Position, pointerLock bool) Camera {
 	defer free()
 	mvpid := gl.GetUniformLocation(shaders[0], *mvPointer)
 
-	//Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
+	// Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), 1.333, 0.1, 1000)
-	view := mgl32.LookAt(
-		position.X, position.Y, position.Z, //Camera is at (x, y, z), in world space
-		0, 0, 0, //and looks at the origin
-		0, 1, 0, //head is up (set to 0, -1, 0 to look upside-down)
-	)
 
-	cam := Camera{projection, view, mvpid, position, CameraData{}}
+	// Create new Camera instance
+	cam := Camera{projection, mvpid, position, CameraData{}}
 	if pointerLock {
 		cam.EnablePointerLock()
 	} else {
