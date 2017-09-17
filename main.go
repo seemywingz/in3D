@@ -33,13 +33,10 @@ func main() {
 	boxTexture := newTexture("textures/square.jpg")
 	defer gl.DeleteTextures(1, &boxTexture)
 
-	lifionTexture := newTexture("textures/lifion.png")
-	defer gl.DeleteTextures(1, &lifionTexture)
-
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	randObject(1000, -200, 200, cube, boxTexture)
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, cube, lifionTexture, shaders[0]))
+	randObject(100, -200, 200, cube, boxTexture)
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, cube, boxTexture, shaders[0]))
 
 	for !window.ShouldClose() {
 		camera.Update()
@@ -63,7 +60,14 @@ func randObject(numberOfObjects, min, max int, points []float32, texture uint32)
 		x := float32(rand.Intn(max-min) + min)
 		y := float32(rand.Intn(max-min) + min)
 		z := float32(rand.Intn(max-min) + min)
-		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, texture, shaders[0]))
+		if i == numberOfObjects/2 {
+			println("Adding Lifion Box")
+			lifionTexture := newTexture("textures/lifion.png")
+			// defer gl.DeleteTextures(1, &lifionTexture)
+			drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, lifionTexture, shaders[0]))
+		} else {
+			drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, texture, shaders[0]))
+		}
 	}
 }
 
