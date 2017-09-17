@@ -14,13 +14,14 @@ const (
 	basicVertexSRC = `
 	#version 410 core
 
-	layout(location = 0) in vec3 pos;
+	in vec3 pos;
 
 	uniform mat4 MVP;
-	uniform vec4 translation;
-	uniform mat4 foo;
+	uniform mat4 localRotation;
 
 	void main(){
-		gl_Position =  MVP * (vec4(pos, 1.0) + translation);
+		vec4 p = vec4(pos, 1.0);
+		vec4 c = vec4(p.x - p.x, p.y - p.y, p.z - p.z, 1.0);
+		gl_Position =  MVP * (localRotation) * (p);
 	}` + "\x00"
 )
