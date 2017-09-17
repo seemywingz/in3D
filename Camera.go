@@ -156,10 +156,8 @@ func (Camera) New(position Position, pointerLock bool) Camera {
 
 	cam := Camera{projection, view, mvpid, position, CameraData{}}
 	if pointerLock {
-		cam.LastX, cam.LastY = window.GetCursorPos()
 		cam.EnablePointerLock()
 	} else {
-		cam.PointerLock = false
 		cam.DisablePointerLock()
 	}
 
