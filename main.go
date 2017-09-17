@@ -10,13 +10,8 @@ import (
 	gt "github.com/seemywingz/gtils"
 )
 
-const (
-	width  = 800
-	height = 600
-	title  = "go-gl Boiler"
-)
-
 var (
+	title        = "go-gl Boiler"
 	camera       Camera
 	shaders      []uint32
 	window       *glfw.Window
@@ -27,7 +22,9 @@ var (
 func main() {
 	runtime.LockOSThread()
 
-	window = initGlfw(width, height, title)
+	var windowWidth int
+	var windowHeight int
+	window = initGlfw(windowWidth, windowHeight, title)
 	defer glfw.Terminate()
 
 	initGL()

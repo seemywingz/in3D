@@ -59,7 +59,13 @@ func initGlfw(width, height int, title string) *glfw.Window {
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 
+	if width == 0 {
+		mode := glfw.GetPrimaryMonitor().GetVideoMode()
+		width = mode.Width
+		height = mode.Height
+	}
 	newWindow, err := glfw.CreateWindow(width, height, title, nil, nil)
+	// newWindow, err := glfw.CreateWindow(width, height, title, glfw.GetPrimaryMonitor(), nil)
 	gt.EoE("Error Creating GLFW Window", err)
 	newWindow.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
 	newWindow.SetInputMode(glfw.StickyMouseButtonsMode, 1)
