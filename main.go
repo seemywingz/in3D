@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
+	gt "github.com/seemywingz/gtils"
 )
 
 const (
@@ -33,7 +34,9 @@ func main() {
 	loadShaders()
 	loadLights()
 
+	gt.SetDirPath("github.com/seemywingz/go-gl_boiler")
 	boxTexture = newTexture("textures/square.jpg")
+
 	defer gl.DeleteTextures(1, &boxTexture)
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
