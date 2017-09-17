@@ -95,10 +95,9 @@ func makeVao(points []float32, program uint32) uint32 {
 	gl.EnableVertexAttribArray(vertAttrib)
 	gl.VertexAttribPointer(vertAttrib, 3, gl.FLOAT, false, 5*4, gl.PtrOffset(0))
 
-	// gl.EnableVertexAttribArray(0)
-	// gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
-	// gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 5*4, gl.PtrOffset(0))
-	// gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 0, nil)
+	texCoordAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertTXT\x00")))
+	gl.EnableVertexAttribArray(texCoordAttrib)
+	gl.VertexAttribPointer(texCoordAttrib, 2, gl.FLOAT, false, 5*4, gl.PtrOffset(3*4))
 
 	return vao
 }
