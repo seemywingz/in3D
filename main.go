@@ -20,6 +20,7 @@ var (
 	shaders      []uint32
 	window       *glfw.Window
 	drawnObjects []DrawnObject
+	texture      uint32
 )
 
 func main() {
@@ -30,6 +31,10 @@ func main() {
 
 	initGL()
 	loadShaders()
+	loadLights()
+
+	texture = newTexture("textures/square.jpg")
+	defer gl.DeleteTextures(1, &texture)
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
@@ -38,8 +43,18 @@ func main() {
 
 	for !window.ShouldClose() {
 		camera.Update()
-		draw()
+		update()
 	}
+}
+
+func loadLights() {
+	// ambient := []float32{0.5, 0.5, 0.5, 1}
+	// diffuse := []float32{1, 1, 1, 1}
+	// lightPosition := []float32{-5, 5, 10, 0}
+	// gl.Lightfv(gl.LIGHT0, gl.AMBIENT, &ambient[0])
+	// gl.Lightfv(gl.LIGHT0, gl.DIFFUSE, &diffuse[0])
+	// gl.Lightfv(gl.LIGHT0, gl.POSITION, &lightPosition[0])
+	// gl.Enable(gl.LIGHT0)
 }
 
 func randObject(numberOfObjects, min, max int, points []float32) {
@@ -56,7 +71,7 @@ func loadShaders() {
 	shaders = append(shaders, createGLprogram(basicVertexSRC, basicFragmentSRC))
 }
 
-func draw() {
+func update() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 	for _, obj := range drawnObjects {

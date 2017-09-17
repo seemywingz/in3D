@@ -20,6 +20,7 @@ type DrawnObjectData struct {
 	DrawnObjectDefaults
 }
 
+// DrawnObjectDefaults :
 type DrawnObjectDefaults struct {
 	XRotation float32
 	YRotation float32
@@ -55,6 +56,7 @@ func (d *DrawnObjectData) Draw() {
 
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
+	gl.BindTexture(gl.TEXTURE_2D, texture)
 
 	// println(d.LocalMVP)
 	gl.UniformMatrix4fv(d.LocalMVP, 1, false, &rotation[0])
