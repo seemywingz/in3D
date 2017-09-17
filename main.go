@@ -31,12 +31,11 @@ func main() {
 	initGL()
 	loadShaders()
 
-	camera = Camera{}.New(Position{0, 0, 0})
+	camera = Camera{}.New(Position{0, 0, 0}, false)
 
 	randObject(100, -200, 200, cube)
 	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -2}, cube, shaders[0]))
 
-	camera.PointerLock = true
 	for !window.ShouldClose() {
 		camera.Update()
 		draw()

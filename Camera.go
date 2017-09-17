@@ -140,7 +140,7 @@ func (c *Camera) Update() {
 }
 
 // New : return new Camera
-func (Camera) New(position Position) Camera {
+func (Camera) New(position Position, pointerLock bool) Camera {
 
 	mvPointer, free := gl.Strs("MVP")
 	defer free()
@@ -155,7 +155,13 @@ func (Camera) New(position Position) Camera {
 	)
 
 	cam := Camera{projection, view, mvpid, position, CameraData{}}
-	cam.LastX, cam.LastY = window.GetCursorPos()
+	if pointerLock {
+		cam.LastX, cam.LastY = window.GetCursorPos()
+		cam.EnablePointerLock()
+	} else {
+		cam.PointerLock = false
+		cam.DisablePointerLock()
+	}
 
 	return cam
 }
