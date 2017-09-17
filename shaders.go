@@ -19,11 +19,15 @@ const (
 	#version 410 core
 
 	in vec4 inPOS;
+  in vec2 inTXT;
+
+  out vec2 outTXT;
 
 	uniform mat4 MVP;
 	uniform mat4 localRotation;
 
 	void main(){
 		gl_Position =  MVP * localRotation * inPOS;
+		outTXT = inTXT;
 	}` + "\x00"
 )
