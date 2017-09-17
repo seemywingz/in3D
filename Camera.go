@@ -147,7 +147,7 @@ func (Camera) New(position Position) Camera {
 	mvpid := gl.GetUniformLocation(shaders[0], *mvPointer)
 
 	//Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
-	projection := mgl32.Perspective(mgl32.DegToRad(45.0), width/height, 0.1, 1000)
+	projection := mgl32.Perspective(mgl32.DegToRad(45.0), 1.333, 0.1, 1000)
 	view := mgl32.LookAt(
 		position.X, position.Y, position.Z, //Camera is at (x, y, z), in world space
 		0, 0, 0, //and looks at the origin
