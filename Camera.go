@@ -144,7 +144,6 @@ func (Camera) New(position Position, pointerLock bool) Camera {
 	mvPointer, free := gl.Strs("MVP")
 	defer free()
 	mvpid := gl.GetUniformLocation(shaders[0], *mvPointer)
-	print(mvpid)
 
 	// Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), 1.333, 0.1, 1000)
