@@ -26,8 +26,8 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	randObject(1000, -200, 200, cube, texture["box"])
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, cube, texture["box"], shaders["phong"]))
+	// randObject(1000, -200, 200, cube, texture["box"])
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, square, texture["tk"], shaders["phong"]))
 
 	for !window.ShouldClose() {
 		camera.Update()
@@ -61,6 +61,7 @@ func loadTextures() {
 	texture = make(map[string]uint32)
 	texture["lifion"] = newTexture("textures/lifion.png")
 	texture["box"] = newTexture("textures/square.jpg")
+	texture["tk"] = newTexture("textures/tk.jpg")
 }
 
 func update() {
