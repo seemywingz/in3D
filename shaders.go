@@ -9,9 +9,9 @@ const (
 	uniform mat4 MVP;
 	uniform mat4 MODEL;
 
-	const vec3 lightPos = vec3(1.0,1.0,1.0);
-	const vec3 ambientColor = vec3(0.1, 0.0, 0.0);
-	const vec3 diffuseColor = vec3(0.5, 0.0, 0.0);
+	const vec3 lightPos = vec3(0.0,0.0,0.0);
+	const vec3 ambientColor = vec3(0.1, 0.1, 0.1);
+	const vec3 diffuseColor = vec3(0.5, 0.5, 0.5);
 	const vec3 specColor = vec3(1.0, 1.0, 1.0);
 
 	in vec3 normalInterp;
@@ -47,10 +47,10 @@ const (
 	    }
 	  }
 
-
+    vec4 surfaceColor = texture(tex, fragTexCoord);
 		finalColor = vec4(ambientColor +
 		                  lambertian * diffuseColor +
-		                  specular * specColor, 1.0);
+		                  specular * specColor, 1.0) * surfaceColor;
 
 	  // finalColor = texture(tex, fragTexCoord);
     //finalColor = vec4(1,0,1,1);
