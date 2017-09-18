@@ -109,7 +109,6 @@ func makeVao(points []float32, program uint32) uint32 {
 	gl.EnableVertexAttribArray(texCoordAttrib)
 	gl.VertexAttribPointer(texCoordAttrib, 2, gl.FLOAT, false, 8*4, gl.PtrOffset(3*4))
 
-	// connect the normal to the "vertNormal" attribute of the vertex shader
 	vertNormalAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertNormal\x00")))
 	gl.EnableVertexAttribArray(vertNormalAttrib)
 	gl.VertexAttribPointer(vertNormalAttrib, 3, gl.FLOAT, true, 8*4, gl.PtrOffset(5*4))

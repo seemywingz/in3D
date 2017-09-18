@@ -50,7 +50,7 @@ func (d *DrawnObjectData) rotate() *mgl32.Mat4 {
 	m := mgl32.Translate3D(d.X, d.Y, d.Z)
 	// rotataton
 	d.YRotation++
-	d.XRotation++
+	// d.XRotation++
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.XRotation))
 	rotation := m.Mul4(yrotMatrix.Mul4(xrotMatrix))
