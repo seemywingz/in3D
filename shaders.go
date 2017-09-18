@@ -9,7 +9,8 @@ const (
 	uniform mat4 MVP;
 	uniform mat4 MODEL;
 
-	const vec3 lightPos = vec3(0.0,100.0,0.0);
+	vec3 lightPos = vec3(MVP * vec4(0.0,100.0,0.0,1));
+	// const vec3 lightPos = vec3(0.0,100.0,0.0);
 	const vec3 ambientColor = vec3(0.1, 0.1, 0.1);
 	const vec3 diffuseColor = vec3(0.1, 0.1, 0.1)*3;
 	const vec3 specColor = vec3(0.1, 0.1, 0.1)*10;
