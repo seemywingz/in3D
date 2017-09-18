@@ -45,13 +45,6 @@ func main() {
 }
 
 func loadLights() {
-	// ambient := []float32{0.5, 0.5, 0.5, 1}
-	// diffuse := []float32{1, 1, 1, 1}
-	// lightPosition := []float32{-5, 5, 10, 0}
-	// gl.Lightfv(gl.LIGHT0, gl.AMBIENT, &ambient[0])
-	// gl.Lightfv(gl.LIGHT0, gl.DIFFUSE, &diffuse[0])
-	// gl.Lightfv(gl.LIGHT0, gl.POSITION, &lightPosition[0])
-	// gl.Enable(gl.LIGHT0)
 }
 
 func randObject(numberOfObjects, min, max int, points []float32, texture uint32) {

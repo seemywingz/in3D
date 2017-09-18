@@ -46,14 +46,13 @@ func (DrawnObjectData) New(position Position, points []float32, texture uint32, 
 }
 
 func (d *DrawnObjectData) rotate() *mgl32.Mat4 {
-	// translate to obj position
-	m := mgl32.Translate3D(d.X, d.Y, d.Z)
-	// rotataton
 	d.YRotation++
-	// d.XRotation++
+	d.XRotation++
+
+	model := mgl32.Translate3D(d.X, d.Y, d.Z)
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.XRotation))
-	rotation := m.Mul4(yrotMatrix.Mul4(xrotMatrix))
+	rotation := model.Mul4(xrotMatrix.Mul4(yrotMatrix))
 	return &rotation
 }
 
