@@ -35,8 +35,8 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	randObject(1000, -200, 200, square, boxTexture)
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, square, boxTexture, shaders[0]))
+	randObject(1000, -200, 200, cube, boxTexture)
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, cube, boxTexture, shaders[0]))
 
 	for !window.ShouldClose() {
 		camera.Update()
