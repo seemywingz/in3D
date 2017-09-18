@@ -6,12 +6,12 @@ const (
 
   in vec2 fragTexCoord;
 
-  out vec4 outCLR;
+  out vec4 outColor;
 
   uniform sampler2D tex;
 
   void main() {
-  	outCLR = texture(tex, fragTexCoord);
+  	outColor = texture(tex, fragTexCoord);
   	//outCLR = vec4(1,0,1,1);
   }` + "\x00"
 
