@@ -12,7 +12,7 @@ const (
 	const vec3 lightPos = vec3(0.0,0.0,0.0);
 	const vec3 ambientColor = vec3(0.1, 0.1, 0.1);
 	const vec3 diffuseColor = vec3(0.3, 0.3, 0.3);
-	const vec3 specColor = vec3(1.0, 1.0, 1.0);
+	const vec3 specColor = vec3(0.6, 0.6, 0.6);
 
 	in vec3 normalInterp;
 	in vec3 fragPos;
@@ -59,7 +59,7 @@ const (
 	basicVertexSRC = `
 	#version 410 core
 
-	uniform mat4 MVP, MODEL;
+	uniform mat4 MVP, MODEL, NormalMatrix;
 
 	in vec3 vert;
 	in vec2 vertTexCoord;
@@ -72,10 +72,12 @@ const (
 	void main(){
 	  vec4 fragPos4 = MODEL * vec4(vert, 1.0);
 	  fragPos = vec3(fragPos4) / fragPos4.w;
-		mat4 normalMatrix = transpose(inverse(MODEL));
-	  normalInterp = vec3(normalMatrix * vec4(vertNormal, 0.0));
+		fragTexCoord = vertTexCoord;
 
-    fragTexCoord = vertTexCoord;
+		// mat4 normalMatrix = transpose(inverse(MODEL));
+	  // normalInterp = vec3(normalMatrix * vec4(vertNormal, 0.0));
+	  normalInterp = vec3(NormalMatrix * vec4(vertNormal, 0.0));
+
 		gl_Position =  MVP * MODEL * vec4(vert, 1);
 	}` + "\x00"
 )
