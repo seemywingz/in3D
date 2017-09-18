@@ -65,9 +65,13 @@ func (d *DrawnObjectData) rotate() *mgl32.Mat4 {
 // Draw : draw the vertecies
 func (d *DrawnObjectData) Draw() {
 	modelMatrix := d.rotate()
-	// normalMatrix := transpose(inverse(MODEL))
-	gl.UseProgram(d.Program)
 	gl.UniformMatrix4fv(d.ModelMatrix, 1, false, &modelMatrix[0])
+
+	inv := modelMatrix.Inv()
+	normalMatrix := inv.Transpose()
+	gl.UniformMatrix4fv(d.NormalMatrix, 1, false, &normalMatrix[0])
+
+	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.BindTexture(gl.TEXTURE_2D, d.Texture)
