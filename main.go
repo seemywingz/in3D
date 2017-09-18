@@ -27,7 +27,7 @@ func main() {
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
 	randObject(1000, -200, 200, cube, texture["box"])
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, cube, texture["box"], shaders[0]))
+	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, cube, texture["box"], shaders["phong"]))
 
 	for !window.ShouldClose() {
 		camera.Update()
@@ -43,9 +43,9 @@ func randObject(numberOfObjects, min, max int, points []float32, textr uint32) {
 		z := float32(rand.Intn(max-min) + min)
 		if i == numberOfObjects/2 {
 			println("Adding Lifion Box")
-			drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, texture["lifion"], shaders[0]))
+			drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, texture["lifion"], shaders["phong"]))
 		}
-		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, textr, shaders[0]))
+		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, textr, shaders["phong"]))
 	}
 }
 
@@ -53,7 +53,8 @@ func loadLights() {
 }
 
 func loadShaders() {
-	shaders = append(shaders, createGLprogram(basicVertexSRC, basicFragmentSRC))
+	shaders = make(map[string]uint32)
+	shaders["phong"] = createGLprogram(basicVertexSRC, basicFragmentSRC)
 }
 
 func loadTextures() {

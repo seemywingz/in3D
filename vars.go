@@ -14,7 +14,7 @@ var (
 	// Graphics
 	window       *glfw.Window
 	camera       Camera
-	shaders      []uint32
+	shaders      map[string]uint32
 	texture      map[string]uint32
 	drawnObjects []DrawnObject
 
