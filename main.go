@@ -12,12 +12,12 @@ import (
 
 func main() {
 	runtime.LockOSThread()
+	gt.SetDirPath("github.com/seemywingz/go-gl_boiler")
 
 	var windowWidth = 800
 	var windowHeight = 600
 	window = initGlfw(windowWidth, windowHeight, "go-gl Boiler")
 	defer glfw.Terminate()
-	gt.SetDirPath("github.com/seemywingz/go-gl_boiler")
 
 	initGL()
 	loadShaders()
