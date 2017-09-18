@@ -11,7 +11,7 @@ const (
 
 	const vec3 lightPos = vec3(0.0,0.0,0.0);
 	const vec3 ambientColor = vec3(0.1, 0.1, 0.1);
-	const vec3 diffuseColor = vec3(0.5, 0.5, 0.5);
+	const vec3 diffuseColor = vec3(0.3, 0.3, 0.3);
 	const vec3 specColor = vec3(1.0, 1.0, 1.0);
 
 	in vec3 normalInterp;
