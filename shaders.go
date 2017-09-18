@@ -20,8 +20,39 @@ const (
 
   out vec4 finalColor;
 
+	int mode = 1;
+
   void main() {
-	  finalColor = texture(tex, fragTexCoord);
+		vec3 normal = normalize(normalInterp);
+	  vec3 lightDir = normalize(lightPos - fragPos);
+
+	  float lambertian = max(dot(lightDir,normal), 0.0);
+	  float specular = 0.0;
+
+	  if(lambertian > 0.0) {
+
+	    vec3 viewDir = normalize(-fragPos);
+
+	    // this is blinn phong
+	    vec3 halfDir = normalize(lightDir + viewDir);
+	    float specAngle = max(dot(halfDir, normal), 0.0);
+	    specular = pow(specAngle, 16.0);
+
+	    // this is phong (for comparison)
+	    if(mode == 2) {
+	      vec3 reflectDir = reflect(-lightDir, normal);
+	      specAngle = max(dot(reflectDir, viewDir), 0.0);
+	      // note that the exponent is different here
+	      specular = pow(specAngle, 4.0);
+	    }
+	  }
+
+
+		finalColor = vec4(ambientColor +
+		                  lambertian * diffuseColor +
+		                  specular * specColor, 1.0);
+
+	  // finalColor = texture(tex, fragTexCoord);
     //finalColor = vec4(1,0,1,1);
   }` + "\x00"
 
@@ -34,14 +65,16 @@ const (
 	in vec2 vertTexCoord;
 	in vec3 vertNormal;
 
-	out vec3 normalInterp;
 	out vec3 fragPos;
 	out vec2 fragTexCoord;
+	out vec3 normalInterp;
 
 	void main(){
-	  // vec4 fragPos4 = MODEL * vec4(vert, 1.0);
-	  // fragPos = vec3(fragPos4) / fragPos4.w;
-	  // normalInterp = vec3(normalMat * vec4(vertNormal, 0.0));
+	  vec4 fragPos4 = MODEL * vec4(vert, 1.0);
+	  fragPos = vec3(fragPos4) / fragPos4.w;
+		mat4 normalMatrix = transpose(inverse(MODEL));
+	  normalInterp = vec3(normalMatrix * vec4(vertNormal, 0.0));
+
     fragTexCoord = vertTexCoord;
 		gl_Position =  MVP * MODEL * vec4(vert, 1);
 	}` + "\x00"
