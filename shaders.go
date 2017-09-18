@@ -65,8 +65,8 @@ const (
 	void main(){
 		fragTexCoord = vertTexCoord;
     fragNormal = vertNormal;
-    fragVert = vert;
-		fragModel = MODEL;
+		fragModel = MVP * MODEL;
 		gl_Position =  MVP * MODEL * vert;
+		fragVert = gl_Position;
 	}` + "\x00"
 )
