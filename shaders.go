@@ -7,6 +7,7 @@ const (
 
 	uniform sampler2D tex;
 	uniform mat4 MVP;
+	uniform vec3 CPOS;
 	uniform mat4 MODEL;
 
 	vec3 lightPos = vec3(-2.0, 0.0, 0.0);
@@ -23,6 +24,7 @@ const (
   void main() {
 		vec3 normal = normalize(normalInterp);
 	  vec3 lightDir = normalize(lightPos - fragPos);
+		vec3 camDir = normalize(CPOS - fragPos);
 
 	  float lambertian = max(dot(lightDir,normal), 0.0);
 	  float specular = 0.0;
