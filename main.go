@@ -26,12 +26,18 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	randObject(1000, -200, 200, cube, texture["box"])
-	card1 := DrawnObjectData{}.New(Position{0, 0, -4}, cube, texture["tk"], shaders["phong"])
-	card1.DrawLogic = func(d *DrawnObjectData) {
+	// randObject(1000, -200, 200, cube, texture["box"])
+	cardfront := DrawnObjectData{}.New(Position{0, 0, -4}, cardFront, texture["tk"], shaders["phong"])
+	cardback := DrawnObjectData{}.New(Position{0, 0, -4.0001}, cardBack, texture["back"], shaders["phong"])
+	cl := func(d *DrawnObjectData) {
 		d.XRotation++
+		d.YRotation += 2
 	}
-	drawnObjects = append(drawnObjects, card1)
+	cardfront.DrawLogic = cl
+	cardback.DrawLogic = cl
+	drawnObjects = append(drawnObjects, cardfront)
+	drawnObjects = append(drawnObjects, cardback)
+	drawnObjects = append(drawnObjects, Card{})
 
 	// ground := DrawnObjectData{}.New(Position{0, 0, 0}, card, texture["tk"], shaders["phong"], nil)
 	// ground.XRotation = -90
@@ -71,6 +77,7 @@ func loadTextures() {
 	texture["lifion"] = newTexture("textures/lifion.png")
 	texture["box"] = newTexture("textures/square.jpg")
 	texture["tk"] = newTexture("textures/tk.jpg")
+	texture["back"] = newTexture("textures/back.jpg")
 }
 
 func update() {
