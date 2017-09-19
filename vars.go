@@ -9,7 +9,7 @@ type Position struct {
 	Z float32
 }
 
-// Logic : extra logic to perform durring DrawnObject Draw phase
+// DrawLogic : extra logic to perform durring DrawnObject Draw phase
 type DrawLogic func(d *DrawnObjectData)
 
 var (
