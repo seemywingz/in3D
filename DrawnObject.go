@@ -60,7 +60,7 @@ func (d *DrawnObjectData) rotate() *mgl32.Mat4 {
 	return &rotation
 }
 
-// Draw : draw the vertecies
+// Draw : draw the object
 func (d *DrawnObjectData) Draw() {
 	if d.DrawLogic != nil {
 		d.DrawLogic(d)

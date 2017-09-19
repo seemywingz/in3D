@@ -27,19 +27,9 @@ func main() {
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
 	// randObject(1000, -200, 200, cube, texture["box"])
-	cardfront := DrawnObjectData{}.New(Position{0, 0, -4}, cardFront, texture["tk"], shaders["phong"])
-	cardback := DrawnObjectData{}.New(Position{0, 0, -4.0001}, cardBack, texture["back"], shaders["phong"])
-	cl := func(d *DrawnObjectData) {
-		d.XRotation++
-		d.YRotation += 2
-	}
-	cardfront.DrawLogic = cl
-	cardback.DrawLogic = cl
-	drawnObjects = append(drawnObjects, cardfront)
-	drawnObjects = append(drawnObjects, cardback)
-	drawnObjects = append(drawnObjects, Card{})
+	drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
 
-	// ground := DrawnObjectData{}.New(Position{0, 0, 0}, card, texture["tk"], shaders["phong"], nil)
+	// ground := DrawnObjectData{}.New(Position{0, 0, 0}, card, texture["tk"], shader["phong"], nil)
 	// ground.XRotation = -90
 	// drawnObjects = append(drawnObjects, ground)
 
@@ -55,7 +45,7 @@ func randObject(numberOfObjects, min, max int, points []float32, textr uint32) {
 		x := float32(rand.Intn(max-min) + min)
 		y := float32(rand.Intn(max-min) + min)
 		z := float32(rand.Intn(max-min) + min)
-		d := DrawnObjectData{}.New(Position{x, y, z}, points, textr, shaders["phong"])
+		d := DrawnObjectData{}.New(Position{x, y, z}, points, textr, shader["phong"])
 		d.DrawLogic = func(d *DrawnObjectData) {
 			d.XRotation++
 			d.YRotation++
@@ -68,8 +58,8 @@ func loadLights() {
 }
 
 func loadShaders() {
-	shaders = make(map[string]uint32)
-	shaders["phong"] = createGLprogram(basicVertexSRC, basicFragmentSRC)
+	shader = make(map[string]uint32)
+	shader["phong"] = createGLprogram(basicVertexSRC, basicFragmentSRC)
 }
 
 func loadTextures() {
