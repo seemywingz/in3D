@@ -9,9 +9,9 @@ const (
 	uniform mat4 MVP;
 	uniform mat4 MODEL;
 
-	vec3 lightPos = vec3(0.0, 0.0, 0.0);
-	const vec3 ambientColor = vec3(0.1, 0.1, 0.1)*3;
-	const vec3 diffuseColor = vec3(0.1, 0.1, 0.1)*5;
+	vec3 lightPos = vec3(-2.0, 0.0, 0.0);
+	const vec3 ambientColor = vec3(0.1, 0.1, 0.1)*1;
+	const vec3 diffuseColor = vec3(0.1, 0.1, 0.1)*7;
 	const vec3 specColor = vec3(0.1, 0.1, 0.1)*10;
 
 	in vec3 normalInterp;
@@ -19,8 +19,6 @@ const (
 	in vec2 fragTexCoord;
 
   out vec4 finalColor;
-
-	int mode = 1;
 
   void main() {
 		vec3 normal = normalize(normalInterp);
@@ -36,15 +34,8 @@ const (
 	    // this is blinn phong
 	    vec3 halfDir = normalize(lightDir + viewDir);
 	    float specAngle = max(dot(halfDir, normal), 0.0);
-	    specular = pow(specAngle, 16.0);
+	    specular = pow(specAngle, 20.0);
 
-	    // this is phong (for comparison)
-	    if(mode == 2) {
-	      vec3 reflectDir = reflect(-lightDir, normal);
-	      specAngle = max(dot(reflectDir, viewDir), 0.0);
-	      // note that the exponent is different here
-	      specular = pow(specAngle, 4.0);
-	    }
 	  }
 
     vec4 surfaceColor = texture(tex, fragTexCoord);
@@ -78,6 +69,6 @@ const (
 	  // normalInterp = vec3(normalMatrix * vec4(vertNormal, 0.0));
 	  normalInterp = vec3(NormalMatrix * vec4(vertNormal, 0.0));
 
-		gl_Position =  MVP * MODEL * vec4(vert, 1);
+		gl_Position =  MVP * MODEL * vec4(vert, 1.0);
 	}` + "\x00"
 )

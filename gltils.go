@@ -83,7 +83,7 @@ func initGL() {
 
 	gl.Enable(gl.DEPTH_TEST)
 	gl.DepthFunc(gl.LESS)
-	gl.ClearColor(0.1, 0.1, 0.1, 1)
+	// gl.ClearColor(0.1, 0.1, 0.1, 1)
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	println("OpenGL version", version)

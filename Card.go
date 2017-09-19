@@ -13,7 +13,7 @@ func (Card) New(p Position) *Card {
 	cardback := DrawnObjectData{}.New(p, cardBack, texture["back"], shader["phong"])
 	cl := func(d *DrawnObjectData) {
 		// d.XRotation++
-		d.YRotation++
+		d.YRotation += 0.5
 	}
 	cardfront.DrawLogic = cl
 	cardback.DrawLogic = cl

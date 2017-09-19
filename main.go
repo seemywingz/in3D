@@ -26,7 +26,7 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	// randObject(1000, -200, 200, cube, texture["box"])
+	randObject(1000, -200, 200, cube, texture["box"])
 	drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
 
 	// ground := DrawnObjectData{}.New(Position{0, 0, 0}, card, texture["tk"], shader["phong"], nil)
