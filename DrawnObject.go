@@ -26,6 +26,7 @@ type DrawnObjectData struct {
 type DrawnObjectDefaults struct {
 	XRotation float32
 	YRotation float32
+	Logic     Logic
 }
 
 // New : Create new DrawnObjectData
@@ -64,6 +65,9 @@ func (d *DrawnObjectData) rotate() *mgl32.Mat4 {
 
 // Draw : draw the vertecies
 func (d *DrawnObjectData) Draw() {
+	if d.Logic != nil {
+		d.Logic(d)
+	}
 	modelMatrix := d.rotate()
 	gl.UniformMatrix4fv(d.ModelMatrix, 1, false, &modelMatrix[0])
 

@@ -27,10 +27,15 @@ func main() {
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
 	// randObject(1000, -200, 200, cube, texture["box"])
-	drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{0, 0, -4}, card, texture["tk"], shaders["phong"]))
-	ground := DrawnObjectData{}.New(Position{0, 0, 0}, card, texture["tk"], shaders["phong"])
-	ground.XRotation = -90
-	drawnObjects = append(drawnObjects, ground)
+	card1 := DrawnObjectData{}.New(Position{0, 0, -4}, card, texture["tk"], shaders["phong"])
+	card1.Logic = func(d *DrawnObjectData) {
+		d.XRotation++
+	}
+	drawnObjects = append(drawnObjects, card1)
+
+	// ground := DrawnObjectData{}.New(Position{0, 0, 0}, card, texture["tk"], shaders["phong"], nil)
+	// ground.XRotation = -90
+	// drawnObjects = append(drawnObjects, ground)
 
 	for !window.ShouldClose() {
 		camera.Update()
