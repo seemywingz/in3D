@@ -117,23 +117,6 @@ func (c *Camera) KeyControls() {
 	}
 }
 
-// Update : update camera
-func (c *Camera) Update() {
-	c.MouseControls()
-	c.KeyControls()
-
-	println(c.POSID)
-
-	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
-	model := translateMatrix.Mul4(mgl32.Ident4())
-
-	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(c.XRotation))
-	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(c.YRotation))
-	view := xrotMatrix.Mul4(yrotMatrix.Mul4(mgl32.Ident4()))
-	MVP := c.Projection.Mul4(view.Mul4(model))
-	gl.UniformMatrix4fv(c.MVPID, 1, false, &MVP[0])
-}
-
 // New : return new Camera
 func (Camera) New(position Position, pointerLock bool) Camera {
 
@@ -159,4 +142,19 @@ func (Camera) New(position Position, pointerLock bool) Camera {
 	}
 
 	return cam
+}
+
+// Update : update camera
+func (c *Camera) Update() {
+	c.MouseControls()
+	c.KeyControls()
+
+	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
+	model := translateMatrix.Mul4(mgl32.Ident4())
+
+	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(c.XRotation))
+	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(c.YRotation))
+	view := xrotMatrix.Mul4(yrotMatrix.Mul4(mgl32.Ident4()))
+	MVP := c.Projection.Mul4(view.Mul4(model))
+	gl.UniformMatrix4fv(c.MVPID, 1, false, &MVP[0])
 }
