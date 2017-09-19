@@ -26,9 +26,9 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	// randObject(1000, -200, 200, cube, texture["box"])
-	card1 := DrawnObjectData{}.New(Position{0, 0, -4}, card, texture["tk"], shaders["phong"])
-	card1.Logic = func(d *DrawnObjectData) {
+	randObject(1000, -200, 200, cube, texture["box"])
+	card1 := DrawnObjectData{}.New(Position{0, 0, -4}, cube, texture["tk"], shaders["phong"])
+	card1.DrawLogic = func(d *DrawnObjectData) {
 		d.XRotation++
 	}
 	drawnObjects = append(drawnObjects, card1)
