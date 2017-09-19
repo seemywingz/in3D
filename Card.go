@@ -17,8 +17,6 @@ func (Card) New(p Position) *Card {
 	}
 	cardfront.DrawLogic = cl
 	cardback.DrawLogic = cl
-	// drawnObjects = append(drawnObjects, cardfront)
-	// drawnObjects = append(drawnObjects, cardback)
 	return &Card{cardfront, cardback}
 }
 
