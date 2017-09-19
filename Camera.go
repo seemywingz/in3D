@@ -120,13 +120,8 @@ func (c *Camera) KeyControls() {
 // New : return new Camera
 func (Camera) New(position Position, pointerLock bool) Camera {
 
-	ptr, free1 := gl.Strs("MVP")
-	defer free1()
-	mvpid := gl.GetUniformLocation(shader["phong"], *ptr)
-
-	ptr, free2 := gl.Strs("CPOS")
-	defer free2()
-	posid := gl.GetUniformLocation(shader["phong"], *ptr)
+	mvpid := gl.GetUniformLocation(shader["phong"], gl.Str("MVP\x00"))
+	posid := gl.GetUniformLocation(shader["phong"], gl.Str("CPOS\x00"))
 
 	// Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
 	w, h := window.GetSize()

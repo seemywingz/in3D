@@ -32,13 +32,8 @@ type DrawnObjectDefaults struct {
 // New : Create new DrawnObjectData
 func (DrawnObjectData) New(position Position, points []float32, texture uint32, program uint32) *DrawnObjectData {
 
-	ptr, free1 := gl.Strs("MODEL")
-	defer free1()
-	ModelMatrix := gl.GetUniformLocation(program, *ptr)
-
-	ptr, free2 := gl.Strs("NormalMatrix")
-	defer free2()
-	NormalMatrix := gl.GetUniformLocation(program, *ptr)
+	ModelMatrix := gl.GetUniformLocation(shader["phong"], gl.Str("MODEL\x00"))
+	NormalMatrix := gl.GetUniformLocation(shader["phong"], gl.Str("NormalMatrix\x00"))
 
 	return &DrawnObjectData{
 		makeVao(points, program),
