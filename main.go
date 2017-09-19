@@ -49,11 +49,12 @@ func randObject(numberOfObjects, min, max int, points []float32, textr uint32) {
 		x := float32(rand.Intn(max-min) + min)
 		y := float32(rand.Intn(max-min) + min)
 		z := float32(rand.Intn(max-min) + min)
-		if i == numberOfObjects/2 {
-			println("Adding Lifion Box")
-			drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, texture["lifion"], shaders["phong"]))
+		d := DrawnObjectData{}.New(Position{x, y, z}, points, textr, shaders["phong"])
+		d.DrawLogic = func(d *DrawnObjectData) {
+			d.XRotation++
+			d.YRotation++
 		}
-		drawnObjects = append(drawnObjects, DrawnObjectData{}.New(Position{x, y, z}, points, textr, shaders["phong"]))
+		drawnObjects = append(drawnObjects, d)
 	}
 }
 
