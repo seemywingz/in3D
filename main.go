@@ -29,8 +29,14 @@ func main() {
 	randObject(200, -200, 200, cube, texture["box"], shader["basic"])
 	randObject(200, -200, 200, cube, texture["box"], shader["color"])
 	randObject(200, -200, 200, cube, texture["box"], shader["texture"])
-	randObject(200, -200, 200, cube, texture["box"], shader["phong"])
-	drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
+	randObject(700, -200, 200, cube, texture["box"], shader["phong"])
+	// drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
+	d := DrawnObjectData{}.New(Position{0, 0, -5}, cube, texture["box"], shader["phong"])
+	d.DrawLogic = func(d *DrawnObjectData) {
+		// d.XRotation++
+		d.YRotation++
+	}
+	drawnObjects = append(drawnObjects, d)
 
 	for !window.ShouldClose() {
 		camera.Update()
@@ -46,16 +52,12 @@ func randObject(numberOfObjects, min, max int, points []float32, textr, shadr ui
 		z := float32(rand.Intn(max-min) + min)
 		d := DrawnObjectData{}.New(Position{x, y, z}, points, textr, shadr)
 		dy := rand.Float32() * 10
-		dx := rand.Float32() * 10
+		// dx := rand.Float32() * 10
 		d.DrawLogic = func(d *DrawnObjectData) {
-			d.XRotation += dx
+			// d.XRotation += dx
 			d.YRotation += dy
 		}
-		r := gt.Randomf()
-		g := gt.Randomf()
-		b := gt.Randomf()
-		// fmt.Println(r, g, b)
-		d.Color = Color{r, g, b, 0}
+		d.Color = Color{gt.Randomf(), gt.Randomf(), gt.Randomf(), 0}
 		drawnObjects = append(drawnObjects, d)
 	}
 }
