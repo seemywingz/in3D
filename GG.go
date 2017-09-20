@@ -9,7 +9,6 @@ import (
 	_ "image/png"  // include png support
 	"io/ioutil"
 	"os"
-	"runtime"
 	"strings"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
@@ -18,8 +17,7 @@ import (
 )
 
 // Init : initializes glfw and returns a Window to use, then InitGL
-func Init(width, height int, title string) *glfw.Window {
-	runtime.LockOSThread()
+func Init(width, height int, title string) {
 
 	gt.EoE("Error Initializing GLFW", glfw.Init())
 	glfw.WindowHint(glfw.Resizable, glfw.False)
@@ -42,8 +40,6 @@ func Init(width, height int, title string) *glfw.Window {
 	window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
 	window.MakeContextCurrent()
 	InitGL()
-
-	return window
 }
 
 // InitGL : initialize GL setting and print version
@@ -190,4 +186,16 @@ func NewTexture(file string) uint32 {
 		gl.Ptr(rgba.Pix))
 
 	return texture
+}
+func ShouldClose() bool {
+	return window.ShouldClose()
+}
+
+// SwapBuffers : wrapper for glfw
+func SwapBuffers() {
+	window.SwapBuffers()
+}
+
+func GetSize() (int, int) {
+	return window.GetSize()
 }
