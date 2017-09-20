@@ -12,7 +12,7 @@ import (
 
 func main() {
 	runtime.LockOSThread()
-	gt.SetDirPath("github.com/seemywingz/go-gl_boiler")
+	gt.SetDirPath("github.com/seemywingz/ggl")
 
 	var windowWidth = 00
 	var windowHeight = 600
