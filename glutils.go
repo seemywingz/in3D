@@ -17,42 +17,6 @@ import (
 	"github.com/seemywingz/gt"
 )
 
-// NewTexture : greate GL reference to provided texture
-func NewTexture(file string) uint32 {
-	imgFile, err := os.Open(file)
-	gt.EoE("Error Loading Texture", err)
-
-	img, _, err := image.Decode(imgFile)
-	gt.EoE("Error Decoding Image", err)
-
-	rgba := image.NewRGBA(img.Bounds())
-	if rgba.Stride != rgba.Rect.Size().X*4 {
-		gt.EoE("Error Getting RGB Strride", errors.New("unsupported stride"))
-	}
-	draw.Draw(rgba, rgba.Bounds(), img, image.Point{0, 0}, draw.Src)
-
-	var texture uint32
-	gl.Enable(gl.TEXTURE_2D)
-	gl.GenTextures(1, &texture)
-	gl.BindTexture(gl.TEXTURE_2D, texture)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-	gl.TexImage2D(
-		gl.TEXTURE_2D,
-		0,
-		gl.RGBA,
-		int32(rgba.Rect.Size().X),
-		int32(rgba.Rect.Size().Y),
-		0,
-		gl.RGBA,
-		gl.UNSIGNED_BYTE,
-		gl.Ptr(rgba.Pix))
-
-	return texture
-}
-
 // Init : initializes glfw and returns a Window to use, then InitGL
 func Init(width, height int, title string) *glfw.Window {
 	runtime.LockOSThread()
@@ -130,7 +94,8 @@ func makeVao(points []float32, program uint32) uint32 {
 	return vao
 }
 
-func compileShader(source string, shaderType uint32) uint32 {
+// CompileShader :
+func CompileShader(source string, shaderType uint32) uint32 {
 	shader := gl.CreateShader(shaderType)
 
 	csources, free := gl.Strs(source)
@@ -159,7 +124,7 @@ func CompileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
 	source, err := ioutil.ReadFile(sourceFile)
 	gt.EoE("Error Reading Source File", err)
 
-	return compileShader(string(source)+"\x00", shaderType)
+	return CompileShader(string(source)+"\x00", shaderType)
 }
 
 // NewShader : create GL shader program from provided GLSL source files
@@ -189,4 +154,40 @@ func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 	gl.DeleteShader(vertexShader)
 	gl.DeleteShader(fragmentShader)
 	return program
+}
+
+// NewTexture : greate GL reference to provided texture
+func NewTexture(file string) uint32 {
+	imgFile, err := os.Open(file)
+	gt.EoE("Error Loading Texture", err)
+
+	img, _, err := image.Decode(imgFile)
+	gt.EoE("Error Decoding Image", err)
+
+	rgba := image.NewRGBA(img.Bounds())
+	if rgba.Stride != rgba.Rect.Size().X*4 {
+		gt.EoE("Error Getting RGB Strride", errors.New("unsupported stride"))
+	}
+	draw.Draw(rgba, rgba.Bounds(), img, image.Point{0, 0}, draw.Src)
+
+	var texture uint32
+	gl.Enable(gl.TEXTURE_2D)
+	gl.GenTextures(1, &texture)
+	gl.BindTexture(gl.TEXTURE_2D, texture)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+	gl.TexImage2D(
+		gl.TEXTURE_2D,
+		0,
+		gl.RGBA,
+		int32(rgba.Rect.Size().X),
+		int32(rgba.Rect.Size().Y),
+		0,
+		gl.RGBA,
+		gl.UNSIGNED_BYTE,
+		gl.Ptr(rgba.Pix))
+
+	return texture
 }
