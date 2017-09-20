@@ -5,10 +5,11 @@ uniform sampler2D tex;
 uniform mat4 MVP, MODEL;
 
 // TODO: store light data in go program
-vec3 lightPos = vec3(0.0, 0.0, 0.0);
+const vec3 lightPos = vec3(0.0, 0.0, 10.0);
 const vec3 Iamb = vec3(0.1, 0.1, 0.1)*1;
 const vec3 Idif = vec3(0.1, 0.1, 0.1)*6;
 const vec3 Ispec = vec3(0.1, 0.1, 0.1)*10;
+const float pi = 3.14159265;
 
 in vec3 fragPos;
 in vec3 fragNoraml;
@@ -24,11 +25,13 @@ void main() {
 
   float lambertian = max(dot(N,L), 0.0);
   float specular = 0.0;
+  float shininess = 16.0;
 
   if(lambertian > 0.0) {
     vec3 H = normalize(L + V);
     float specAngle = max(dot(H, N), 0.0);
-    specular = pow(specAngle, 16.0);
+    float eConservation = ( 8.0 + shininess ) / ( 8.0 * pi );
+    specular = eConservation * pow(specAngle, shininess);
   }
   float diffuse = max(dot(normalize(fragNoraml), normalize(lightPos)), 0.0);
 

@@ -14,7 +14,7 @@ func main() {
 	runtime.LockOSThread()
 	gt.SetDirPath("github.com/seemywingz/go-gl_boiler")
 
-	var windowWidth = 800
+	var windowWidth = 00
 	var windowHeight = 600
 	window = initGlfw(windowWidth, windowHeight, "go-gl Boiler")
 	defer glfw.Terminate()
@@ -26,17 +26,18 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	randObject(200, -200, 200, cube, texture["box"], shader["basic"])
+	randObject(200, -200, 200, cube, texture["none"], shader["basic"])
 	randObject(200, -200, 200, cube, texture["box"], shader["color"])
-	randObject(200, -200, 200, cube, texture["box"], shader["texture"])
+	// randObject(200, -200, 200, cube, texture["box"], shader["texture"])
 	randObject(700, -200, 200, cube, texture["box"], shader["phong"])
-	// drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
-	d := DrawnObjectData{}.New(Position{0, 0, -5}, cube, texture["box"], shader["phong"])
-	d.DrawLogic = func(d *DrawnObjectData) {
-		// d.XRotation++
-		d.YRotation++
-	}
-	drawnObjects = append(drawnObjects, d)
+	drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
+
+	// d := DrawnObjectData{}.New(Position{0, 0, -5}, cube, texture["box"], shader["phong"])
+	// d.DrawLogic = func(d *DrawnObjectData) {
+	// 	// d.XRotation++
+	// 	d.YRotation++
+	// }
+	// drawnObjects = append(drawnObjects, d)
 
 	for !window.ShouldClose() {
 		camera.Update()
@@ -75,6 +76,7 @@ func loadShaders() {
 
 func loadTextures() {
 	texture = make(map[string]uint32)
+	texture["none"] = 99999
 	texture["lifion"] = newTexture("textures/lifion.png")
 	texture["box"] = newTexture("textures/square.jpg")
 	texture["tk"] = newTexture("textures/tk.jpg")
