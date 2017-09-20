@@ -14,7 +14,7 @@ type DrawnObject interface {
 type DrawnObjectData struct {
 	Vao     uint32
 	Program uint32
-	Points  []float32
+	Points  *[]float32
 	Position
 	MVPID          int32
 	ModelMatrixID  int32
@@ -40,7 +40,7 @@ func (DrawnObjectData) New(position Position, points []float32, texture uint32, 
 	return &DrawnObjectData{
 		makeVao(points, program),
 		program,
-		points,
+		&points,
 		position,
 		MVPID,
 		ModelMatrixID,
@@ -60,6 +60,7 @@ func (d *DrawnObjectData) rotate() *mgl32.Mat4 {
 
 // Draw : draw the object
 func (d *DrawnObjectData) Draw() {
+	gl.UseProgram(d.Program)
 
 	if d.DrawLogic != nil {
 		d.DrawLogic(d)
@@ -73,7 +74,6 @@ func (d *DrawnObjectData) Draw() {
 	gl.UniformMatrix4fv(d.NormalMatrixID, 1, false, &normalMatrix[0])
 	gl.UniformMatrix4fv(d.MVPID, 1, false, &camera.MVP[0])
 
-	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.BindTexture(gl.TEXTURE_2D, d.Texture)
