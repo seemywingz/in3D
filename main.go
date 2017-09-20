@@ -29,10 +29,6 @@ func main() {
 	randObject(1000, -200, 200, cube, texture["box"])
 	drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
 
-	// ground := DrawnObjectData{}.New(Position{0, 0, 0}, card, texture["tk"], shader["phong"], nil)
-	// ground.XRotation = -90
-	// drawnObjects = append(drawnObjects, ground)
-
 	for !window.ShouldClose() {
 		camera.Update()
 		update()
@@ -59,7 +55,8 @@ func loadLights() {
 
 func loadShaders() {
 	shader = make(map[string]uint32)
-	shader["phong"] = createGLprogram(basicVertexSRC, basicFragmentSRC)
+	// shader["phong"] = createGLprogram(basicVertexSRC, basicFragmentSRC)
+	shader["phong"] = createGLprogram("shaders/blinnPhongVect.glsl", "shaders/blinnPhongFrag.glsl")
 }
 
 func loadTextures() {

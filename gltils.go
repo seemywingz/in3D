@@ -7,6 +7,7 @@ import (
 	"image/draw"
 	_ "image/jpeg"
 	_ "image/png"
+	"io/ioutil"
 	"os"
 	"strings"
 
@@ -116,7 +117,7 @@ func makeVao(points []float32, program uint32) uint32 {
 	return vao
 }
 
-func compileShader(source string, shaderType uint32) (uint32, error) {
+func compileShader(source string, shaderType uint32) uint32 {
 	shader := gl.CreateShader(shaderType)
 
 	csources, free := gl.Strs(source)
@@ -133,18 +134,24 @@ func compileShader(source string, shaderType uint32) (uint32, error) {
 		log := strings.Repeat("\x00", int(logLength+1))
 		gl.GetShaderInfoLog(shader, logLength, nil, gl.Str(log))
 
-		return 0, fmt.Errorf("failed to compile %v: %v", source, log)
+		gt.EoE("Failed to Compile Source ", fmt.Errorf("failed to compile %v: %v", source, log))
 	}
 
-	return shader, nil
+	return shader
 }
 
-func createGLprogram(vertexShaderSource, fragmentShaderSource string) uint32 {
-	vertexShader, err := compileShader(vertexShaderSource, gl.VERTEX_SHADER)
-	gt.EoE("Error Compiling Vertex Shader", err)
+func compileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
 
-	fragmentShader, err := compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER)
-	gt.EoE("Error Compiling Fragment Shader", err)
+	source, err := ioutil.ReadFile(sourceFile)
+	gt.EoE("Error Reading Source File", err)
+
+	return compileShader(string(source)+"\x00", shaderType)
+}
+
+func createGLprogram(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
+
+	vertexShader := compileShaderFromFile(vertexShaderSourceFile, gl.VERTEX_SHADER)
+	fragmentShader := compileShaderFromFile(fragmentShaderSourceFile, gl.FRAGMENT_SHADER)
 
 	program := gl.CreateProgram()
 	gl.AttachShader(program, vertexShader)
