@@ -26,6 +26,28 @@ type CameraData struct {
 	PointerLock bool
 }
 
+// New : return new Camera
+func (Camera) New(position Position, pointerLock bool) Camera {
+
+	mvpid := gl.GetUniformLocation(shader["basic"], gl.Str("MVP\x00"))
+	posid := gl.GetUniformLocation(shader["basic"], gl.Str("CPOS\x00"))
+
+	// Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
+	w, h := window.GetSize()
+	ratio := float32(w) / float32(h)
+	projection := mgl32.Perspective(mgl32.DegToRad(45.0), ratio, 0.1, 1000)
+
+	// Create new Camera instance
+	cam := Camera{projection, mvpid, posid, position, CameraData{}}
+	if pointerLock {
+		cam.EnablePointerLock()
+	} else {
+		cam.DisablePointerLock()
+	}
+
+	return cam
+}
+
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
 
@@ -115,28 +137,6 @@ func (c *Camera) KeyControls() {
 	// Press e
 	if window.GetKey(glfw.KeyE) == glfw.Press {
 	}
-}
-
-// New : return new Camera
-func (Camera) New(position Position, pointerLock bool) Camera {
-
-	mvpid := gl.GetUniformLocation(shader["phong"], gl.Str("MVP\x00"))
-	posid := gl.GetUniformLocation(shader["phong"], gl.Str("CPOS\x00"))
-
-	// Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
-	w, h := window.GetSize()
-	ratio := float32(w) / float32(h)
-	projection := mgl32.Perspective(mgl32.DegToRad(45.0), ratio, 0.1, 1000)
-
-	// Create new Camera instance
-	cam := Camera{projection, mvpid, posid, position, CameraData{}}
-	if pointerLock {
-		cam.EnablePointerLock()
-	} else {
-		cam.DisablePointerLock()
-	}
-
-	return cam
 }
 
 // Update : update camera

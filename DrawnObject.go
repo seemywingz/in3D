@@ -30,7 +30,7 @@ type DrawnObjectDefaults struct {
 // New : Create new DrawnObjectData
 func (DrawnObjectData) New(position Position, points []float32, texture uint32, program uint32) *DrawnObjectData {
 
-	ModelMatrix := gl.GetUniformLocation(shader["phong"], gl.Str("MODEL\x00"))
+	ModelMatrix := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
 
 	return &DrawnObjectData{
 		makeVao(points, program),
@@ -57,6 +57,7 @@ func (d *DrawnObjectData) Draw() {
 	}
 	modelMatrix := d.rotate()
 	gl.UniformMatrix4fv(d.ModelMatrix, 1, false, &modelMatrix[0])
+	// println(d.ModelMatrix)
 
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
