@@ -10,6 +10,9 @@ type DrawnObject interface {
 	Draw()
 }
 
+// DrawLogic : extra logic to perform durring DrawnObject Draw phase
+type DrawLogic func(d *DrawnObjectData)
+
 // DrawnObjectData : a struct to hold openGL object data
 type DrawnObjectData struct {
 	Vao     uint32

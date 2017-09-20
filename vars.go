@@ -17,9 +17,6 @@ type Color struct {
 	A float32
 }
 
-// DrawLogic : extra logic to perform durring DrawnObject Draw phase
-type DrawLogic func(d *DrawnObjectData)
-
 var (
 
 	// Graphics
