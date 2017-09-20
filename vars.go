@@ -11,6 +11,11 @@ type Position struct {
 	Z float32
 }
 
+// NewPosition : create a new Position, you know, for looks
+func NewPosition(x, y, z float32) *Position {
+	return &Position{X: x, Y: y, Z: z}
+}
+
 // Color : struct to store RGBA values
 type Color struct {
 	R float32
