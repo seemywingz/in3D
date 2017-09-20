@@ -14,11 +14,12 @@ type DrawnObject interface {
 type DrawnObjectData struct {
 	Vao     uint32
 	Program uint32
-	Points  []float32
+	Points  *[]float32
 	Position
-	ModelMatrix  int32
-	NormalMatrix int32
-	Texture      uint32
+	MVPID          int32
+	ModelMatrixID  int32
+	NormalMatrixID int32
+	Texture        uint32
 	DrawnObjectDefaults
 }
 
@@ -26,35 +27,30 @@ type DrawnObjectData struct {
 type DrawnObjectDefaults struct {
 	XRotation float32
 	YRotation float32
+	DrawLogic DrawLogic
 }
 
 // New : Create new DrawnObjectData
 func (DrawnObjectData) New(position Position, points []float32, texture uint32, program uint32) *DrawnObjectData {
 
-	ptr, free1 := gl.Strs("MODEL")
-	defer free1()
-	ModelMatrix := gl.GetUniformLocation(program, *ptr)
-
-	ptr, free2 := gl.Strs("NormalMatrix")
-	defer free2()
-	NormalMatrix := gl.GetUniformLocation(program, *ptr)
+	ModelMatrixID := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
+	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
+	MVPID := gl.GetUniformLocation(program, gl.Str("MVP\x00"))
 
 	return &DrawnObjectData{
 		makeVao(points, program),
 		program,
-		points,
+		&points,
 		position,
-		ModelMatrix,
-		NormalMatrix,
+		MVPID,
+		ModelMatrixID,
+		NormalMatrixID,
 		texture,
 		DrawnObjectDefaults{},
 	}
 }
 
 func (d *DrawnObjectData) rotate() *mgl32.Mat4 {
-	d.YRotation++
-	d.XRotation++
-
 	model := mgl32.Translate3D(d.X, d.Y, d.Z)
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.XRotation))
@@ -62,16 +58,22 @@ func (d *DrawnObjectData) rotate() *mgl32.Mat4 {
 	return &rotation
 }
 
-// Draw : draw the vertecies
+// Draw : draw the object
 func (d *DrawnObjectData) Draw() {
-	modelMatrix := d.rotate()
-	gl.UniformMatrix4fv(d.ModelMatrix, 1, false, &modelMatrix[0])
-
-	inv := modelMatrix.Inv()
-	normalMatrix := inv.Transpose()
-	gl.UniformMatrix4fv(d.NormalMatrix, 1, false, &normalMatrix[0])
-
 	gl.UseProgram(d.Program)
+
+	if d.DrawLogic != nil {
+		d.DrawLogic(d)
+	}
+
+	modelMatrix := d.rotate()
+	gl.UniformMatrix4fv(d.ModelMatrixID, 1, false, &modelMatrix[0])
+
+	inv := modelMatrix.Transpose()
+	normalMatrix := inv.Inv()
+	gl.UniformMatrix4fv(d.NormalMatrixID, 1, false, &normalMatrix[0])
+	gl.UniformMatrix4fv(d.MVPID, 1, false, &camera.MVP[0])
+
 	gl.BindVertexArray(d.Vao)
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.BindTexture(gl.TEXTURE_2D, d.Texture)
