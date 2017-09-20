@@ -6,6 +6,7 @@ uniform mat4 MVP;
 uniform vec3 CPOS;
 uniform mat4 MODEL;
 
+// TODO: store light data in go program
 vec3 lightPos = vec3(-2.0, 0.0, 0.0);
 const vec3 ambientColor = vec3(0.1, 0.1, 0.1)*1;
 const vec3 diffuseColor = vec3(0.1, 0.1, 0.1)*7;
@@ -18,9 +19,9 @@ in vec2 fragTexCoord;
 out vec4 finalColor;
 
 void main() {
+  // TODO: Support multiple light sources
   vec3 normal = normalize(normalInterp);
   vec3 lightDir = normalize(lightPos - fragPos);
-  vec3 camDir = normalize(CPOS - fragPos);
 
   float lambertian = max(dot(lightDir,normal), 0.0);
   float specular = 0.0;
