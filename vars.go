@@ -24,6 +24,11 @@ type Color struct {
 	A float32
 }
 
+// NewColor : create a new Position, you know, for looks
+func NewColor(r, g, b, a float32) *Color {
+	return &Color{R: r, G: g, B: b, A: a}
+}
+
 var (
 	window *glfw.Window
 	camera *Camera
