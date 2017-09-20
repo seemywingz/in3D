@@ -27,6 +27,7 @@ func main() {
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
 	randObject(200, -200, 200, cube, texture["box"], shader["basic"])
+	randObject(200, -200, 200, cube, texture["box"], shader["color"])
 	randObject(200, -200, 200, cube, texture["box"], shader["texture"])
 	randObject(200, -200, 200, cube, texture["box"], shader["phong"])
 	drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
@@ -48,6 +49,10 @@ func randObject(numberOfObjects, min, max int, points []float32, textr, shadr ui
 			d.XRotation++
 			d.YRotation++
 		}
+		r := float32(gt.Random(0, 1000)) / 1000
+		g := float32(gt.Random(0, 1000)) / 1000
+		b := float32(gt.Random(0, 1000)) / 1000
+		d.Color = Color{r, g, b, 0}
 		drawnObjects = append(drawnObjects, d)
 	}
 }
@@ -58,6 +63,7 @@ func loadLights() {
 func loadShaders() {
 	shader = make(map[string]uint32)
 	shader["basic"] = createGLprogram("shaders/basicVect.glsl", "shaders/basicFrag.glsl")
+	shader["color"] = createGLprogram("shaders/basicVect.glsl", "shaders/colorFrag.glsl")
 	shader["texture"] = createGLprogram("shaders/textureVect.glsl", "shaders/textureFrag.glsl")
 	shader["phong"] = createGLprogram("shaders/blinnPhongVect.glsl", "shaders/blinnPhongFrag.glsl")
 }

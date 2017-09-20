@@ -1,7 +1,9 @@
 #version 410
 
+uniform vec4 COLOR;
+
 out vec4 finalColor;
 
 void main() {
-  finalColor = vec4(1, 1, 1, 1);
+  finalColor = COLOR;
 }

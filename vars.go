@@ -9,6 +9,14 @@ type Position struct {
 	Z float32
 }
 
+// Color : struct to store RGBA values
+type Color struct {
+	R float32
+	G float32
+	B float32
+	A float32
+}
+
 // DrawLogic : extra logic to perform durring DrawnObject Draw phase
 type DrawLogic func(d *DrawnObjectData)
 
