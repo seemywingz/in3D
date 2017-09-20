@@ -14,9 +14,6 @@ void main(){
   vec4 fragPos4 = MODEL * vec4(vert, 1.0);
   fragPos = vec3(fragPos4) / fragPos4.w;
   fragTexCoord = vertTexCoord;
-
-  // mat4 normalMatrix = transpose(inverse(MODEL));
-  // normalInterp = vec3(normalMatrix * vec4(vertNormal, 0.0));
   normalInterp = vec3(NormalMatrix * vec4(vertNormal, 0.0));
 
   gl_Position =  MVP * MODEL * vec4(vert, 1.0);
