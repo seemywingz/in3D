@@ -149,8 +149,8 @@ func compileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
 	return compileShader(string(source)+"\x00", shaderType)
 }
 
-// CreateGLprogram : create GL shader program from provided GLSL source files
-func CreateGLprogram(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
+// NewShader : create GL shader program from provided GLSL source files
+func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 
 	vertexShader := compileShaderFromFile(vertexShaderSourceFile, gl.VERTEX_SHADER)
 	fragmentShader := compileShaderFromFile(fragmentShaderSourceFile, gl.FRAGMENT_SHADER)
