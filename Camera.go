@@ -46,6 +46,7 @@ func NewCamera(position Position, pointerLock bool) *Camera {
 
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
+	glfw.PollEvents()
 
 	if c.PointerLock {
 		x, y := window.GetCursorPos()
