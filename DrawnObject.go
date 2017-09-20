@@ -35,8 +35,8 @@ type DrawnObjectDefaults struct {
 	DrawLogic DrawLogic
 }
 
-// New : Create new DrawnObjectData
-func (DrawnObjectData) New(position Position, points []float32, texture uint32, program uint32) *DrawnObjectData {
+// NewDrawnObject : Create new DrawnObjectData
+func NewDrawnObject(position Position, points []float32, texture uint32, program uint32) *DrawnObjectData {
 
 	ModelMatrixID := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))

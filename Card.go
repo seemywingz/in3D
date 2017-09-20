@@ -6,11 +6,11 @@ type Card struct {
 	Back  *DrawnObjectData
 }
 
-// New : Create New Card
-func (Card) New(p Position, ftexture, btexture, shader uint32) *Card {
+// NewCard : Create New Card
+func NewCard(p Position, ftexture, btexture, shader uint32) *Card {
 
-	cardfront := DrawnObjectData{}.New(p, cardFront, ftexture, shader)
-	cardback := DrawnObjectData{}.New(p, cardBack, btexture, shader)
+	cardfront := NewDrawnObject(p, cardFront, ftexture, shader)
+	cardback := NewDrawnObject(p, cardBack, btexture, shader)
 	cl := func(d *DrawnObjectData) {
 		// d.XRotation++
 		d.YRotation += 0.5
