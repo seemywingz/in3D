@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"runtime"
 	"time"
@@ -46,14 +45,16 @@ func randObject(numberOfObjects, min, max int, points []float32, textr, shadr ui
 		y := float32(rand.Intn(max-min) + min)
 		z := float32(rand.Intn(max-min) + min)
 		d := DrawnObjectData{}.New(Position{x, y, z}, points, textr, shadr)
+		dy := rand.Float32() * 10
+		dx := rand.Float32() * 10
 		d.DrawLogic = func(d *DrawnObjectData) {
-			d.XRotation += gt.Randomf()
-			d.YRotation += gt.Randomf()
+			d.XRotation += dx
+			d.YRotation += dy
 		}
 		r := gt.Randomf()
 		g := gt.Randomf()
 		b := gt.Randomf()
-		fmt.Println(r, g, b)
+		// fmt.Println(r, g, b)
 		d.Color = Color{r, g, b, 0}
 		drawnObjects = append(drawnObjects, d)
 	}
