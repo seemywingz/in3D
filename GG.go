@@ -189,6 +189,8 @@ func NewTexture(file string) uint32 {
 
 	return texture
 }
+
+// ShouldClose : wraper for glfw
 func ShouldClose() bool {
 	window.SwapBuffers()
 	return window.ShouldClose()
@@ -197,8 +199,4 @@ func ShouldClose() bool {
 // SwapBuffers : wrapper for glfw
 func SwapBuffers() {
 	window.SwapBuffers()
-}
-
-func GetSize() (int, int) {
-	return window.GetSize()
 }
