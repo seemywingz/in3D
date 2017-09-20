@@ -20,6 +20,7 @@ type DrawnObjectData struct {
 	ModelMatrixID  int32
 	NormalMatrixID int32
 	ColorID        int32
+	CPOSID         int32
 	Texture        uint32
 	DrawnObjectDefaults
 }
@@ -39,6 +40,7 @@ func (DrawnObjectData) New(position Position, points []float32, texture uint32, 
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
 	MVPID := gl.GetUniformLocation(program, gl.Str("MVP\x00"))
 	ColorID := gl.GetUniformLocation(program, gl.Str("COLOR\x00"))
+	CPOSID := gl.GetUniformLocation(program, gl.Str("CPOS\x00"))
 
 	return &DrawnObjectData{
 		makeVao(points, program),
@@ -49,6 +51,7 @@ func (DrawnObjectData) New(position Position, points []float32, texture uint32, 
 		ModelMatrixID,
 		NormalMatrixID,
 		ColorID,
+		CPOSID,
 		texture,
 		DrawnObjectDefaults{},
 	}
@@ -70,14 +73,15 @@ func (d *DrawnObjectData) Draw() {
 	}
 
 	modelMatrix := d.translateRotate()
-	inv := modelMatrix.Transpose()
-	normalMatrix := inv.Inv()
+	normalMatrix := modelMatrix.Inv()
+	normalMatrix = normalMatrix.Transpose()
 
 	gl.UseProgram(d.Program)
+	gl.UniformMatrix4fv(d.MVPID, 1, false, &camera.MVP[0])
 	gl.UniformMatrix4fv(d.ModelMatrixID, 1, false, &modelMatrix[0])
 	gl.UniformMatrix4fv(d.NormalMatrixID, 1, false, &normalMatrix[0])
-	gl.UniformMatrix4fv(d.MVPID, 1, false, &camera.MVP[0])
 	gl.Uniform4f(d.ColorID, d.Color.R, d.Color.G, d.Color.B, d.Color.A)
+	gl.Uniform3f(d.CPOSID, camera.Position.X, camera.Position.Y, camera.Position.Z)
 
 	gl.BindVertexArray(d.Vao)
 	gl.ActiveTexture(gl.TEXTURE0)
