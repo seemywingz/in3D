@@ -1,6 +1,5 @@
 #version 410
 
-uniform vec3 CPOS;
 uniform sampler2D tex;
 uniform mat4 MVP, MODEL;
 

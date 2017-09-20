@@ -7,9 +7,9 @@ type Card struct {
 }
 
 // New : Create New Card
-func (Card) New(p Position) *Card {
+func (Card) New(p Position, textureName string) *Card {
 
-	cardfront := DrawnObjectData{}.New(p, cardFront, texture["tk"], shader["phong"])
+	cardfront := DrawnObjectData{}.New(p, cardFront, texture[textureName], shader["phong"])
 	cardback := DrawnObjectData{}.New(p, cardBack, texture["back"], shader["phong"])
 	cl := func(d *DrawnObjectData) {
 		// d.XRotation++

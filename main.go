@@ -26,11 +26,12 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	randObject(200, -200, 200, cube, texture["none"], shader["basic"])
+	randObject(100, -200, 200, cube, texture["none"], shader["basic"])
 	randObject(200, -200, 200, cube, texture["box"], shader["color"])
 	// randObject(200, -200, 200, cube, texture["box"], shader["texture"])
 	randObject(700, -200, 200, cube, texture["box"], shader["phong"])
-	drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
+	drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}, "tk"))
+	drawnObjects = append(drawnObjects, Card{}.New(Position{-5, 0, -5}, "imn"))
 
 	// d := DrawnObjectData{}.New(Position{0, 0, -5}, cube, texture["box"], shader["phong"])
 	// d.DrawLogic = func(d *DrawnObjectData) {
@@ -80,6 +81,7 @@ func loadTextures() {
 	texture["lifion"] = newTexture("textures/lifion.png")
 	texture["box"] = newTexture("textures/square.jpg")
 	texture["tk"] = newTexture("textures/tk.jpg")
+	texture["imn"] = newTexture("textures/imn.jpg")
 	texture["back"] = newTexture("textures/back.jpg")
 }
 
