@@ -20,10 +20,10 @@ type Color struct {
 }
 
 var (
-	window       *glfw.Window
-	camera       *Camera
-	Shader       map[string]uint32
-	drawnObjects []DrawnObject
+	window *glfw.Window
+	camera *Camera
+	// Shader : map of gg provided shaders
+	Shader map[string]uint32
 
 	// Triangle :
 	Triangle = []float32{
