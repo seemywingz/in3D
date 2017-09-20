@@ -12,8 +12,9 @@ out vec3 fragNoraml;
 
 void main(){
   vec4 fragPos4 = MODEL * vec4(vert, 1.0);
-  fragPos =  fragPos4.xyz / fragPos4.w;
+
   fragTexCoord = vertTexCoord;
+  fragPos =  fragPos4.xyz / fragPos4.w;
   fragNoraml = (NormalMatrix * vec4(vertNormal, 0.0)).xyz;
 
   gl_Position =  MVP * MODEL * vec4(vert, 1.0);
