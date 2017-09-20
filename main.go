@@ -12,7 +12,6 @@ import (
 
 func main() {
 	runtime.LockOSThread()
-	gt.SetDirPath("github.com/seemywingz/gg")
 
 	var windowWidth = 00
 	var windowHeight = 600
@@ -22,7 +21,6 @@ func main() {
 	initGL()
 	loadShaders()
 	loadTextures()
-	loadLights()
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
@@ -64,25 +62,24 @@ func randObject(numberOfObjects, min, max int, points []float32, textr, shadr ui
 	}
 }
 
-func loadLights() {
-}
-
 func loadShaders() {
 	shader = make(map[string]uint32)
-	shader["basic"] = createGLprogram("shaders/basicVect.glsl", "shaders/basicFrag.glsl")
-	shader["color"] = createGLprogram("shaders/basicVect.glsl", "shaders/colorFrag.glsl")
-	shader["texture"] = createGLprogram("shaders/textureVect.glsl", "shaders/textureFrag.glsl")
-	shader["phong"] = createGLprogram("shaders/blinnPhongVect.glsl", "shaders/blinnPhongFrag.glsl")
+	gt.SetDirPath("github.com/seemywingz/gg/shaders")
+	shader["basic"] = createGLprogram("basicVect.glsl", "basicFrag.glsl")
+	shader["color"] = createGLprogram("basicVect.glsl", "colorFrag.glsl")
+	shader["texture"] = createGLprogram("textureVect.glsl", "textureFrag.glsl")
+	shader["phong"] = createGLprogram("blinnPhongVect.glsl", "blinnPhongFrag.glsl")
 }
 
 func loadTextures() {
 	texture = make(map[string]uint32)
 	texture["none"] = 99999
-	texture["lifion"] = newTexture("textures/lifion.png")
-	texture["box"] = newTexture("textures/square.jpg")
-	texture["tk"] = newTexture("textures/tk.jpg")
-	texture["imn"] = newTexture("textures/imn.jpg")
-	texture["back"] = newTexture("textures/back.jpg")
+	gt.SetDirPath("github.com/seemywingz/gg/textures")
+	texture["lifion"] = newTexture("lifion.png")
+	texture["box"] = newTexture("square.jpg")
+	texture["tk"] = newTexture("tk.jpg")
+	texture["imn"] = newTexture("imn.jpg")
+	texture["back"] = newTexture("back.jpg")
 }
 
 func update() {
