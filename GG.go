@@ -9,6 +9,7 @@ import (
 	_ "image/png"  // include png support
 	"io/ioutil"
 	"os"
+	"runtime"
 	"strings"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
@@ -18,6 +19,7 @@ import (
 
 // Init : initializes glfw and returns a Window to use, then InitGL
 func Init(width, height int, title string) {
+	runtime.LockOSThread()
 
 	gt.EoE("Error Initializing GLFW", glfw.Init())
 	glfw.WindowHint(glfw.Resizable, glfw.False)
