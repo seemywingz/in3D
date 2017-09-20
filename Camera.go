@@ -1,4 +1,4 @@
-package main
+package gg
 
 import (
 	"math"
@@ -7,10 +7,13 @@ import (
 	"github.com/go-gl/mathgl/mgl32"
 )
 
+var camera Camera
+
 // Camera : struct to store camera matrices
 type Camera struct {
 	Projection mgl32.Mat4
 	Position
+	Window *glfw.Window
 	CameraData
 }
 
@@ -25,7 +28,7 @@ type CameraData struct {
 }
 
 // New : return new Camera
-func (Camera) New(position Position, pointerLock bool) Camera {
+func (Camera) New(position Position, pointerLock bool, window *glfw.Window) *Camera {
 
 	// Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
 	w, h := window.GetSize()
@@ -33,21 +36,21 @@ func (Camera) New(position Position, pointerLock bool) Camera {
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), ratio, 0.1, 1000)
 
 	// Create new Camera instance
-	cam := Camera{projection, position, CameraData{}}
+	camera = Camera{projection, position, window, CameraData{}}
 	if pointerLock {
-		cam.EnablePointerLock()
+		camera.EnablePointerLock()
 	} else {
-		cam.DisablePointerLock()
+		camera.DisablePointerLock()
 	}
 
-	return cam
+	return &camera
 }
 
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
 
 	if c.PointerLock {
-		x, y := window.GetCursorPos()
+		x, y := c.Window.GetCursorPos()
 
 		sensitivity := float32(0.1)
 		c.YRotation += -float32(c.LastX-x) * sensitivity
@@ -64,7 +67,7 @@ func (c *Camera) MouseControls() {
 		c.LastX = x
 		c.LastY = y
 	} else { // no PointerLock
-		if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
+		if c.Window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
 			c.EnablePointerLock()
 		}
 	}
@@ -73,64 +76,64 @@ func (c *Camera) MouseControls() {
 // EnablePointerLock :
 func (c *Camera) EnablePointerLock() {
 	// fmt.Println("PointerLock Enabled")
-	x, y := window.GetCursorPos()
+	x, y := c.Window.GetCursorPos()
 	c.LastX = x
 	c.LastY = y
-	window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+	c.Window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
 	c.PointerLock = true
 }
 
 // DisablePointerLock :
 func (c *Camera) DisablePointerLock() {
-	window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
+	c.Window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 	c.PointerLock = false
 }
 
 // KeyControls : control the camera via the keyboard
 func (c *Camera) KeyControls() {
-	if window.GetKey(glfw.KeyEscape) == glfw.Press {
+	if c.Window.GetKey(glfw.KeyEscape) == glfw.Press {
 		// os.Exit(1)
 		c.DisablePointerLock()
 	}
 	// Press w
-	if window.GetKey(glfw.KeyW) == glfw.Press {
+	if c.Window.GetKey(glfw.KeyW) == glfw.Press {
 		// move forward
 		c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
 	}
 	// Press A
-	if window.GetKey(glfw.KeyA) == glfw.Press {
+	if c.Window.GetKey(glfw.KeyA) == glfw.Press {
 		// Move left
 		c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 	}
 	// Press s
-	if window.GetKey(glfw.KeyS) == glfw.Press {
+	if c.Window.GetKey(glfw.KeyS) == glfw.Press {
 		// Move Backward
 		c.X += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
 	}
 	// Press d
-	if window.GetKey(glfw.KeyD) == glfw.Press {
+	if c.Window.GetKey(glfw.KeyD) == glfw.Press {
 		// Move Right
 		c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 	}
 	// Press space
-	if window.GetKey(glfw.KeySpace) == glfw.Press {
-		if window.GetKey(glfw.KeyLeftShift) == glfw.Press {
+	if c.Window.GetKey(glfw.KeySpace) == glfw.Press {
+		if c.Window.GetKey(glfw.KeyLeftShift) == glfw.Press {
 			c.Y++
 		} else {
 			c.Y--
 		}
 	}
 	// Press q
-	if window.GetKey(glfw.KeyQ) == glfw.Press {
+	if c.Window.GetKey(glfw.KeyQ) == glfw.Press {
 	}
 	// Press e
-	if window.GetKey(glfw.KeyE) == glfw.Press {
+	if c.Window.GetKey(glfw.KeyE) == glfw.Press {
 	}
 }
 

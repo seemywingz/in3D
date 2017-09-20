@@ -1,6 +1,4 @@
-package main
-
-import "github.com/go-gl/glfw/v3.2/glfw"
+package gg
 
 // Position : struct to store 3D coords
 type Position struct {
@@ -19,21 +17,14 @@ type Color struct {
 
 var (
 
-	// Graphics
-	window       *glfw.Window
-	camera       Camera
-	shader       map[string]uint32
-	texture      map[string]uint32
-	drawnObjects []DrawnObject
-
 	// Shapes ....
-	triangle = []float32{
+	Triangle = []float32{
 		-1.0, -1.0, 0, 1.0, 0.0,
 		1.0, -1.0, 0, 0.0, 0.0,
 		-1.0, 1.0, 0, 1.0, 1.0,
 	}
 
-	square = []float32{
+	Square = []float32{
 		//  X, Y, Z, U, V, normal(3)
 		-1.0, -1.0, 0, 0.0, 1.0, 0.0, 0.0, 1.0,
 		1.0, -1.0, 0, 1.0, 1.0, 0.0, 0.0, 1.0,
@@ -65,7 +56,7 @@ var (
 		1.25, -1.75, -0.01, 0.0, 1.0, 0.0, 0.0, -1.0, //right bottom
 	}
 
-	cube = []float32{
+	Cube = []float32{
 		//  X, Y, Z, U, V, normal(3)
 		// Bottom
 		-1.0, -1.0, -1.0, 0.0, 0.0, 0.0, -1.0, 0.0,

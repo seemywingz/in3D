@@ -1,12 +1,12 @@
-package main
+package gg
 
 import (
 	"errors"
 	"fmt"
 	"image"
 	"image/draw"
-	_ "image/jpeg"
-	_ "image/png"
+	_ "image/jpeg" // include jpeg support
+	_ "image/png"  // include png support
 	"io/ioutil"
 	"os"
 	"strings"
@@ -16,8 +16,8 @@ import (
 	"github.com/seemywingz/gt"
 )
 
-// newTexture :
-func newTexture(file string) uint32 {
+// NewTexture : greate GL reference to provided texture
+func NewTexture(file string) uint32 {
 	imgFile, err := os.Open(file)
 	gt.EoE("Error Loading Texture", err)
 
@@ -52,8 +52,8 @@ func newTexture(file string) uint32 {
 	return texture
 }
 
-// initGlfw initializes glfw and returns a Window to use.
-func initGlfw(width, height int, title string) *glfw.Window {
+// InitGlfw : initializes glfw and returns a Window to use.
+func InitGlfw(width, height int, title string) *glfw.Window {
 	gt.EoE("Error Initializing GLFW", glfw.Init())
 	glfw.WindowHint(glfw.Resizable, glfw.False)
 	glfw.WindowHint(glfw.ContextVersionMajor, 4)
@@ -79,7 +79,8 @@ func initGlfw(width, height int, title string) *glfw.Window {
 	return newWindow
 }
 
-func initGL() {
+// InitGL : initialize GL setting and print version
+func InitGL() {
 	gt.EoE("Error Initializing OpenGL", gl.Init())
 
 	gl.Enable(gl.DEPTH_TEST)
@@ -148,7 +149,8 @@ func compileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
 	return compileShader(string(source)+"\x00", shaderType)
 }
 
-func createGLprogram(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
+// CreateGLprogram : create GL shader program from provided GLSL source files
+func CreateGLprogram(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 
 	vertexShader := compileShaderFromFile(vertexShaderSourceFile, gl.VERTEX_SHADER)
 	fragmentShader := compileShaderFromFile(fragmentShaderSourceFile, gl.FRAGMENT_SHADER)
