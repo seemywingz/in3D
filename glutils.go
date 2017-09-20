@@ -9,6 +9,7 @@ import (
 	_ "image/png"  // include png support
 	"io/ioutil"
 	"os"
+	"runtime"
 	"strings"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
@@ -52,8 +53,10 @@ func NewTexture(file string) uint32 {
 	return texture
 }
 
-// InitGlfw : initializes glfw and returns a Window to use.
-func InitGlfw(width, height int, title string) *glfw.Window {
+// Init : initializes glfw and returns a Window to use, then InitGL
+func Init(width, height int, title string) *glfw.Window {
+	runtime.LockOSThread()
+
 	gt.EoE("Error Initializing GLFW", glfw.Init())
 	glfw.WindowHint(glfw.Resizable, glfw.False)
 	glfw.WindowHint(glfw.ContextVersionMajor, 4)
@@ -61,22 +64,22 @@ func InitGlfw(width, height int, title string) *glfw.Window {
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
 
-	var newWindow *glfw.Window
 	var err error
 	if width == 0 {
 		mode := glfw.GetPrimaryMonitor().GetVideoMode()
 		width = mode.Width
 		height = mode.Height
-		newWindow, err = glfw.CreateWindow(width, height, title, glfw.GetPrimaryMonitor(), nil)
+		window, err = glfw.CreateWindow(width, height, title, glfw.GetPrimaryMonitor(), nil)
 	} else {
-		newWindow, err = glfw.CreateWindow(width, height, title, nil, nil)
+		window, err = glfw.CreateWindow(width, height, title, nil, nil)
 	}
 	gt.EoE("Error Creating GLFW Window", err)
-	newWindow.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
-	newWindow.SetInputMode(glfw.StickyMouseButtonsMode, 1)
-	newWindow.MakeContextCurrent()
+	window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+	window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
+	window.MakeContextCurrent()
+	InitGL()
 
-	return newWindow
+	return window
 }
 
 // InitGL : initialize GL setting and print version
@@ -85,10 +88,19 @@ func InitGL() {
 
 	gl.Enable(gl.DEPTH_TEST)
 	gl.DepthFunc(gl.LESS)
-	// gl.ClearColor(0.1, 0.1, 0.1, 1)
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	println("OpenGL version", version)
+	loadShaders()
+}
+
+func loadShaders() {
+	Shader = make(map[string]uint32)
+	gt.SetDirPath("github.com/seemywingz/gg/shaders")
+	Shader["basic"] = NewShader("basicVect.glsl", "basicFrag.glsl")
+	Shader["color"] = NewShader("basicVect.glsl", "colorFrag.glsl")
+	Shader["texture"] = NewShader("textureVect.glsl", "textureFrag.glsl")
+	Shader["phong"] = NewShader("blinnPhongVect.glsl", "blinnPhongFrag.glsl")
 }
 
 // makeVao initializes and returns a vertex array from the points provided.
@@ -141,7 +153,8 @@ func compileShader(source string, shaderType uint32) uint32 {
 	return shader
 }
 
-func compileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
+// CompileShaderFromFile : create gl shader from source string
+func CompileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
 
 	source, err := ioutil.ReadFile(sourceFile)
 	gt.EoE("Error Reading Source File", err)
@@ -152,8 +165,8 @@ func compileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
 // NewShader : create GL shader program from provided GLSL source files
 func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 
-	vertexShader := compileShaderFromFile(vertexShaderSourceFile, gl.VERTEX_SHADER)
-	fragmentShader := compileShaderFromFile(fragmentShaderSourceFile, gl.FRAGMENT_SHADER)
+	vertexShader := CompileShaderFromFile(vertexShaderSourceFile, gl.VERTEX_SHADER)
+	fragmentShader := CompileShaderFromFile(fragmentShaderSourceFile, gl.FRAGMENT_SHADER)
 
 	program := gl.CreateProgram()
 	gl.AttachShader(program, vertexShader)

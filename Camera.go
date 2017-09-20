@@ -3,17 +3,15 @@ package gg
 import (
 	"math"
 
+	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
 	"github.com/go-gl/mathgl/mgl32"
 )
-
-var camera Camera
 
 // Camera : struct to store camera matrices
 type Camera struct {
 	Projection mgl32.Mat4
 	Position
-	Window *glfw.Window
 	CameraData
 }
 
@@ -27,8 +25,8 @@ type CameraData struct {
 	PointerLock bool
 }
 
-// New : return new Camera
-func (Camera) New(position Position, pointerLock bool, window *glfw.Window) *Camera {
+// NewCamera : return new Camera
+func NewCamera(position Position, pointerLock bool) *Camera {
 
 	// Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
 	w, h := window.GetSize()
@@ -36,21 +34,21 @@ func (Camera) New(position Position, pointerLock bool, window *glfw.Window) *Cam
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), ratio, 0.1, 1000)
 
 	// Create new Camera instance
-	camera = Camera{projection, position, window, CameraData{}}
+	camera = &Camera{projection, position, CameraData{}}
 	if pointerLock {
 		camera.EnablePointerLock()
 	} else {
 		camera.DisablePointerLock()
 	}
 
-	return &camera
+	return camera
 }
 
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
 
 	if c.PointerLock {
-		x, y := c.Window.GetCursorPos()
+		x, y := window.GetCursorPos()
 
 		sensitivity := float32(0.1)
 		c.YRotation += -float32(c.LastX-x) * sensitivity
@@ -67,7 +65,7 @@ func (c *Camera) MouseControls() {
 		c.LastX = x
 		c.LastY = y
 	} else { // no PointerLock
-		if c.Window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
+		if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
 			c.EnablePointerLock()
 		}
 	}
@@ -76,69 +74,71 @@ func (c *Camera) MouseControls() {
 // EnablePointerLock :
 func (c *Camera) EnablePointerLock() {
 	// fmt.Println("PointerLock Enabled")
-	x, y := c.Window.GetCursorPos()
+	x, y := window.GetCursorPos()
 	c.LastX = x
 	c.LastY = y
-	c.Window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+	window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
 	c.PointerLock = true
 }
 
 // DisablePointerLock :
 func (c *Camera) DisablePointerLock() {
-	c.Window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
+	window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 	c.PointerLock = false
 }
 
 // KeyControls : control the camera via the keyboard
 func (c *Camera) KeyControls() {
-	if c.Window.GetKey(glfw.KeyEscape) == glfw.Press {
+	if window.GetKey(glfw.KeyEscape) == glfw.Press {
 		// os.Exit(1)
 		c.DisablePointerLock()
 	}
 	// Press w
-	if c.Window.GetKey(glfw.KeyW) == glfw.Press {
+	if window.GetKey(glfw.KeyW) == glfw.Press {
 		// move forward
 		c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
 	}
 	// Press A
-	if c.Window.GetKey(glfw.KeyA) == glfw.Press {
+	if window.GetKey(glfw.KeyA) == glfw.Press {
 		// Move left
 		c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 	}
 	// Press s
-	if c.Window.GetKey(glfw.KeyS) == glfw.Press {
+	if window.GetKey(glfw.KeyS) == glfw.Press {
 		// Move Backward
 		c.X += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
 	}
 	// Press d
-	if c.Window.GetKey(glfw.KeyD) == glfw.Press {
+	if window.GetKey(glfw.KeyD) == glfw.Press {
 		// Move Right
 		c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 	}
 	// Press space
-	if c.Window.GetKey(glfw.KeySpace) == glfw.Press {
-		if c.Window.GetKey(glfw.KeyLeftShift) == glfw.Press {
+	if window.GetKey(glfw.KeySpace) == glfw.Press {
+		if window.GetKey(glfw.KeyLeftShift) == glfw.Press {
 			c.Y++
 		} else {
 			c.Y--
 		}
 	}
 	// Press q
-	if c.Window.GetKey(glfw.KeyQ) == glfw.Press {
+	if window.GetKey(glfw.KeyQ) == glfw.Press {
 	}
 	// Press e
-	if c.Window.GetKey(glfw.KeyE) == glfw.Press {
+	if window.GetKey(glfw.KeyE) == glfw.Press {
 	}
 }
 
 // Update : update camera
 func (c *Camera) Update() {
+	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
 	c.MouseControls()
 	c.KeyControls()
 
