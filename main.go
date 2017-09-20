@@ -26,9 +26,9 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	// randObject(200, -200, 200, cube, texture["box"], shader["basic"])
-	// randObject(200, -200, 200, cube, texture["box"], shader["color"])
-	// randObject(200, -200, 200, cube, texture["box"], shader["texture"])
+	randObject(200, -200, 200, cube, texture["box"], shader["basic"])
+	randObject(200, -200, 200, cube, texture["box"], shader["color"])
+	randObject(200, -200, 200, cube, texture["box"], shader["texture"])
 	randObject(700, -200, 200, cube, texture["box"], shader["phong"])
 	// drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
 	d := DrawnObjectData{}.New(Position{0, 0, -5}, cube, texture["box"], shader["phong"])
