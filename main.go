@@ -7,12 +7,12 @@ import (
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
-	gt "github.com/seemywingz/gtils"
+	"github.com/seemywingz/gt"
 )
 
 func main() {
 	runtime.LockOSThread()
-	gt.SetDirPath("github.com/seemywingz/ggl")
+	gt.SetDirPath("github.com/seemywingz/gg")
 
 	var windowWidth = 00
 	var windowHeight = 600

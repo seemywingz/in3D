@@ -13,7 +13,7 @@ import (
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
-	gt "github.com/seemywingz/gtils"
+	"github.com/seemywingz/gt"
 )
 
 // newTexture :
