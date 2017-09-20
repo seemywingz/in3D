@@ -26,7 +26,8 @@ func main() {
 
 	camera = Camera{}.New(Position{0, 0, 0}, false)
 
-	randObject(1000, -200, 200, cube, texture["box"])
+	randObject(500, -200, 200, cube, texture["box"], shader["basic"])
+	randObject(500, -200, 200, cube, texture["box"], shader["phong"])
 	// drawnObjects = append(drawnObjects, Card{}.New(Position{0, 0, -5}))
 
 	for !window.ShouldClose() {
@@ -35,13 +36,13 @@ func main() {
 	}
 }
 
-func randObject(numberOfObjects, min, max int, points []float32, textr uint32) {
+func randObject(numberOfObjects, min, max int, points []float32, textr, shadr uint32) {
 	for i := 0; i < numberOfObjects; i++ {
 		rand.Seed(time.Now().UnixNano())
 		x := float32(rand.Intn(max-min) + min)
 		y := float32(rand.Intn(max-min) + min)
 		z := float32(rand.Intn(max-min) + min)
-		d := DrawnObjectData{}.New(Position{x, y, z}, points, textr, shader["basic"])
+		d := DrawnObjectData{}.New(Position{x, y, z}, points, textr, shadr)
 		d.DrawLogic = func(d *DrawnObjectData) {
 			d.XRotation++
 			d.YRotation++

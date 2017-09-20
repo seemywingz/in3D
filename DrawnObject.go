@@ -16,7 +16,10 @@ type DrawnObjectData struct {
 	Program uint32
 	Points  []float32
 	Position
-	ModelMatrix int32
+	MVPID          int32
+	ModelMatrixID  int32
+	NormalMatrixID int32
+	Texture        uint32
 	DrawnObjectDefaults
 }
 
@@ -30,14 +33,19 @@ type DrawnObjectDefaults struct {
 // New : Create new DrawnObjectData
 func (DrawnObjectData) New(position Position, points []float32, texture uint32, program uint32) *DrawnObjectData {
 
-	ModelMatrix := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
+	ModelMatrixID := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
+	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
+	MVPID := gl.GetUniformLocation(program, gl.Str("MVP\x00"))
 
 	return &DrawnObjectData{
 		makeVao(points, program),
 		program,
 		points,
 		position,
-		ModelMatrix,
+		MVPID,
+		ModelMatrixID,
+		NormalMatrixID,
+		texture,
 		DrawnObjectDefaults{},
 	}
 }
@@ -52,14 +60,22 @@ func (d *DrawnObjectData) rotate() *mgl32.Mat4 {
 
 // Draw : draw the object
 func (d *DrawnObjectData) Draw() {
+
 	if d.DrawLogic != nil {
 		d.DrawLogic(d)
 	}
+
 	modelMatrix := d.rotate()
-	gl.UniformMatrix4fv(d.ModelMatrix, 1, false, &modelMatrix[0])
-	// println(d.ModelMatrix)
+	gl.UniformMatrix4fv(d.ModelMatrixID, 1, false, &modelMatrix[0])
+
+	inv := modelMatrix.Transpose()
+	normalMatrix := inv.Inv()
+	gl.UniformMatrix4fv(d.NormalMatrixID, 1, false, &normalMatrix[0])
+	gl.UniformMatrix4fv(d.MVPID, 1, false, &camera.MVP[0])
 
 	gl.UseProgram(d.Program)
 	gl.BindVertexArray(d.Vao)
+	gl.ActiveTexture(gl.TEXTURE0)
+	gl.BindTexture(gl.TEXTURE_2D, d.Texture)
 	gl.DrawArrays(gl.TRIANGLES, 0, 6*2*3)
 }
