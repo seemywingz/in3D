@@ -190,6 +190,7 @@ func NewTexture(file string) uint32 {
 	return texture
 }
 func ShouldClose() bool {
+	window.SwapBuffers()
 	return window.ShouldClose()
 }
 
