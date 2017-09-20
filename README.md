@@ -1,2 +1,2 @@
 # GG
-A relatively simple go powered OpenGL Game Engine
+A [relatively simple](https://github.com/seemywingz/gge) go powered OpenGL Game Engine
