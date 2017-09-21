@@ -32,8 +32,6 @@ var (
 	// unexported
 	window *glfw.Window
 	camera *Camera
-	light  *Light
-
 	// Shader : map of gg provided shaders
 	Shader map[string]uint32
 

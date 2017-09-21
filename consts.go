@@ -17,6 +17,8 @@ const (
 	MoveEnabled
 	// NoTexture :
 	NoTexture
+	// CenterLight :
+	CenterLight
 	// Press :
 	Press = glfw.Press
 	// Releasese :

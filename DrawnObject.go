@@ -43,7 +43,6 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
 	MVPID := gl.GetUniformLocation(program, gl.Str("MVP\x00"))
 	ColorID := gl.GetUniformLocation(program, gl.Str("COLOR\x00"))
-	// LightID := gl.GetUniformLocation(program, gl.Str("LIGHT\x00"))
 
 	return &DrawnObjectData{
 		makeVao(points, program),
@@ -90,9 +89,9 @@ func (d *DrawnObjectData) Draw() {
 	gl.BindVertexArray(d.Vao)
 	if d.Texture != NoTexture {
 		gl.Enable(gl.TEXTURE_2D)
-		// gl.ActiveTexture(gl.TEXTURE0)
 		gl.BindTexture(gl.TEXTURE_2D, d.Texture)
 	}
+
 	gl.DrawArrays(gl.TRIANGLES, 0, 6*2*3)
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 	gl.Disable(gl.TEXTURE_2D)
