@@ -6,9 +6,9 @@ uniform vec4 COLOR;
 uniform vec3[4] LIGHT;
 
 vec3 lightPos = LIGHT[0];
-vec3 Iamb = LIGHT[0];
-vec3 Idif = LIGHT[0];
-vec3 Ispec = LIGHT[0];
+vec3 Iamb = LIGHT[1];
+vec3 Idif = LIGHT[2];
+vec3 Ispec = LIGHT[3];
 const float pi = 3.14159265;
 
 in vec3 fragPos;
