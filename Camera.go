@@ -154,6 +154,11 @@ func GetCameraPos(position Position) Position {
 	return camera.Position
 }
 
+// GetCamera : return pounter to gg camera
+func GetCamera(position Position) *Camera {
+	return camera
+}
+
 // Update : update camera
 func (c *Camera) Update() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
