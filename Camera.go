@@ -31,7 +31,10 @@ type CameraData struct {
 // NewCamera : return new Camera
 func NewCamera(pointerLock bool) *Camera {
 
-	// Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
+	// Projection matrix :
+	//    45° Field of View,
+	//    width:height ratio,
+	//    display range : 0.1 unit <-> 1000 units
 	w, h := window.GetSize()
 	ratio := float32(w) / float32(h)
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), ratio, 0.1, 1000)
