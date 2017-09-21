@@ -144,14 +144,14 @@ func (c *Camera) KeyControls() {
 	}
 }
 
-// SetCameraPos : set the position of the camera
-func SetCameraPos(position Position) {
-	camera.Position = position
+// SetPos : set the position of the camera
+func (c *Camera) SetPos(position Position) {
+	c.Position = position
 }
 
-// GetCameraPos : set the position of the camera
-func GetCameraPos(position Position) Position {
-	return camera.Position
+// GetPos : set the position of the camera
+func (c *Camera) GetPos(position Position) Position {
+	return c.Position
 }
 
 // GetCamera : return pounter to gg camera
