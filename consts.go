@@ -15,6 +15,8 @@ const (
 	LookEnabled
 	// MoveEnabled :
 	MoveEnabled
+	// NoTexture :
+	NoTexture
 	// Press :
 	Press = glfw.Press
 	// Releasese :

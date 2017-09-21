@@ -186,7 +186,8 @@ func NewTexture(file string) uint32 {
 		gl.RGBA,
 		gl.UNSIGNED_BYTE,
 		gl.Ptr(rgba.Pix))
-
+	gl.BindTexture(gl.TEXTURE_2D, 0)
+	gl.Disable(gl.TEXTURE_2D)
 	return texture
 }
 
@@ -219,6 +220,9 @@ func GetWindow() *glfw.Window {
 func Enable(feature int, enabled bool) {
 	switch feature {
 	case LookEnabled:
+		x, y := window.GetCursorPos()
+		camera.LastX = x
+		camera.LastY = y
 		camera.LookEnabled = enabled
 	case MoveEnabled:
 		camera.MoveEnabled = enabled

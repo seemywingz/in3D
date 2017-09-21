@@ -2,6 +2,7 @@
 
 uniform sampler2D tex;
 uniform mat4 MVP, MODEL;
+uniform vec4 COLOR;
 
 // TODO: store light data in go program
 const vec3 lightPos = vec3(0.0, 0.0, 10.0);
@@ -35,7 +36,10 @@ void main() {
   float diffuse = max(dot(normalize(fragNoraml), normalize(lightPos)), 0.0);
 
   vec3 texture = texture(tex, fragTexCoord).rgb;
-  finalColor = vec4(texture * (Iamb +
+  if(texture == vec3(0,0,0)){
+    texture = vec3(1,1,1);
+  }
+  finalColor = COLOR * vec4( texture * (Iamb +
                     lambertian * Idif +
                     specular * Ispec ) ,1);
 }

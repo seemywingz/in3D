@@ -23,6 +23,7 @@ type DrawnObjectData struct {
 	ModelMatrixID  int32
 	NormalMatrixID int32
 	ColorID        int32
+	Color          Color
 	Texture        uint32
 	DrawnObjectDefaults
 }
@@ -31,7 +32,6 @@ type DrawnObjectData struct {
 type DrawnObjectDefaults struct {
 	XRotation float32
 	YRotation float32
-	Color     Color
 	DrawLogic DrawLogic
 }
 
@@ -52,6 +52,7 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 		ModelMatrixID,
 		NormalMatrixID,
 		ColorID,
+		NewColor(1, 1, 1, 1),
 		texture,
 		DrawnObjectDefaults{},
 	}
@@ -83,7 +84,13 @@ func (d *DrawnObjectData) Draw() {
 	gl.Uniform4f(d.ColorID, d.Color.R, d.Color.G, d.Color.B, d.Color.A)
 
 	gl.BindVertexArray(d.Vao)
-	gl.ActiveTexture(gl.TEXTURE0)
-	gl.BindTexture(gl.TEXTURE_2D, d.Texture)
+	if d.Texture != NoTexture {
+		gl.Enable(gl.TEXTURE_2D)
+		// gl.ActiveTexture(gl.TEXTURE0)
+		gl.BindTexture(gl.TEXTURE_2D, d.Texture)
+	}
 	gl.DrawArrays(gl.TRIANGLES, 0, 6*2*3)
+	gl.BindTexture(gl.TEXTURE_2D, 0)
+	gl.Disable(gl.TEXTURE_2D)
+
 }
