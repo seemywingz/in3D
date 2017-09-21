@@ -24,21 +24,16 @@ type LightData struct {
 // NewLight :
 func NewLight(pos, iamb, idif, ispec []float32) *Light {
 
-	LPos := &[]float32{1, 1, 1}[0]
-	Iamb := &[]float32{0, 0, 0}[0]
-	Idif := &[]float32{0.4, 0.4, 0.4}[0]
-	Ispec := &[]float32{10, 10, 10}[0]
-
 	LPosID := gl.GetUniformLocation(Shader["singleLight"], gl.Str("lightPos\x00"))
 	IambID := gl.GetUniformLocation(Shader["singleLight"], gl.Str("Iamb\x00"))
 	IdifID := gl.GetUniformLocation(Shader["singleLight"], gl.Str("Idif\x00"))
 	IspecID := gl.GetUniformLocation(Shader["singleLight"], gl.Str("Ispec\x00"))
 
 	data := LightData{
-		LPos,
-		Iamb,
-		Idif,
-		Ispec,
+		&pos[0],
+		&iamb[0],
+		&idif[0],
+		&ispec[0],
 	}
 
 	return &Light{
