@@ -119,26 +119,30 @@ func (c *Camera) KeyControls() {
 	if window.GetKey(glfw.KeySpace) == glfw.Press {
 		if c.Mode == FlyMode {
 			if window.GetKey(glfw.KeyLeftShift) == glfw.Press {
-				c.Y++
-			} else {
 				c.Y--
+			} else {
+				c.Y++
 			}
 		}
 	}
 }
 
+func SetCameraPosition(position Position) {
+	camera.Position = position
+	camera.Update()
+}
+
 // Update : update camera
 func (c *Camera) Update() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
 	c.MouseControls()
 	c.KeyControls()
 
-	translateMatrix := mgl32.Translate3D(c.X, c.Y, c.Z)
-	model := translateMatrix.Mul4(mgl32.Ident4())
+	translateMatrix := mgl32.Translate3D(c.X, -c.Y, c.Z)
+	modelMatrix := translateMatrix.Mul4(mgl32.Ident4())
 
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(c.XRotation))
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(c.YRotation))
 	view := xrotMatrix.Mul4(yrotMatrix.Mul4(mgl32.Ident4()))
-	c.MVP = c.Projection.Mul4(view.Mul4(model))
+	c.MVP = c.Projection.Mul4(view.Mul4(modelMatrix))
 }
