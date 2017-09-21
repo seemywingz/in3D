@@ -25,6 +25,7 @@ type DrawnObjectData struct {
 	ColorID        int32
 	Color          Color
 	Texture        uint32
+	Scale          float32
 	DrawnObjectDefaults
 }
 
@@ -54,12 +55,14 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 		ColorID,
 		NewColor(1, 1, 1, 1),
 		texture,
+		1,
 		DrawnObjectDefaults{},
 	}
 }
 
 func (d *DrawnObjectData) translateRotate() *mgl32.Mat4 {
-	model := mgl32.Translate3D(d.X, d.Y, d.Z)
+	model := mgl32.Translate3D(d.X, d.Y, d.Z).
+		Mul4(mgl32.Scale3D(d.Scale, d.Scale, d.Scale))
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.XRotation))
 	rotation := model.Mul4(xrotMatrix.Mul4(yrotMatrix))
