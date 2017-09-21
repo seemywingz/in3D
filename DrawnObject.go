@@ -43,6 +43,7 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
 	MVPID := gl.GetUniformLocation(program, gl.Str("MVP\x00"))
 	ColorID := gl.GetUniformLocation(program, gl.Str("COLOR\x00"))
+	// LightID := gl.GetUniformLocation(program, gl.Str("LIGHT\x00"))
 
 	return &DrawnObjectData{
 		makeVao(points, program),
