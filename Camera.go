@@ -11,7 +11,6 @@ import (
 // Camera : struct to store camera matrices
 type Camera struct {
 	Projection mgl32.Mat4
-	Position
 	CameraData
 }
 
@@ -23,10 +22,14 @@ type CameraData struct {
 	LastY       float64
 	MVP         mgl32.Mat4
 	PointerLock bool
+	Mode        int
+	LookEnabled bool
+	MoveEnabled bool
+	Position
 }
 
 // NewCamera : return new Camera
-func NewCamera(position Position, pointerLock bool) *Camera {
+func NewCamera(pointerLock bool) *Camera {
 
 	// Projection matrix : 45° Field of View, width:height ratio, display range : 0.1 unit <-> 1000 units
 	w, h := window.GetSize()
@@ -34,19 +37,21 @@ func NewCamera(position Position, pointerLock bool) *Camera {
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), ratio, 0.1, 1000)
 
 	// Create new Camera instance
-	camera = &Camera{projection, position, CameraData{}}
+	camera = &Camera{projection, CameraData{}}
 	if pointerLock {
 		camera.EnablePointerLock()
 	} else {
 		camera.DisablePointerLock()
 	}
-	// camera.Update()
 	return camera
 }
 
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
 	glfw.PollEvents()
+	if !c.LookEnabled {
+		return
+	}
 
 	if c.PointerLock {
 		x, y := window.GetCursorPos()
@@ -90,6 +95,9 @@ func (c *Camera) DisablePointerLock() {
 
 // KeyControls : control the camera via the keyboard
 func (c *Camera) KeyControls() {
+	if !c.MoveEnabled {
+		return
+	}
 	if window.GetKey(glfw.KeyEscape) == glfw.Press {
 		// os.Exit(1)
 		c.DisablePointerLock()

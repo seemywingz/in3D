@@ -14,14 +14,13 @@ import (
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
-	"github.com/seemywingz/gt"
 )
 
 // Init : initializes glfw and returns a Window to use, then InitGL
-func Init(width, height int, cameraPosition Position, title string) {
+func Init(width, height int, pointerLock bool, title string) {
 	runtime.LockOSThread()
 
-	gt.EoE("Error Initializing GLFW", glfw.Init())
+	EoE("Error Initializing GLFW", glfw.Init())
 	glfw.WindowHint(glfw.Resizable, glfw.False)
 	glfw.WindowHint(glfw.ContextVersionMajor, 4)
 	glfw.WindowHint(glfw.ContextVersionMinor, 1)
@@ -37,17 +36,17 @@ func Init(width, height int, cameraPosition Position, title string) {
 	} else {
 		window, err = glfw.CreateWindow(width, height, title, nil, nil)
 	}
-	gt.EoE("Error Creating GLFW Window", err)
+	EoE("Error Creating GLFW Window", err)
 	window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
 	window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
 	window.MakeContextCurrent()
 	InitGL()
-	NewCamera(cameraPosition, false)
+	NewCamera(pointerLock)
 }
 
 // InitGL : initialize GL setting and print version
 func InitGL() {
-	gt.EoE("Error Initializing OpenGL", gl.Init())
+	EoE("Error Initializing OpenGL", gl.Init())
 
 	gl.Enable(gl.DEPTH_TEST)
 	gl.DepthFunc(gl.LESS)
@@ -59,7 +58,7 @@ func InitGL() {
 
 func loadShaders() {
 	Shader = make(map[string]uint32)
-	gt.SetDirPath("github.com/seemywingz/gg/shaders")
+	SetDirPath("github.com/seemywingz/gg/shaders")
 	Shader["basic"] = NewShader("basicVect.glsl", "basicFrag.glsl")
 	Shader["color"] = NewShader("basicVect.glsl", "colorFrag.glsl")
 	Shader["texture"] = NewShader("textureVect.glsl", "textureFrag.glsl")
@@ -111,7 +110,7 @@ func CompileShader(source string, shaderType uint32) uint32 {
 		log := strings.Repeat("\x00", int(logLength+1))
 		gl.GetShaderInfoLog(shader, logLength, nil, gl.Str(log))
 
-		gt.EoE("Failed to Compile Source ", fmt.Errorf("failed to compile %v: %v", source, log))
+		EoE("Failed to Compile Source ", fmt.Errorf("failed to compile %v: %v", source, log))
 	}
 
 	return shader
@@ -121,7 +120,7 @@ func CompileShader(source string, shaderType uint32) uint32 {
 func CompileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
 
 	source, err := ioutil.ReadFile(sourceFile)
-	gt.EoE("Error Reading Source File", err)
+	EoE("Error Reading Source File", err)
 
 	return CompileShader(string(source)+"\x00", shaderType)
 }
@@ -147,7 +146,7 @@ func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 		log := strings.Repeat("\x00", int(logLength+1))
 		gl.GetProgramInfoLog(program, logLength, nil, gl.Str(log))
 
-		gt.EoE("Error Linking Shader Program", fmt.Errorf("failed to link program: %v", log))
+		EoE("Error Linking Shader Program", fmt.Errorf("failed to link program: %v", log))
 	}
 
 	gl.DeleteShader(vertexShader)
@@ -158,14 +157,14 @@ func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 // NewTexture : greate GL reference to provided texture
 func NewTexture(file string) uint32 {
 	imgFile, err := os.Open(file)
-	gt.EoE("Error Loading Texture", err)
+	EoE("Error Loading Texture", err)
 
 	img, _, err := image.Decode(imgFile)
-	gt.EoE("Error Decoding Image", err)
+	EoE("Error Decoding Image", err)
 
 	rgba := image.NewRGBA(img.Bounds())
 	if rgba.Stride != rgba.Rect.Size().X*4 {
-		gt.EoE("Error Getting RGB Strride", errors.New("unsupported stride"))
+		EoE("Error Getting RGB Strride", errors.New("unsupported stride"))
 	}
 	draw.Draw(rgba, rgba.Bounds(), img, image.Point{0, 0}, draw.Src)
 
@@ -204,4 +203,14 @@ func SwapBuffers() {
 // Update :
 func Update() {
 	camera.Update()
+}
+
+// Enable :
+func Enable(feature int) {
+	switch feature {
+	case FirstPersonCamera:
+		camera.LookEnabled = true
+		camera.MoveEnabled = true
+		camera.EnablePointerLock()
+	}
 }
