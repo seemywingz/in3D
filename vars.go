@@ -28,8 +28,12 @@ func NewColor(r, g, b, a float32) Color {
 }
 
 var (
+
+	// unexported
 	window *glfw.Window
 	camera *Camera
+	light  *Light
+
 	// Shader : map of gg provided shaders
 	Shader map[string]uint32
 
@@ -52,7 +56,8 @@ var (
 		1.0, -1.0, 0, 1.0, 1.0, 0.0, 0.0, 1.0,
 	}
 
-	cardFront = []float32{
+	// CardFront :
+	CardFront = []float32{
 		//  X, Y, Z, U, V, normal(3)
 		-1.25, -1.75, 0, 0.0, 1.0, 0.0, 0.0, 1.0,
 		1.25, -1.75, 0, 1.0, 1.0, 0.0, 0.0, 1.0,
@@ -63,7 +68,8 @@ var (
 		1.25, -1.75, 0, 1.0, 1.0, 0.0, 0.0, 1.0,
 	}
 
-	cardBack = []float32{
+	// CardBack :
+	CardBack = []float32{
 		-1.25, 1.75, -0.01, 1.0, 0.0, 0.0, 0.0, -1.0, // left top
 		-1.25, -1.75, -0.01, 1.0, 1.0, 0.0, 0.0, -1.0, // left bottom
 		1.25, -1.75, -0.01, 0.0, 1.0, 0.0, 0.0, -1.0, // right bottom

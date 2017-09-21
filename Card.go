@@ -9,8 +9,8 @@ type Card struct {
 // NewCard : Create New Card
 func NewCard(p Position, ftexture, btexture, shader uint32) *Card {
 
-	cardfront := NewDrawnObject(p, cardFront, ftexture, shader)
-	cardback := NewDrawnObject(p, cardBack, btexture, shader)
+	cardfront := NewDrawnObject(p, CardFront, ftexture, shader)
+	cardback := NewDrawnObject(p, CardBack, btexture, shader)
 	cl := func(d *DrawnObjectData) {
 		// d.XRotation++
 		d.YRotation += 0.5
