@@ -17,7 +17,7 @@ import (
 )
 
 // Init : initializes glfw and returns a Window to use, then InitGL
-func Init(width, height int, pointerLock bool, title string) {
+func Init(width, height int, title string) {
 	runtime.LockOSThread()
 
 	EoE("Error Initializing GLFW", glfw.Init())
@@ -41,7 +41,7 @@ func Init(width, height int, pointerLock bool, title string) {
 	window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
 	window.MakeContextCurrent()
 	InitGL()
-	NewCamera(pointerLock)
+	NewCamera()
 }
 
 // InitGL : initialize GL setting and print version

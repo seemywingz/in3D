@@ -29,7 +29,7 @@ type CameraData struct {
 }
 
 // NewCamera : return new Camera
-func NewCamera(pointerLock bool) *Camera {
+func NewCamera() *Camera {
 
 	// Projection matrix :
 	//    45° Field of View,
@@ -41,11 +41,6 @@ func NewCamera(pointerLock bool) *Camera {
 
 	// Create new Camera instance
 	camera = &Camera{projection, CameraData{}}
-	if pointerLock {
-		camera.EnablePointerLock()
-	} else {
-		camera.DisablePointerLock()
-	}
 	return camera
 }
 
