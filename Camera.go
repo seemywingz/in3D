@@ -144,6 +144,16 @@ func (c *Camera) KeyControls() {
 	}
 }
 
+// SetCameraPos : set the position of the camera
+func SetCameraPos(position Position) {
+	camera.Position = position
+}
+
+// GetCameraPos : set the position of the camera
+func GetCameraPos(position Position) Position {
+	return camera.Position
+}
+
 // Update : update camera
 func (c *Camera) Update() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
