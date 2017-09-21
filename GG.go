@@ -218,15 +218,31 @@ func GetWindow() *glfw.Window {
 // Enable :
 func Enable(feature int, enabled bool) {
 	switch feature {
-	case FirstPersonCamera:
+	case LookEnabled:
+		camera.LookEnabled = enabled
+	case MoveEnabled:
+		camera.MoveEnabled = enabled
+	case FirstPersonMode:
+		camera.LookEnabled = enabled
+		camera.MoveEnabled = enabled
 		if enabled {
-			camera.LookEnabled = true
-			camera.MoveEnabled = true
+			camera.Mode = FirstPersonMode
+		} else {
+			camera.Mode = NoMode
+		}
+	case PointerLock:
+		if enabled {
 			camera.EnablePointerLock()
 		} else {
-			camera.LookEnabled = false
-			camera.MoveEnabled = false
 			camera.DisablePointerLock()
+		}
+	case FlyMode:
+		camera.LookEnabled = enabled
+		camera.MoveEnabled = enabled
+		if enabled {
+			camera.Mode = FlyMode
+		} else {
+			camera.Mode = NoMode
 		}
 	}
 }

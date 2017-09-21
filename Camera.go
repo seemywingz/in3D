@@ -52,11 +52,8 @@ func NewCamera(pointerLock bool) *Camera {
 // MouseControls : control the camera via the mouse
 func (c *Camera) MouseControls() {
 	glfw.PollEvents()
-	if !c.LookEnabled {
-		return
-	}
 
-	if c.PointerLock {
+	if c.LookEnabled {
 		x, y := window.GetCursorPos()
 
 		sensitivity := float32(0.1)
@@ -73,10 +70,6 @@ func (c *Camera) MouseControls() {
 
 		c.LastX = x
 		c.LastY = y
-	} else { // no PointerLock
-		if window.GetMouseButton(glfw.MouseButton1) == glfw.Press {
-			c.EnablePointerLock()
-		}
 	}
 }
 
@@ -100,10 +93,6 @@ func (c *Camera) DisablePointerLock() {
 func (c *Camera) KeyControls() {
 	if !c.MoveEnabled {
 		return
-	}
-	if window.GetKey(glfw.KeyEscape) == glfw.Press {
-		// os.Exit(1)
-		c.DisablePointerLock()
 	}
 	// Press w
 	if window.GetKey(glfw.KeyW) == glfw.Press {
@@ -133,17 +122,13 @@ func (c *Camera) KeyControls() {
 	}
 	// Press space
 	if window.GetKey(glfw.KeySpace) == glfw.Press {
-		if window.GetKey(glfw.KeyLeftShift) == glfw.Press {
-			c.Y++
-		} else {
-			c.Y--
+		if c.Mode == FlyMode {
+			if window.GetKey(glfw.KeyLeftShift) == glfw.Press {
+				c.Y++
+			} else {
+				c.Y--
+			}
 		}
-	}
-	// Press q
-	if window.GetKey(glfw.KeyQ) == glfw.Press {
-	}
-	// Press e
-	if window.GetKey(glfw.KeyE) == glfw.Press {
 	}
 }
 
