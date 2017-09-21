@@ -205,6 +205,16 @@ func Update() {
 	camera.Update()
 }
 
+// GetCamera : return pounter to gg camera
+func GetCamera() *Camera {
+	return camera
+}
+
+// GetWindow : return pounter to gg window
+func GetWindow() *glfw.Window {
+	return window
+}
+
 // Enable :
 func Enable(feature int, enabled bool) {
 	switch feature {
