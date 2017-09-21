@@ -5,16 +5,11 @@ import (
 	"github.com/go-gl/mathgl/mgl32"
 )
 
-// DrawnObject : interface for opengl drawable object
-type DrawnObject interface {
-	Draw()
-}
+// DrawLogic : extra logic to perform durring SceneObject Draw phase
+type DrawLogic func(d *DrawnObject)
 
-// DrawLogic : extra logic to perform durring DrawnObject Draw phase
-type DrawLogic func(d *DrawnObjectData)
-
-// DrawnObjectData : a struct to hold openGL object data
-type DrawnObjectData struct {
+// DrawnObject : a struct to hold openGL object data
+type DrawnObject struct {
 	Vao     uint32
 	Program uint32
 	Points  *[]float32
@@ -36,15 +31,15 @@ type DrawnObjectDefaults struct {
 	DrawLogic DrawLogic
 }
 
-// NewDrawnObject : Create new DrawnObjectData
-func NewDrawnObject(position Position, points []float32, texture uint32, program uint32) *DrawnObjectData {
+// NewDrawnObject : Create new DrawnObject
+func NewDrawnObject(position Position, points []float32, texture uint32, program uint32) *DrawnObject {
 
 	ModelMatrixID := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
 	MVPID := gl.GetUniformLocation(program, gl.Str("MVP\x00"))
 	ColorID := gl.GetUniformLocation(program, gl.Str("COLOR\x00"))
 
-	return &DrawnObjectData{
+	return &DrawnObject{
 		makeVao(points, program),
 		program,
 		&points,
@@ -60,7 +55,7 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 	}
 }
 
-func (d *DrawnObjectData) translateRotate() *mgl32.Mat4 {
+func (d *DrawnObject) translateRotate() *mgl32.Mat4 {
 	model := mgl32.Translate3D(d.X, d.Y, d.Z).
 		Mul4(mgl32.Scale3D(d.Scale, d.Scale, d.Scale))
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
@@ -70,7 +65,7 @@ func (d *DrawnObjectData) translateRotate() *mgl32.Mat4 {
 }
 
 // Draw : draw the object
-func (d *DrawnObjectData) Draw() {
+func (d *DrawnObject) Draw() {
 
 	if d.DrawLogic != nil {
 		d.DrawLogic(d)
