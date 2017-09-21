@@ -206,11 +206,17 @@ func Update() {
 }
 
 // Enable :
-func Enable(feature int) {
+func Enable(feature int, enabled bool) {
 	switch feature {
 	case FirstPersonCamera:
-		camera.LookEnabled = true
-		camera.MoveEnabled = true
-		camera.EnablePointerLock()
+		if enabled {
+			camera.LookEnabled = true
+			camera.MoveEnabled = true
+			camera.EnablePointerLock()
+		} else {
+			camera.LookEnabled = false
+			camera.MoveEnabled = false
+			camera.DisablePointerLock()
+		}
 	}
 }
