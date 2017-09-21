@@ -40,7 +40,7 @@ func NewCamera(position Position, pointerLock bool) *Camera {
 	} else {
 		camera.DisablePointerLock()
 	}
-	camera.Update()
+	// camera.Update()
 	return camera
 }
 

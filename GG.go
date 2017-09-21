@@ -18,7 +18,7 @@ import (
 )
 
 // Init : initializes glfw and returns a Window to use, then InitGL
-func Init(width, height int, title string) {
+func Init(width, height int, cameraPosition Position, title string) {
 	runtime.LockOSThread()
 
 	gt.EoE("Error Initializing GLFW", glfw.Init())
@@ -42,6 +42,7 @@ func Init(width, height int, title string) {
 	window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
 	window.MakeContextCurrent()
 	InitGL()
+	NewCamera(cameraPosition, false)
 }
 
 // InitGL : initialize GL setting and print version
@@ -192,11 +193,15 @@ func NewTexture(file string) uint32 {
 
 // ShouldClose : wraper for glfw
 func ShouldClose() bool {
-	window.SwapBuffers()
 	return window.ShouldClose()
 }
 
 // SwapBuffers : wrapper for glfw
 func SwapBuffers() {
 	window.SwapBuffers()
+}
+
+// Update :
+func Update() {
+	camera.Update()
 }
