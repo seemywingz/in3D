@@ -216,6 +216,12 @@ func GetWindow() *glfw.Window {
 	return window
 }
 
+// SetCameraPosition :
+func SetCameraPosition(position Position) {
+	camera.Position = position
+	// camera.Updae()
+}
+
 // Enable :
 func Enable(feature int, enabled bool) {
 	switch feature {

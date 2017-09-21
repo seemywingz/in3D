@@ -92,28 +92,28 @@ func (c *Camera) KeyControls() {
 	// Press w
 	if window.GetKey(glfw.KeyW) == glfw.Press {
 		// move forward
-		c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
-		c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
-		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
-	}
-	// Press A
-	if window.GetKey(glfw.KeyA) == glfw.Press {
-		// Move left
-		c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
-		c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
-	}
-	// Press s
-	if window.GetKey(glfw.KeyS) == glfw.Press {
-		// Move Backward
 		c.X += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 		c.Z -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
 		c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
 	}
+	// Press A
+	if window.GetKey(glfw.KeyA) == glfw.Press {
+		// Move left
+		c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
+		c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
+	}
+	// Press s
+	if window.GetKey(glfw.KeyS) == glfw.Press {
+		// Move Backward
+		c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
+		c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
+		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
+	}
 	// Press d
 	if window.GetKey(glfw.KeyD) == glfw.Press {
 		// Move Right
-		c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
-		c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
+		c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
+		c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
 	}
 	// Press space
 	if window.GetKey(glfw.KeySpace) == glfw.Press {
@@ -127,18 +127,13 @@ func (c *Camera) KeyControls() {
 	}
 }
 
-func SetCameraPosition(position Position) {
-	camera.Position = position
-	camera.Update()
-}
-
 // Update : update camera
 func (c *Camera) Update() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 	c.MouseControls()
 	c.KeyControls()
 
-	translateMatrix := mgl32.Translate3D(c.X, -c.Y, c.Z)
+	translateMatrix := mgl32.Translate3D(-c.X, -c.Y, -c.Z)
 	modelMatrix := translateMatrix.Mul4(mgl32.Ident4())
 
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(c.XRotation))
