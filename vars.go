@@ -8,15 +8,7 @@ type SceneObject interface {
 }
 
 // SceneLogic :
-type SceneLogic func(s *SceneObjectData)
-
-// SceneObjectData :
-type SceneObjectData struct {
-	Position
-	XRotation  float32
-	YRotation  float32
-	SceneLogic SceneLogic
-}
+type SceneLogic func(s SceneLogig)
 
 // Position : struct to store 3D coords
 type Position struct {

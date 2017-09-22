@@ -9,6 +9,7 @@ type LightLogic func(l *Light)
 
 // Light : struct to hold light data
 type Light struct {
+	Position
 	Iamb    *float32
 	Idif    *float32
 	Ispec   *float32
@@ -16,7 +17,12 @@ type Light struct {
 	IambID  int32
 	IdifID  int32
 	IspecID int32
-	SceneObjectData
+	LightDefaults
+}
+
+// LightDefaults :
+type LightDefaults struct {
+	LightLogic LightLogic
 }
 
 // NewLight :
@@ -27,7 +33,8 @@ func NewLight(pos Position, iamb, idif, ispec []float32) *Light {
 	IdifID := gl.GetUniformLocation(Shader["1Light"], gl.Str("Idif\x00"))
 	IspecID := gl.GetUniformLocation(Shader["1Light"], gl.Str("Ispec\x00"))
 
-	l := Light{
+	return &Light{
+		pos,
 		&iamb[0],
 		&idif[0],
 		&ispec[0],
@@ -35,17 +42,15 @@ func NewLight(pos Position, iamb, idif, ispec []float32) *Light {
 		IambID,
 		IdifID,
 		IspecID,
-		SceneObjectData{},
+		LightDefaults{},
 	}
-	l.Position = pos
-	return &l
 }
 
 // Draw :
 func (l *Light) Draw() {
 
-	if l.SceneLogic != nil {
-		l.SceneLogic(&l.SceneObjectData)
+	if l.LightLogic != nil {
+		l.LightLogic(l)
 	}
 
 	gl.UseProgram(Shader["1Light"])
