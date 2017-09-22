@@ -8,10 +8,10 @@ type SceneObject interface {
 }
 
 // SceneLogic :
-type SceneLogic func(s *SceneObjectData)
+type SceneLogic func(s *StdData)
 
-// SceneObjectData :
-type SceneObjectData struct {
+// StdData :
+type StdData struct {
 	Position
 	Program    uint32
 	XRotation  float32

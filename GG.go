@@ -43,6 +43,7 @@ func Init(width, height int, title string) {
 	InitGL()
 	InitFeatures()
 	NewCamera()
+	NewLightManager()
 }
 
 // InitGL : initialize GL setting and print version
@@ -218,6 +219,7 @@ func SwapBuffers() {
 // Update :
 func Update() {
 	camera.Update()
+	lightManager.Update()
 }
 
 // GetCamera : return pounter to gg camera

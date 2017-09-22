@@ -19,7 +19,7 @@ type DrawnObject struct {
 	Color          Color
 	Texture        uint32
 	Scale          float32
-	SceneObjectData
+	StdData
 }
 
 // NewDrawnObject : Create new DrawnObject
@@ -40,7 +40,7 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 		NewColor(1, 1, 1, 1),
 		texture,
 		1,
-		SceneObjectData{},
+		StdData{},
 	}
 	d.Position = position
 	d.Program = program
@@ -60,7 +60,7 @@ func (d *DrawnObject) translateRotate() *mgl32.Mat4 {
 func (d *DrawnObject) Draw() {
 
 	if d.SceneLogic != nil {
-		d.SceneLogic(&d.SceneObjectData)
+		d.SceneLogic(&d.StdData)
 	}
 
 	modelMatrix := d.translateRotate()
