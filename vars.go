@@ -13,6 +13,7 @@ type SceneLogic func(s *SceneObjectData)
 // SceneObjectData :
 type SceneObjectData struct {
 	Position
+	Program    uint32
 	XRotation  float32
 	YRotation  float32
 	SceneLogic SceneLogic

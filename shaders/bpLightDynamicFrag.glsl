@@ -1,11 +1,11 @@
 #version 410
+const float pi = 3.14159265;
 
 uniform sampler2D tex;
 uniform mat4 MVP, MODEL;
 uniform vec4 COLOR;
+uniform float lightRad;
 uniform vec3 lightPos, Iamb, Idif, Ispec;
-
-const float pi = 3.14159265;
 
 in vec3 fragPos;
 in vec3 fragNoraml;
@@ -46,10 +46,8 @@ void main() {
   }
 
   float
-    a = 0.1,
-    b = 0.001,
     dist = distance(fragPos, lightPos),
-    att = 1.0 / (1.0 + a*dist + b*dist*dist);
+    att = clamp(1.0 - dist*dist/(lightRad*lightRad), 0.0, 1.0); att *= att;
 
   finalColor =  COLOR * vec4( att * texture * (Iamb +
                     lambertian * Idif +

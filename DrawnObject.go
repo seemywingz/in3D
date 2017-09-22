@@ -11,7 +11,6 @@ type DrawLogic func(d *DrawnObject)
 // DrawnObject : a struct to hold openGL object data
 type DrawnObject struct {
 	Vao            uint32
-	Program        uint32
 	Points         *[]float32
 	MVPID          int32
 	ModelMatrixID  int32
@@ -33,7 +32,6 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 
 	d := &DrawnObject{
 		makeVao(points, program),
-		program,
 		&points,
 		MVPID,
 		ModelMatrixID,
@@ -45,6 +43,7 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 		SceneObjectData{},
 	}
 	d.Position = position
+	d.Program = program
 	return d
 }
 
