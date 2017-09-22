@@ -7,6 +7,9 @@ type SceneObject interface {
 	Draw()
 }
 
+// SceneLogic :
+type SceneLogic func(s SceneLogig)
+
 // Position : struct to store 3D coords
 type Position struct {
 	X float32
