@@ -75,9 +75,7 @@ func InitShaders() {
 	Shader["basic"] = NewShader("basicVect.glsl", "basicFrag.glsl")
 	Shader["color"] = NewShader("basicVect.glsl", "colorFrag.glsl")
 	Shader["texture"] = NewShader("textureVect.glsl", "textureFrag.glsl")
-	Shader["phong"] = NewShader("bpLightVect.glsl", "bpLightFixedFrag.glsl")
-	Shader["1Light"] = NewShader("bpLightVect.glsl", "bpLightDynamicFrag.glsl")
-	Shader["multiLight"] = NewShader("bpLightVect.glsl", "bpMultiLightFrag.glsl")
+	Shader["phong"] = NewShader("blinnPhongVect.glsl", "blinnPhongFrag.glsl")
 }
 
 // makeVao initializes and returns a vertex array from the points provided.

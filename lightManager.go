@@ -34,7 +34,7 @@ func NewLightManager() *LightManager {
 
 	lightManager = &LightManager{
 		[]*Light{},
-		Shader["multiLight"],
+		Shader["phong"],
 	}
 	return lightManager
 }
