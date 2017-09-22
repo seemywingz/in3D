@@ -2,11 +2,6 @@ package gg
 
 import "github.com/go-gl/glfw/v3.2/glfw"
 
-// SceneObject : interface for opengl drawable object
-type SceneObject interface {
-	Draw()
-}
-
 // SceneLogic :
 type SceneLogic func(s *StdData)
 
