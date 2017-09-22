@@ -47,8 +47,6 @@ void main() {
   }
 
   float
-    a = 0.1,
-    b = 0.001,
     dist = distance(fragPos, lightPos),
     att = clamp(1.0 - dist*dist/(lightRad*lightRad), 0.0, 1.0); att *= att;
 
