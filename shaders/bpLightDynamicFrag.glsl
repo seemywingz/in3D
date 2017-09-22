@@ -22,7 +22,7 @@ float dinstance(vec3 p0, vec3 p1){
 }
 
 void main() {
-  
+
   // TODO: Support multiple light sources
   vec3 L = normalize(lightPos - fragPos);
   vec3 N = normalize(fragNoraml);
@@ -51,7 +51,7 @@ void main() {
     dist = distance(fragPos, lightPos),
     att = 1.0 / (1.0 + a*dist + b*dist*dist);
 
-  finalColor =  att * COLOR * vec4( texture * (Iamb +
+  finalColor =  COLOR * vec4( att * texture * (Iamb +
                     lambertian * Idif +
                     specular * Ispec ) ,1);
 }
