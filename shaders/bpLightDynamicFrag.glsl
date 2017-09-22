@@ -13,7 +13,16 @@ in vec2 fragTexCoord;
 
 out vec4 finalColor;
 
+float dinstance(vec3 p0, vec3 p1){
+  float dx, dy, dz;
+  dx = pow((p1.x - p0.x), 2);
+  dy = pow((p1.y - p0.y), 2);
+  dz = pow((p1.z - p0.z), 2);
+  return sqrt((dx+dy+dz));
+}
+
 void main() {
+  
   // TODO: Support multiple light sources
   vec3 L = normalize(lightPos - fragPos);
   vec3 N = normalize(fragNoraml);
@@ -35,7 +44,14 @@ void main() {
   if(texture == vec3(0,0,0)){
     texture = vec3(1,1,1);
   }
-  finalColor = COLOR * vec4( texture * (Iamb +
+
+  float
+    a = 0.1,
+    b = 0.001,
+    dist = distance(fragPos, lightPos),
+    att = 1.0 / (1.0 + a*dist + b*dist*dist);
+
+  finalColor =  att * COLOR * vec4( texture * (Iamb +
                     lambertian * Idif +
                     specular * Ispec ) ,1);
 }
