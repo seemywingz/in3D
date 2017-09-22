@@ -10,10 +10,9 @@ type DrawLogic func(d *DrawnObject)
 
 // DrawnObject : a struct to hold openGL object data
 type DrawnObject struct {
-	Vao     uint32
-	Program uint32
-	Points  *[]float32
-	Position
+	Vao            uint32
+	Program        uint32
+	Points         *[]float32
 	MVPID          int32
 	ModelMatrixID  int32
 	NormalMatrixID int32
@@ -21,14 +20,7 @@ type DrawnObject struct {
 	Color          Color
 	Texture        uint32
 	Scale          float32
-	DrawnObjectDefaults
-}
-
-// DrawnObjectDefaults :
-type DrawnObjectDefaults struct {
-	XRotation float32
-	YRotation float32
-	DrawLogic DrawLogic
+	SceneObjectData
 }
 
 // NewDrawnObject : Create new DrawnObject
@@ -39,11 +31,10 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 	MVPID := gl.GetUniformLocation(program, gl.Str("MVP\x00"))
 	ColorID := gl.GetUniformLocation(program, gl.Str("COLOR\x00"))
 
-	return &DrawnObject{
+	d := &DrawnObject{
 		makeVao(points, program),
 		program,
 		&points,
-		position,
 		MVPID,
 		ModelMatrixID,
 		NormalMatrixID,
@@ -51,8 +42,10 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 		NewColor(1, 1, 1, 1),
 		texture,
 		1,
-		DrawnObjectDefaults{},
+		SceneObjectData{},
 	}
+	d.Position = position
+	return d
 }
 
 func (d *DrawnObject) translateRotate() *mgl32.Mat4 {
@@ -67,8 +60,8 @@ func (d *DrawnObject) translateRotate() *mgl32.Mat4 {
 // Draw : draw the object
 func (d *DrawnObject) Draw() {
 
-	if d.DrawLogic != nil {
-		d.DrawLogic(d)
+	if d.SceneLogic != nil {
+		d.SceneLogic(&d.SceneObjectData)
 	}
 
 	modelMatrix := d.translateRotate()
