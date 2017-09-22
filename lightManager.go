@@ -49,7 +49,7 @@ func NewLight(pos Position, radius float32, iamb, idif, ispec []float32) *Light 
 	IdifID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Idif\x00"))
 	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
 
-	l := &Light{
+	light := &Light{
 		radius,
 		&iamb[0],
 		&idif[0],
@@ -61,9 +61,9 @@ func NewLight(pos Position, radius float32, iamb, idif, ispec []float32) *Light 
 		IspecID,
 		StdData{},
 	}
-	l.Position = pos
-	lightManager.Lights = append(lightManager.Lights, l)
-	return l
+	light.Position = pos
+	lightManager.Lights = append(lightManager.Lights, light)
+	return light
 }
 
 // Update :
