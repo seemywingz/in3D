@@ -24,7 +24,6 @@ struct LightData {
     Ispec;
 };
 uniform LightData Light[maxLights];
-// LightData Light[maxLights] = LightData[maxLights](LightData(50,vec3(1,1,1),vec3(1,1,1),vec3(1,1,1),vec3(1,1,1)));
 
 float dinstance(vec3 p0, vec3 p1){
   float dx, dy, dz;
