@@ -41,6 +41,7 @@ func Init(width, height int, title string) {
 	window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
 	window.MakeContextCurrent()
 	InitGL()
+	InitFeatures()
 	NewCamera()
 }
 
@@ -53,17 +54,28 @@ func InitGL() {
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	println("OpenGL version", version)
-	loadShaders()
+	InitShaders()
 }
 
-func loadShaders() {
+// InitFeatures :
+func InitFeatures() {
+	Feature = make(map[int]bool)
+	Feature[Look] = false
+	Feature[Move] = false
+	Feature[FlyMode] = false
+	Feature[PointerLock] = false
+	Feature[FirstPersonMode] = false
+}
+
+// InitShaders :
+func InitShaders() {
 	Shader = make(map[string]uint32)
 	SetDirPath("github.com/seemywingz/gg/shaders")
 	Shader["basic"] = NewShader("basicVect.glsl", "basicFrag.glsl")
 	Shader["color"] = NewShader("basicVect.glsl", "colorFrag.glsl")
 	Shader["texture"] = NewShader("textureVect.glsl", "textureFrag.glsl")
-	Shader["phong"] = NewShader("bp1LightVect.glsl", "bp1LightFrag.glsl")
-	Shader["singleLight"] = NewShader("bp1LightVect.glsl", "bp1LightDFrag.glsl")
+	Shader["phong"] = NewShader("bpLightVect.glsl", "bpLightFixedFrag.glsl")
+	Shader["1Light"] = NewShader("bpLightVect.glsl", "bpLightDynamicFrag.glsl")
 }
 
 // makeVao initializes and returns a vertex array from the points provided.
@@ -223,37 +235,34 @@ func SetCameraPosition(position Position) {
 	// camera.Updae()
 }
 
-// Enable :
-func Enable(feature int, enabled bool) {
-	switch feature {
-	case LookEnabled:
+// TogglePointerLock :
+func TogglePointerLock() {
+	fmt.Println("PointerLock Enabled:", Feature[PointerLock])
+	if Feature[PointerLock] {
 		x, y := window.GetCursorPos()
 		camera.LastX = x
 		camera.LastY = y
-		camera.LookEnabled = enabled
-	case MoveEnabled:
-		camera.MoveEnabled = enabled
-	case FirstPersonMode:
-		camera.LookEnabled = enabled
-		camera.MoveEnabled = enabled
-		if enabled {
-			camera.Mode = FirstPersonMode
-		} else {
-			camera.Mode = NoMode
-		}
+		window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+	} else {
+		window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
+	}
+}
+
+// Enable :
+func Enable(feature int, enabled bool) {
+
+	Feature[feature] = enabled
+	switch feature {
+	case Look:
+		x, y := window.GetCursorPos()
+		camera.LastX = x
+		camera.LastY = y
 	case PointerLock:
-		if enabled {
-			camera.EnablePointerLock()
-		} else {
-			camera.DisablePointerLock()
-		}
+		TogglePointerLock()
+	case FirstPersonMode:
+		fallthrough
 	case FlyMode:
-		camera.LookEnabled = enabled
-		camera.MoveEnabled = enabled
-		if enabled {
-			camera.Mode = FlyMode
-		} else {
-			camera.Mode = NoMode
-		}
+		Feature[Look] = enabled
+		Feature[Move] = enabled
 	}
 }

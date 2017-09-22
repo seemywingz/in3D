@@ -20,18 +20,18 @@ type Light struct {
 	LightDefaults
 }
 
-// LightData :
+// LightDefaults :
 type LightDefaults struct {
 	LightLogic LightLogic
 }
 
 // NewLight :
-func NewLight(pos Position, iamb, idif, ispec []float32, logic LightLogic) *Light {
+func NewLight(pos Position, iamb, idif, ispec []float32) *Light {
 
-	LPosID := gl.GetUniformLocation(Shader["singleLight"], gl.Str("lightPos\x00"))
-	IambID := gl.GetUniformLocation(Shader["singleLight"], gl.Str("Iamb\x00"))
-	IdifID := gl.GetUniformLocation(Shader["singleLight"], gl.Str("Idif\x00"))
-	IspecID := gl.GetUniformLocation(Shader["singleLight"], gl.Str("Ispec\x00"))
+	LPosID := gl.GetUniformLocation(Shader["1Light"], gl.Str("lightPos\x00"))
+	IambID := gl.GetUniformLocation(Shader["1Light"], gl.Str("Iamb\x00"))
+	IdifID := gl.GetUniformLocation(Shader["1Light"], gl.Str("Idif\x00"))
+	IspecID := gl.GetUniformLocation(Shader["1Light"], gl.Str("Ispec\x00"))
 
 	return &Light{
 		pos,
@@ -48,10 +48,12 @@ func NewLight(pos Position, iamb, idif, ispec []float32, logic LightLogic) *Ligh
 
 // Draw :
 func (l *Light) Draw() {
+
 	if l.LightLogic != nil {
 		l.LightLogic(l)
 	}
-	gl.UseProgram(Shader["singleLight"])
+
+	gl.UseProgram(Shader["1Light"])
 	gl.Uniform3fv(l.LPosID, 1, &[]float32{l.X, l.Y, l.Z}[0])
 	gl.Uniform3fv(l.IambID, 1, l.Iamb)
 	gl.Uniform3fv(l.IdifID, 1, l.Idif)

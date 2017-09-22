@@ -37,6 +37,10 @@ var (
 	// unexported
 	window *glfw.Window
 	camera *Camera
+
+	// Feature : used to chech gg enabled
+	Feature map[int]bool
+
 	// Shader : map of gg provided shaders
 	Shader map[string]uint32
 

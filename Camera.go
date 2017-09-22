@@ -16,15 +16,11 @@ type Camera struct {
 
 // CameraData : struct to hold CameraData
 type CameraData struct {
-	XRotation   float32
-	YRotation   float32
-	LastX       float64
-	LastY       float64
-	MVP         mgl32.Mat4
-	PointerLock bool
-	Mode        int
-	LookEnabled bool
-	MoveEnabled bool
+	XRotation float32
+	YRotation float32
+	LastX     float64
+	LastY     float64
+	MVP       mgl32.Mat4
 	Position
 }
 
@@ -48,7 +44,7 @@ func NewCamera() *Camera {
 func (c *Camera) MouseControls() {
 	glfw.PollEvents()
 
-	if c.LookEnabled {
+	if Feature[Look] {
 		x, y := window.GetCursorPos()
 
 		sensitivity := float32(0.1)
@@ -68,25 +64,9 @@ func (c *Camera) MouseControls() {
 	}
 }
 
-// EnablePointerLock :
-func (c *Camera) EnablePointerLock() {
-	// fmt.Println("PointerLock Enabled")
-	x, y := window.GetCursorPos()
-	c.LastX = x
-	c.LastY = y
-	window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
-	c.PointerLock = true
-}
-
-// DisablePointerLock :
-func (c *Camera) DisablePointerLock() {
-	window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
-	c.PointerLock = false
-}
-
 // KeyControls : control the camera via the keyboard
 func (c *Camera) KeyControls() {
-	if !c.MoveEnabled {
+	if !Feature[Move] {
 		return
 	}
 	// Press w
@@ -117,12 +97,14 @@ func (c *Camera) KeyControls() {
 	}
 	// Press space
 	if window.GetKey(glfw.KeySpace) == glfw.Press {
-		if c.Mode == FlyMode {
+		if Feature[FlyMode] {
 			if window.GetKey(glfw.KeyLeftShift) == glfw.Press {
 				c.Y--
 			} else {
 				c.Y++
 			}
+		} else {
+			//jump
 		}
 	}
 }

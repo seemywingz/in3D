@@ -3,24 +3,22 @@ package gg
 import "github.com/go-gl/glfw/v3.2/glfw"
 
 const (
-	// NoMode :
-	NoMode = iota
-	// PointerLock :
-	PointerLock
-	// FirstPersonMode :
-	FirstPersonMode
-	// FlyMode :
-	FlyMode
-	// LookEnabled :
-	LookEnabled
-	// MoveEnabled :
-	MoveEnabled
-	// NoTexture :
-	NoTexture
-	// CenterLight :
-	CenterLight
 	// Press :
 	Press = glfw.Press
 	// Releasese :
 	Releasese = glfw.Release
+	// NoMode :
+	NoMode = iota
+	// FlyMode :
+	FlyMode
+	// FirstPersonMode :a
+	FirstPersonMode
+	// PointerLock :
+	PointerLock
+	// Look :
+	Look
+	// Move :
+	Move
+	// NoTexture :
+	NoTexture
 )
