@@ -72,10 +72,10 @@ func InitFeatures() {
 func InitShaders() {
 	Shader = make(map[string]uint32)
 	SetDirPath("github.com/seemywingz/gg/shaders")
-	Shader["basic"] = NewShader("basicVect.glsl", "basicFrag.glsl")
-	Shader["color"] = NewShader("basicVect.glsl", "colorFrag.glsl")
-	Shader["texture"] = NewShader("textureVect.glsl", "textureFrag.glsl")
-	Shader["phong"] = NewShader("blinnPhongVect.glsl", "blinnPhongFrag.glsl")
+	Shader["basic"] = NewShader("Vect.glsl", "basicFrag.glsl")
+	Shader["color"] = NewShader("Vect.glsl", "colorFrag.glsl")
+	Shader["texture"] = NewShader("Vect.glsl", "textureFrag.glsl")
+	Shader["phong"] = NewShader("Vect.glsl", "blinnPhongFrag.glsl")
 }
 
 // makeVao initializes and returns a vertex array from the points provided.
