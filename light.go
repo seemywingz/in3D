@@ -7,6 +7,11 @@ import (
 // LightLogic :
 type LightLogic func(l *Light)
 
+// LightManager :
+type LightManager struct {
+	Lights []Light
+}
+
 // Light : struct to hold light data
 type Light struct {
 	Iamb    *float32

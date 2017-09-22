@@ -46,8 +46,9 @@ func NewColor(r, g, b, a float32) Color {
 var (
 
 	// unexported
-	window *glfw.Window
-	camera *Camera
+	window       *glfw.Window
+	camera       *Camera
+	lightManager *LightManager
 
 	// Feature : used to enable features
 	Feature map[int]bool
