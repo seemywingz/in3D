@@ -1,12 +1,11 @@
 #version 410
+const float pi = 3.14159265;
 
 uniform sampler2D tex;
 uniform mat4 MVP, MODEL;
 uniform vec4 COLOR;
 uniform float lightRad;
 uniform vec3 lightPos, Iamb, Idif, Ispec;
-
-const float pi = 3.14159265;
 
 in vec3 fragPos;
 in vec3 fragNoraml;
