@@ -71,7 +71,6 @@ func (l *LightManager) Update() {
 		if light.SceneLogic != nil {
 			light.SceneLogic(&light.StdData)
 		}
-		light.X++
 		gl.UseProgram(l.Program)
 		gl.Uniform1f(light.LRadID, light.Radius)
 		gl.Uniform3fv(light.LPosID, 1, &[]float32{light.X, light.Y, light.Z}[0])

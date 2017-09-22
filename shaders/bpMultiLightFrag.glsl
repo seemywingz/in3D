@@ -57,15 +57,11 @@ void main() {
       texture = vec3(1,1,1);
     }
     float
-    dist = distance(fragPos, lightPos),
+    dist = distance(fragPos, Light[i].lightPos),
     att = clamp(1.0 - dist*dist/(Light[i].lightRad*Light[i].lightRad), 0.0, 1.0); att *= att;
     vec4 nColor =  COLOR * vec4( att * texture * (Light[i].Iamb +
                       lambertian * Light[i].Idif +
                       specular * Light[i].Ispec ) ,1);
-    finalColor = nColor;
-    // finalColor = vec4(vec3(1,1,1),1);
+    finalColor = finalColor + nColor;
   }
-
-
-  // finalColor =
 }
