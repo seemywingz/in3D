@@ -75,6 +75,7 @@ func InitShaders() {
 	Shader["basic"] = NewShader("Vect.glsl", "basicFrag.glsl")
 	Shader["color"] = NewShader("Vect.glsl", "colorFrag.glsl")
 	Shader["texture"] = NewShader("Vect.glsl", "textureFrag.glsl")
+	Shader["fixedLight"] = NewShader("Vect.glsl", "fixedLightFrag.glsl")
 	Shader["phong"] = NewShader("Vect.glsl", "blinnPhongFrag.glsl")
 }
 
