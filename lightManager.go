@@ -1,6 +1,8 @@
 package gg
 
 import (
+	"fmt"
+
 	"github.com/go-gl/gl/v4.1-core/gl"
 )
 
@@ -39,13 +41,13 @@ func NewLightManager() *LightManager {
 
 // NewLight :
 func NewLight(pos Position, radius float32, iamb, idif, ispec []float32) *Light {
-	// n := len(lightManager.Lights)
-	// LightID := gl.GetUniformLocation(Shader["multiLight"], gl.Str("Light["+string(n)+"]\x00"))
-	LRadID := gl.GetUniformLocation(lightManager.Program, gl.Str("Light[0].lightRad\x00"))
-	LPosID := gl.GetUniformLocation(lightManager.Program, gl.Str("Light[0].lightPos\x00"))
-	IambID := gl.GetUniformLocation(lightManager.Program, gl.Str("Light[0].Iamb\x00"))
-	IdifID := gl.GetUniformLocation(lightManager.Program, gl.Str("Light[0].Idif\x00"))
-	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str("Light[0].Ispec\x00"))
+	n := len(lightManager.Lights)
+	uniform := fmt.Sprintf("Light[%v]", n)
+	LRadID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightRad\x00"))
+	LPosID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightPos\x00"))
+	IambID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Iamb\x00"))
+	IdifID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Idif\x00"))
+	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
 
 	l := &Light{
 		radius,
