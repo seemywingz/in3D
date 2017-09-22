@@ -27,6 +27,8 @@ type Light struct {
 	IdifID  int32
 	IspecID int32
 	StdData
+	Draw        bool
+	DrawnObject *DrawnObject
 }
 
 // NewLightManager :
@@ -40,7 +42,7 @@ func NewLightManager() *LightManager {
 }
 
 // NewLight :
-func NewLight(pos Position, radius float32, iamb, idif, ispec []float32) *Light {
+func NewLight(position Position, radius float32, iamb, idif, ispec []float32, draw bool) *Light {
 	n := len(lightManager.Lights)
 	uniform := fmt.Sprintf("Light[%v]", n)
 	LRadID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightRad\x00"))
@@ -48,6 +50,16 @@ func NewLight(pos Position, radius float32, iamb, idif, ispec []float32) *Light 
 	IambID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Iamb\x00"))
 	IdifID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Idif\x00"))
 	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
+
+	var drawnObject *DrawnObject
+	if draw {
+		drawnObject = NewDrawnObject(
+			position,
+			Cube,
+			NoTexture,
+			Shader["color"],
+		)
+	}
 
 	light := &Light{
 		radius,
@@ -60,8 +72,10 @@ func NewLight(pos Position, radius float32, iamb, idif, ispec []float32) *Light 
 		IdifID,
 		IspecID,
 		StdData{},
+		draw,
+		drawnObject,
 	}
-	light.Position = pos
+	light.Position = position
 	lightManager.Lights = append(lightManager.Lights, light)
 	return light
 }
@@ -72,6 +86,10 @@ func (l *LightManager) Update() {
 	for _, light := range l.Lights {
 		if light.SceneLogic != nil {
 			light.SceneLogic(&light.StdData)
+		}
+		if light.Draw {
+			light.DrawnObject.SceneLogic = light.SceneLogic
+			light.DrawnObject.Draw()
 		}
 		gl.UseProgram(l.Program)
 		gl.Uniform1f(light.LRadID, light.Radius)

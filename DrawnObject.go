@@ -5,9 +5,6 @@ import (
 	"github.com/go-gl/mathgl/mgl32"
 )
 
-// DrawLogic : extra logic to perform durring SceneObject Draw phase
-type DrawLogic func(d *DrawnObject)
-
 // DrawnObject : a struct to hold openGL object data
 type DrawnObject struct {
 	Vao            uint32
