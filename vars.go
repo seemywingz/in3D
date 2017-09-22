@@ -8,7 +8,7 @@ type SceneObject interface {
 }
 
 // SceneLogic :
-type SceneLogic func(s SceneLogig)
+type SceneLogic func(s SceneLogic)
 
 // Position : struct to store 3D coords
 type Position struct {
