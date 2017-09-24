@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Mesh contains vertexes, normals and faces
+// Mesh contains vertexes, normals, faces and GL approved VAO
 type Mesh struct {
 	Vertexes []*Vec3
 	Normals  []*Vec3
@@ -18,6 +18,7 @@ type Mesh struct {
 
 // Vec3 :
 type Vec3 struct {
+	// TODO: ensure [3]float32... add append func
 	Coords []float32
 }
 
@@ -43,7 +44,7 @@ func appendToVAO(vao []float32, vec *Vec3) []float32 {
 	return vao
 }
 
-// LoadObject : opens a wavefront file and parses it into a map of objects
+// LoadObject : opens a wavefront file and parses it into mesh
 func LoadObject(filename string) *Mesh {
 	file, err := os.Open(filename)
 	EoE("Error Opening File", err)
@@ -112,8 +113,9 @@ func LoadObject(filename string) *Mesh {
 		}
 	}
 
-	for _, f := range faces {
+	for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
 		vao = appendToVAO(vao, vertexs[f.VertIdx-1])
+		// TODO: parse material from mtllib *.mtl
 		vao = append(vao, 0)
 		vao = append(vao, 0)
 		vao = appendToVAO(vao, normals[f.NormIdx-1])

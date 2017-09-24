@@ -19,8 +19,15 @@ type DrawnObject struct {
 	SceneData
 }
 
-// NewDrawnObject : Create new DrawnObject
-func NewDrawnObject(position Position, mesh *Mesh, texture uint32, program uint32) *DrawnObject {
+// NewPointsObject :
+func NewPointsObject(position Position, points []float32, texture uint32, program uint32) *DrawnObject {
+	mesh := &Mesh{}
+	mesh.VAO = points
+	return NewMeshObject(position, mesh, texture, program)
+}
+
+// NewMeshObject : Create new DrawnObject
+func NewMeshObject(position Position, mesh *Mesh, texture uint32, program uint32) *DrawnObject {
 
 	ModelMatrixID := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
