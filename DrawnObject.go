@@ -16,7 +16,7 @@ type DrawnObject struct {
 	Color          Color
 	Texture        uint32
 	Scale          float32
-	StdData
+	SceneData
 }
 
 // NewDrawnObject : Create new DrawnObject
@@ -37,7 +37,7 @@ func NewDrawnObject(position Position, mesh *Mesh, texture uint32, program uint3
 		NewColor(1, 1, 1, 1),
 		texture,
 		1,
-		StdData{},
+		SceneData{},
 	}
 	d.Position = position
 	d.Program = program
@@ -47,9 +47,10 @@ func NewDrawnObject(position Position, mesh *Mesh, texture uint32, program uint3
 func (d *DrawnObject) translateRotate() *mgl32.Mat4 {
 	model := mgl32.Translate3D(d.X, d.Y, d.Z).
 		Mul4(mgl32.Scale3D(d.Scale, d.Scale, d.Scale))
-	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.XRotation))
-	rotation := model.Mul4(xrotMatrix.Mul4(yrotMatrix))
+	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
+	zrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.ZRotation))
+	rotation := model.Mul4(zrotMatrix.Mul4(yrotMatrix.Mul4(xrotMatrix)))
 	return &rotation
 }
 
@@ -57,7 +58,7 @@ func (d *DrawnObject) translateRotate() *mgl32.Mat4 {
 func (d *DrawnObject) Draw() {
 
 	if d.SceneLogic != nil {
-		d.SceneLogic(&d.StdData)
+		d.SceneLogic(&d.SceneData)
 	}
 
 	modelMatrix := d.translateRotate()
@@ -76,7 +77,7 @@ func (d *DrawnObject) Draw() {
 		gl.BindTexture(gl.TEXTURE_2D, d.Texture)
 	}
 
-	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Mesh.VAO)*4))
+	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Mesh.VAO)))
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 	gl.Disable(gl.TEXTURE_2D)
 

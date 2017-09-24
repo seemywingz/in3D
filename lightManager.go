@@ -26,7 +26,7 @@ type Light struct {
 	IambID  int32
 	IdifID  int32
 	IspecID int32
-	StdData
+	SceneData
 	Draw        bool
 	DrawnObject *DrawnObject
 }
@@ -76,7 +76,7 @@ func NewCustomLight(position Position, radius float32, iamb, idif, ispec []float
 		IambID,
 		IdifID,
 		IspecID,
-		StdData{},
+		SceneData{},
 		draw,
 		drawnObject,
 	}
@@ -90,7 +90,7 @@ func (l *LightManager) Update() {
 
 	for _, light := range l.Lights {
 		if light.SceneLogic != nil {
-			light.SceneLogic(&light.StdData)
+			light.SceneLogic(&light.SceneData)
 		}
 		if light.Draw {
 			light.DrawnObject.SceneLogic = light.SceneLogic

@@ -3,14 +3,15 @@ package gg
 import "github.com/go-gl/glfw/v3.2/glfw"
 
 // SceneLogic :
-type SceneLogic func(s *StdData)
+type SceneLogic func(s *SceneData)
 
-// StdData :
-type StdData struct {
+// SceneData :
+type SceneData struct {
 	Position
 	Program    uint32
 	XRotation  float32
 	YRotation  float32
+	ZRotation  float32
 	SceneLogic SceneLogic
 }
 
