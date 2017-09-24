@@ -3,7 +3,6 @@
 uniform sampler2D tex;
 uniform mat4 MVP, MODEL;
 uniform vec4 COLOR;
-uniform float lightRad;
 uniform vec3 lightPos, Iamb, Idif, Ispec;
 
 const float pi = 3.14159265;
@@ -50,7 +49,7 @@ void main() {
     a = 0.1,
     b = 0.001,
     dist = distance(fragPos, lightPos),
-    att = clamp(1.0 - dist*dist/(lightRad*lightRad), 0.0, 1.0); att *= att;
+    att = 1.0 / (1.0 + a*dist + b*dist*dist);
 
   finalColor =  COLOR * vec4( att * texture * (Iamb +
                     lambertian * Idif +
