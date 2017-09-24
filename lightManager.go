@@ -44,7 +44,7 @@ func NewLight() *Light {
 		50,                   // radius
 		[]float32{0.2, 0.2, 0.2}, // ambiant intensity
 		[]float32{1, 1, 1},       // diffuse intensity
-		[]float32{0.5, 0.5, 0.5}, // specular intensity
+		[]float32{0.8, 0.8, 0.8}, // specular intensity
 		false, // draw
 	)
 }
@@ -61,7 +61,7 @@ func NewCustomLight(position Position, radius float32, iamb, idif, ispec []float
 	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
 
 	// mesh := &Mesh{}
-	drawnObject := NewPointsObject(position, Cube, NoTexture, lightManager.Program)
+	drawnObject := NewPointsObject(position, Cube, NoTexture, Shader["color"])
 
 	light := &Light{
 		radius,
@@ -89,8 +89,8 @@ func (l *LightManager) Update() {
 		if light.SceneLogic != nil {
 			light.SceneLogic(&light.SceneData)
 		}
+
 		if light.Draw {
-			light.DrawnObject.SceneLogic = light.SceneLogic
 			light.DrawnObject.Color = NewColor(light.Idif[0], light.Idif[1], light.Idif[2], 1)
 			light.DrawnObject.Draw()
 		}
@@ -100,5 +100,6 @@ func (l *LightManager) Update() {
 		gl.Uniform3fv(light.IambID, 1, &light.Iamb[0])
 		gl.Uniform3fv(light.IdifID, 1, &light.Idif[0])
 		gl.Uniform3fv(light.IspecID, 1, &light.Ispec[0])
+
 	}
 }
