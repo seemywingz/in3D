@@ -12,7 +12,6 @@ in vec2 fragTexCoord;
 
 out vec4 finalColor;
 
-// Inside fragment/vertex shader
 struct LightData {
   float lightRad;
   vec3
