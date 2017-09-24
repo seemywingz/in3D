@@ -2,20 +2,16 @@ package gg
 
 import "github.com/go-gl/glfw/v3.2/glfw"
 
-// SceneObject : interface for opengl drawable object
-type SceneObject interface {
-	Draw()
-}
-
 // SceneLogic :
-type SceneLogic func(s *SceneObjectData)
+type SceneLogic func(s *SceneData)
 
-// SceneObjectData :
-type SceneObjectData struct {
+// SceneData :
+type SceneData struct {
 	Position
 	Program    uint32
 	XRotation  float32
 	YRotation  float32
+	ZRotation  float32
 	SceneLogic SceneLogic
 }
 
@@ -47,8 +43,9 @@ func NewColor(r, g, b, a float32) Color {
 var (
 
 	// unexported
-	window *glfw.Window
-	camera *Camera
+	window       *glfw.Window
+	camera       *Camera
+	lightManager *LightManager
 
 	// Feature : used to enable features
 	Feature map[int]bool

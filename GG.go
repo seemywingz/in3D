@@ -43,6 +43,7 @@ func Init(width, height int, title string) {
 	InitGL()
 	InitFeatures()
 	NewCamera()
+	NewLightManager()
 }
 
 // InitGL : initialize GL setting and print version
@@ -71,15 +72,15 @@ func InitFeatures() {
 func InitShaders() {
 	Shader = make(map[string]uint32)
 	SetDirPath("github.com/seemywingz/gg/shaders")
-	Shader["basic"] = NewShader("basicVect.glsl", "basicFrag.glsl")
-	Shader["color"] = NewShader("basicVect.glsl", "colorFrag.glsl")
-	Shader["texture"] = NewShader("textureVect.glsl", "textureFrag.glsl")
-	Shader["phong"] = NewShader("bpLightVect.glsl", "bpLightFixedFrag.glsl")
-	Shader["1Light"] = NewShader("bpLightVect.glsl", "bpLightDynamicFrag.glsl")
+	Shader["basic"] = NewShader("Vect.glsl", "basicFrag.glsl")
+	Shader["color"] = NewShader("Vect.glsl", "colorFrag.glsl")
+	Shader["texture"] = NewShader("Vect.glsl", "textureFrag.glsl")
+	Shader["fixedLight"] = NewShader("Vect.glsl", "fixedLightFrag.glsl")
+	Shader["phong"] = NewShader("Vect.glsl", "blinnPhongFrag.glsl")
 }
 
-// makeVao initializes and returns a vertex array from the points provided.
-func makeVao(points []float32, program uint32) uint32 {
+// MakeVAO initializes and returns a vertex array from the points provided.
+func MakeVAO(points []float32, program uint32) uint32 {
 
 	var vao uint32
 	gl.GenVertexArrays(1, &vao)
@@ -217,6 +218,7 @@ func SwapBuffers() {
 // Update :
 func Update() {
 	camera.Update()
+	lightManager.Update()
 }
 
 // GetCamera : return pounter to gg camera
