@@ -8,7 +8,7 @@ import (
 // DrawnObject : a struct to hold openGL object data
 type DrawnObject struct {
 	Vao            uint32
-	Points         *[]float32
+	Mesh           *Mesh
 	MVPID          int32
 	ModelMatrixID  int32
 	NormalMatrixID int32
@@ -20,7 +20,7 @@ type DrawnObject struct {
 }
 
 // NewDrawnObject : Create new DrawnObject
-func NewDrawnObject(position Position, points []float32, texture uint32, program uint32) *DrawnObject {
+func NewDrawnObject(position Position, mesh *Mesh, texture uint32, program uint32) *DrawnObject {
 
 	ModelMatrixID := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
@@ -28,8 +28,8 @@ func NewDrawnObject(position Position, points []float32, texture uint32, program
 	ColorID := gl.GetUniformLocation(program, gl.Str("COLOR\x00"))
 
 	d := &DrawnObject{
-		makeVao(points, program),
-		&points,
+		MakeVAO(mesh.VAO, program),
+		mesh,
 		MVPID,
 		ModelMatrixID,
 		NormalMatrixID,
@@ -76,7 +76,7 @@ func (d *DrawnObject) Draw() {
 		gl.BindTexture(gl.TEXTURE_2D, d.Texture)
 	}
 
-	gl.DrawArrays(gl.TRIANGLES, 0, 6*2*3)
+	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Mesh.VAO)))
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 	gl.Disable(gl.TEXTURE_2D)
 

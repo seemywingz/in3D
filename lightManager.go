@@ -18,9 +18,9 @@ type LightManager struct {
 // Light : struct to hold light data
 type Light struct {
 	Radius  float32
-	Iamb    *float32
-	Idif    *float32
-	Ispec   *float32
+	Iamb    []float32
+	Idif    []float32
+	Ispec   []float32
 	LRadID  int32
 	LPosID  int32
 	IambID  int32
@@ -42,7 +42,19 @@ func NewLightManager() *LightManager {
 }
 
 // NewLight :
-func NewLight(position Position, radius float32, iamb, idif, ispec []float32, draw bool) *Light {
+func NewLight() *Light {
+	return NewCustomLight(
+		NewPosition(0, 0, 0), // position
+		50,                   // radius
+		[]float32{0.2, 0.2, 0.2}, // ambiant intensity
+		[]float32{1, 1, 1},       // diffuse intensity
+		[]float32{1, 1, 1},       // specular intensity
+		false,                    // draw
+	)
+}
+
+// NewCustomLight :
+func NewCustomLight(position Position, radius float32, iamb, idif, ispec []float32, draw bool) *Light {
 	n := len(lightManager.Lights)
 	uniform := fmt.Sprintf("Light[%v]", n)
 	LRadID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightRad\x00"))
@@ -51,21 +63,14 @@ func NewLight(position Position, radius float32, iamb, idif, ispec []float32, dr
 	IdifID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Idif\x00"))
 	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
 
-	var drawnObject *DrawnObject
-	if draw {
-		drawnObject = NewDrawnObject(
-			position,
-			Cube,
-			NoTexture,
-			Shader["color"],
-		)
-	}
+	// mesh := &Mesh{}
+	drawnObject := &DrawnObject{}
 
 	light := &Light{
 		radius,
-		&iamb[0],
-		&idif[0],
-		&ispec[0],
+		iamb,
+		idif,
+		ispec,
 		LRadID,
 		LPosID,
 		IambID,
@@ -89,13 +94,14 @@ func (l *LightManager) Update() {
 		}
 		if light.Draw {
 			light.DrawnObject.SceneLogic = light.SceneLogic
+			light.DrawnObject.Color = NewColor(light.Idif[0], light.Idif[1], light.Idif[2], 1)
 			light.DrawnObject.Draw()
 		}
 		gl.UseProgram(l.Program)
 		gl.Uniform1f(light.LRadID, light.Radius)
 		gl.Uniform3fv(light.LPosID, 1, &[]float32{light.X, light.Y, light.Z}[0])
-		gl.Uniform3fv(light.IambID, 1, light.Iamb)
-		gl.Uniform3fv(light.IdifID, 1, light.Idif)
-		gl.Uniform3fv(light.IspecID, 1, light.Ispec)
+		gl.Uniform3fv(light.IambID, 1, &light.Iamb[0])
+		gl.Uniform3fv(light.IdifID, 1, &light.Idif[0])
+		gl.Uniform3fv(light.IspecID, 1, &light.Ispec[0])
 	}
 }
