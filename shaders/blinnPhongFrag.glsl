@@ -50,8 +50,8 @@ void main() {
     float diffuse = max(dot(normalize(fragNoraml), normalize(Light[i].lightPos)), 0.0);
 
     vec3 texture = texture(tex, fragTexCoord).rgb;
-    if(texture == vec3(0,0,0)){// white default
-      texture = vec3(1,1,1);
+    if(texture == vec3(0,0,0)){
+      texture = vec3(1,1,1);// white default
     }
     float
     dist = distance(fragPos, Light[i].lightPos),
