@@ -49,8 +49,8 @@ func (d *DrawnObject) translateRotate() *mgl32.Mat4 {
 		Mul4(mgl32.Scale3D(d.Scale, d.Scale, d.Scale))
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.XRotation))
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
-	zrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.ZRotation))
-	rotation := model.Mul4(zrotMatrix.Mul4(yrotMatrix.Mul4(xrotMatrix)))
+	zrotMatrix := mgl32.HomogRotate3DZ(mgl32.DegToRad(d.ZRotation))
+	rotation := model.Mul4(xrotMatrix.Mul4(yrotMatrix.Mul4(zrotMatrix)))
 	return &rotation
 }
 
