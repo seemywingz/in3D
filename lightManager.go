@@ -91,6 +91,7 @@ func (l *LightManager) Update() {
 		}
 
 		if light.Draw {
+			light.DrawnObject.Position = light.Position
 			light.DrawnObject.Color = NewColor(light.Idif[0], light.Idif[1], light.Idif[2], 1)
 			light.DrawnObject.Draw()
 		}
