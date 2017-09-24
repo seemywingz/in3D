@@ -1,6 +1,6 @@
 #version 410
 const float pi = 3.14159265;
-const int maxLights = 10;
+const int maxLights = 11;
 
 uniform sampler2D tex;
 uniform mat4 MVP, MODEL;

@@ -84,7 +84,7 @@ func (d *DrawnObject) Draw() {
 	}
 
 	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Mesh.VAO)))
-	gl.BindTexture(gl.TEXTURE_2D, 0)
 	gl.Disable(gl.TEXTURE_2D)
+	gl.BindTexture(gl.TEXTURE_2D, 0)
 
 }
