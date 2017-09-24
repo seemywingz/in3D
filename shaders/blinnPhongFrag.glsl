@@ -5,8 +5,6 @@ const int maxLights = 10;
 uniform sampler2D tex;
 uniform mat4 MVP, MODEL;
 uniform vec4 COLOR;
-uniform float lightRad;
-uniform vec3 lightPos, Iamb, Idif, Ispec;
 
 in vec3 fragPos;
 in vec3 fragNoraml;
@@ -49,7 +47,7 @@ void main() {
       float eConservation = ( 8.0 + shininess ) / ( 8.0 * pi );
       specular = eConservation * pow(specAngle, shininess);
     }
-    float diffuse = max(dot(normalize(fragNoraml), normalize(lightPos)), 0.0);
+    float diffuse = max(dot(normalize(fragNoraml), normalize(Light[i].lightPos)), 0.0);
 
     vec3 texture = texture(tex, fragTexCoord).rgb;
     if(texture == vec3(0,0,0)){// white default

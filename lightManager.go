@@ -52,6 +52,7 @@ func NewLight() *Light {
 // NewCustomLight :
 func NewCustomLight(position Position, radius float32, iamb, idif, ispec []float32, draw bool) *Light {
 	n := len(lightManager.Lights)
+	fmt.Println("Adding Light:", n)
 	uniform := fmt.Sprintf("Light[%v]", n)
 	LRadID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightRad\x00"))
 	LPosID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightPos\x00"))
