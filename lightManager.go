@@ -48,8 +48,8 @@ func NewLight() *Light {
 		50,                   // radius
 		[]float32{0.2, 0.2, 0.2}, // ambiant intensity
 		[]float32{1, 1, 1},       // diffuse intensity
-		[]float32{1, 1, 1},       // specular intensity
-		false,                    // draw
+		[]float32{0.5, 0.5, 0.5}, // specular intensity
+		false, // draw
 	)
 }
 

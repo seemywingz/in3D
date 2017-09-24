@@ -79,27 +79,6 @@ func InitShaders() {
 	Shader["phong"] = NewShader("Vect.glsl", "blinnPhongFrag.glsl")
 }
 
-// MakeVAOmesh :
-func MakeVAOmesh(points []float32, program uint32) uint32 {
-	var vao uint32
-	gl.GenVertexArrays(1, &vao)
-	gl.BindVertexArray(vao)
-
-	var vbo uint32
-	gl.GenBuffers(1, &vbo)
-	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
-	gl.BufferData(gl.ARRAY_BUFFER, len(points)*4, gl.Ptr(points), gl.STATIC_DRAW)
-
-	vertAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vert\x00")))
-	gl.EnableVertexAttribArray(vertAttrib)
-	gl.VertexAttribPointer(vertAttrib, 3, gl.FLOAT, false, 0, gl.PtrOffset(0))
-
-	// vertNormalAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertNormal\x00")))
-	// gl.EnableVertexAttribArray(vertNormalAttrib)
-	// gl.VertexAttribPointer(vertNormalAttrib, 3, gl.FLOAT, true, 8*4, gl.PtrOffset(5*4))
-	return vao
-}
-
 // MakeVAO initializes and returns a vertex array from the points provided.
 func MakeVAO(points []float32, program uint32) uint32 {
 
