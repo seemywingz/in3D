@@ -43,6 +43,7 @@ func Init(width, height int, title string) {
 	InitGL()
 	InitFeatures()
 	NewCamera()
+	Feature[PointerLock] = false
 	NewLightManager()
 }
 
@@ -221,7 +222,7 @@ func Update() {
 	lightManager.Update()
 }
 
-// GetCamera : return pounter to gg camera
+// GetCamera : return pointer to gg camera
 func GetCamera() *Camera {
 	return camera
 }
@@ -234,7 +235,6 @@ func GetWindow() *glfw.Window {
 // SetCameraPosition :
 func SetCameraPosition(position Position) {
 	camera.Position = position
-	// camera.Updae()
 }
 
 // TogglePointerLock :
