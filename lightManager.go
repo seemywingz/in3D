@@ -6,9 +6,6 @@ import (
 	"github.com/go-gl/gl/v4.1-core/gl"
 )
 
-// LightLogic :
-type LightLogic func(l *Light)
-
 // LightManager :
 type LightManager struct {
 	Lights  []*Light
@@ -33,7 +30,6 @@ type Light struct {
 
 // NewLightManager :
 func NewLightManager() *LightManager {
-
 	lightManager = &LightManager{
 		[]*Light{},
 		Shader["phong"],
@@ -64,7 +60,7 @@ func NewCustomLight(position Position, radius float32, iamb, idif, ispec []float
 	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
 
 	// mesh := &Mesh{}
-	drawnObject := NewPointsObject(position, Cube, NoTexture, Shader["color"])
+	drawnObject := NewPointsObject(position, Cube, NoTexture, lightManager.Program)
 
 	light := &Light{
 		radius,

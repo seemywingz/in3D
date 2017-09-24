@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-// LoE : exit with error code 1 and print if err is notnull
+// LoE : log if err is notnull
 func LoE(msg string, err error) {
 	if err != nil {
 		log.Printf("\n❌  %s\n   %v\n", msg, err)

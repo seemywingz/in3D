@@ -39,11 +39,11 @@ func Init(width, height int, title string) {
 	EoE("Error Creating GLFW Window", err)
 	window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
 	window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
+	TogglePointerLock()
 	window.MakeContextCurrent()
 	InitGL()
 	InitFeatures()
 	NewCamera()
-	Feature[PointerLock] = false
 	NewLightManager()
 }
 
