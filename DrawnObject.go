@@ -50,8 +50,8 @@ func (d *DrawnObject) translateRotate() *mgl32.Mat4 {
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.XRotation))
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
 	zrotMatrix := mgl32.HomogRotate3DZ(mgl32.DegToRad(d.ZRotation))
-	rotation := model.Mul4(xrotMatrix.Mul4(yrotMatrix.Mul4(zrotMatrix)))
-	return &rotation
+	final := model.Mul4(xrotMatrix.Mul4(yrotMatrix.Mul4(zrotMatrix)))
+	return &final
 }
 
 // Draw : draw the object
@@ -62,8 +62,7 @@ func (d *DrawnObject) Draw() {
 	}
 
 	modelMatrix := d.translateRotate()
-	normalMatrix := modelMatrix.Inv()
-	normalMatrix = normalMatrix.Transpose()
+	normalMatrix := modelMatrix.Inv().Transpose()
 
 	gl.UseProgram(d.Program)
 	gl.UniformMatrix4fv(d.MVPID, 1, false, &camera.MVP[0])
