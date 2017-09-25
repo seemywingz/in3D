@@ -62,7 +62,7 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 func loadTextures() {
 	texture = make(map[string]uint32)
 	texture["none"] = gg.NoTexture
-	gg.SetDirPath("github.com/seemywingz/gge/assets/textures")
+	gg.SetDirPath("github.com/seemywingz/gg/examples/assets/textures")
 	texture["box"] = gg.NewTexture("box.jpg")
 	texture["box1"] = gg.NewTexture("box1.jpg")
 }

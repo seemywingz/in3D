@@ -37,7 +37,7 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 func loadTextures() {
 	texture = make(map[string]uint32)
 	texture["none"] = gg.NoTexture
-	gg.SetDirPath("github.com/seemywingz/gge/assets/textures")
+	gg.SetDirPath("github.com/seemywingz/gg/examples/assets/textures")
 	texture["box"] = gg.NewTexture("box.jpg")
 }
 
@@ -52,7 +52,7 @@ func main() {
 	min, max := -20, 20
 	randObjects(200, min, max, gg.Cube, texture["none"], gg.Shader["fixedLight"])
 	randObjects(700, min, max, gg.Cube, texture["box"], gg.Shader["fixedLight"])
-	sceneObjects = append(sceneObjects, *gg.NewPointsObject(gg.NewPosition(0, 0, 0), gg.Cube, texture["none"], gg.Shader["fixedLight"]))
+	sceneObjects = append(sceneObjects, *gg.NewPointsObject(gg.NewPosition(0, 0, 0), gg.Cube, texture["none"], gg.Shader["basic"]))
 
 	for !gg.ShouldClose() {
 		gg.Update()
