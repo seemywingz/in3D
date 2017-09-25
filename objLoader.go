@@ -29,15 +29,6 @@ type Material struct {
 	Shininess float32
 }
 
-// ObjData contains vertexes, normals, faces and GL approved VAO
-type ObjData struct {
-	Vertexes       [][]float32
-	UVs            [][]float32
-	Normals        [][]float32
-	Faces          []*Face
-	MaterialGroups []*MaterialGroup
-}
-
 // Face :
 type Face struct {
 	VertIdx int
@@ -52,7 +43,13 @@ func appendToVAO(vao []float32, vec []float32) []float32 {
 	return vao
 }
 
-var defaultMaterial Material
+var defaultMaterial = Material{
+	"default",
+	[]float32{0.1, 0.1, 0.1},
+	[]float32{1, 1, 1},
+	[]float32{0.8, 0.8, 0.8},
+	1,
+}
 
 // LoadObject : opens a wavefront file and parses it into ObjData
 func LoadObject(filename string) *Mesh {
@@ -61,21 +58,13 @@ func LoadObject(filename string) *Mesh {
 	defer file.Close()
 
 	var (
-		vertexs        [][]float32
-		uvs            [][]float32
-		normals        [][]float32
-		faces          []*Face
-		vao            []float32
+		vertexs [][]float32
+		uvs     [][]float32
+		normals [][]float32
+		faces   []*Face
+		// materials      []*Material
 		materialGroups []*MaterialGroup
 	)
-
-	defaultMaterial = Material{
-		"default",
-		[]float32{0.1, 0.1, 0.1},
-		[]float32{1, 1, 1},
-		[]float32{0.8, 0.8, 0.8},
-		1,
-	}
 
 	scanner := bufio.NewScanner(file)
 
@@ -150,15 +139,103 @@ func LoadObject(filename string) *Mesh {
 		}
 	}
 
-	for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
-		vao = appendToVAO(vao, vertexs[f.VertIdx-1])
-		if len(uvs) != 0 {
-			vao = appendToVAO(vao, uvs[f.UVIdx-1])
-		} else {
-			vao = appendToVAO(vao, []float32{0, 0})
-		}
-		vao = appendToVAO(vao, normals[f.NormIdx-1])
-		// TODO: parse material from mtllib *.mtl
-	}
+	// for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
+	// 	vao = appendToVAO(vao, vertexs[f.VertIdx-1])
+	// 	if len(uvs) != 0 {
+	// 		vao = appendToVAO(vao, uvs[f.UVIdx-1])
+	// 	} else {
+	// 		vao = appendToVAO(vao, []float32{0, 0})
+	// 	}
+	// 	vao = appendToVAO(vao, normals[f.NormIdx-1])
+	// 	// TODO: parse material from mtllib *.mtl
+	// }
 	return &Mesh{materialGroups}
+}
+
+// LoadMaterials :
+func LoadMaterials(filename string) []*Material {
+	file, ferr := os.Open(filename)
+	EoE("Error Opening Material File", ferr)
+	defer file.Close()
+
+	var (
+		materials []*Material
+		material  Material
+	)
+
+	line := ""
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		line = scanner.Text()
+		if strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		fields := strings.Fields(line)
+		if len(fields) == 0 {
+			continue
+		}
+
+		if fields[0] == "newmtl" {
+			if len(fields) != 2 {
+				EoE("unsupported material definition", errors.New(filename))
+			}
+
+			material = defaultMaterial
+			materials = append(materials, &material)
+
+			continue
+		}
+
+		switch fields[0] {
+		case "Ka":
+			if len(fields) != 4 {
+				EoE("unsupported ambient color line", errors.New(filename))
+			}
+			for i := 0; i < 3; i++ {
+				f, err := strconv.ParseFloat(fields[i+1], 32)
+				EoE("Error parsing float", err)
+				material.Ambient[i] = float32(f)
+			}
+		case "Kd":
+			if len(fields) != 4 {
+				EoE("Error Diffuse Parse", errors.New(filename))
+			}
+			for i := 0; i < 3; i++ {
+				f, err := strconv.ParseFloat(fields[i+1], 32)
+				EoE("Error parsing float", err)
+				material.Diffuse[i] = float32(f)
+			}
+		case "Ks":
+			if len(fields) != 4 {
+				EoE("Error KS Parse", errors.New(filename))
+			}
+			for i := 0; i < 3; i++ {
+				f, err := strconv.ParseFloat(fields[i+1], 32)
+				EoE("Error parsing float", err)
+				material.Specular[i] = float32(f)
+			}
+		case "Ns":
+			if len(fields) != 2 {
+				EoE("Error NS Parse", errors.New(filename))
+			}
+			f, err := strconv.ParseFloat(fields[1], 32)
+			EoE("Error parsing float", err)
+			material.Shininess = float32(f / 1000 * 128)
+		case "d":
+			if len(fields) != 2 {
+				EoE("Error d Parse", errors.New(filename))
+			}
+			f, err := strconv.ParseFloat(fields[1], 32)
+			EoE("Error parsing float", err)
+			material.Ambient[3] = float32(f)
+			material.Diffuse[3] = float32(f)
+			material.Specular[3] = float32(f)
+		}
+	}
+
+	EoE("Scann Error", scanner.Err())
+
+	return materials
 }
