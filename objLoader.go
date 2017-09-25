@@ -10,16 +10,11 @@ import (
 
 // Mesh contains vertexes, normals, faces and GL approved VAO
 type Mesh struct {
-	Vertexes []*Vec3
-	Normals  []*Vec3
+	Vertexes [][]float32
+	UVz      [][]float32
+	Normals  [][]float32
 	Faces    []*Face
 	VAO      []float32
-}
-
-// Vec3 :
-type Vec3 struct {
-	// TODO: ensure [3]float32... add append func
-	Coords []float32
 }
 
 // Face :
@@ -37,8 +32,8 @@ type Material struct {
 	Shininess float32
 }
 
-func appendToVAO(vao []float32, vec *Vec3) []float32 {
-	for _, v := range vec.Coords {
+func appendToVAO(vao []float32, vec []float32) []float32 {
+	for _, v := range vec {
 		vao = append(vao, v)
 	}
 	return vao
@@ -51,8 +46,9 @@ func LoadObject(filename string) *Mesh {
 	defer file.Close()
 
 	var (
-		vertexs []*Vec3
-		normals []*Vec3
+		vertexs [][]float32
+		uvs     [][]float32
+		normals [][]float32
 		faces   []*Face
 		vao     []float32
 	)
@@ -82,7 +78,7 @@ func LoadObject(filename string) *Mesh {
 				EoE("Failed to parse float", err)
 				v = append(v, float32(f))
 			}
-			vertexs = append(vertexs, &Vec3{v})
+			vertexs = append(vertexs, v)
 		case "vn":
 			if len(fields) != 4 {
 				EoE("unsupported vertex normal line", errors.New(filename+" "+line))
@@ -93,7 +89,7 @@ func LoadObject(filename string) *Mesh {
 				EoE("cannot parse float", err)
 				n = append(n, float32(f))
 			}
-			normals = append(normals, &Vec3{n})
+			normals = append(normals, n)
 		case "f":
 			if len(fields) != 4 {
 				EoE("unsupported face: "+line, errors.New(filename))
@@ -120,5 +116,5 @@ func LoadObject(filename string) *Mesh {
 		vao = append(vao, 0)
 		vao = appendToVAO(vao, normals[f.NormIdx-1])
 	}
-	return &Mesh{vertexs, normals, faces, vao}
+	return &Mesh{vertexs, uvs, normals, faces, vao}
 }
