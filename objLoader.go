@@ -3,6 +3,7 @@ package gg
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -11,7 +12,7 @@ import (
 // Mesh contains vertexes, normals, faces and GL approved VAO
 type Mesh struct {
 	Vertexes [][]float32
-	UVz      [][]float32
+	UVs      [][]float32
 	Normals  [][]float32
 	Faces    []*Face
 	VAO      []float32
@@ -20,6 +21,7 @@ type Mesh struct {
 // Face :
 type Face struct {
 	VertIdx int
+	UVIdx   int
 	NormIdx int
 }
 
@@ -45,9 +47,9 @@ func LoadObject(filename string) *Mesh {
 	EoE("Error Opening File", err)
 	defer file.Close()
 
+	vertexs := [][]float32{}
+	uvs := [][]float32{}
 	var (
-		vertexs [][]float32
-		uvs     [][]float32
 		normals [][]float32
 		faces   []*Face
 		vao     []float32
@@ -79,6 +81,17 @@ func LoadObject(filename string) *Mesh {
 				v = append(v, float32(f))
 			}
 			vertexs = append(vertexs, v)
+		case "vt":
+			if len(fields) != 2 {
+				EoE("Error Parsing UV coords", errors.New(filename))
+			}
+			var uv []float32
+			for i := 1; i < 3; i++ {
+				f, err := strconv.ParseFloat(fields[i], 32)
+				EoE("Failed to parse float", err)
+				uv = append(uv, float32(f))
+			}
+			uvs = append(uvs, uv)
 		case "vn":
 			if len(fields) != 4 {
 				EoE("unsupported vertex normal line", errors.New(filename+" "+line))
@@ -94,27 +107,34 @@ func LoadObject(filename string) *Mesh {
 			if len(fields) != 4 {
 				EoE("unsupported face: "+line, errors.New(filename))
 			}
+			var vi, ui, ni int
 			for i := 1; i < 4; i++ {
 				faceStr := strings.Split(fields[i], "/")
-				if len(faceStr) == 3 {
-					vi, err := strconv.Atoi(faceStr[0])
-					EoE("unsupported face vertex index", err)
-					ni, err := strconv.Atoi(faceStr[2])
-					EoE("unsupported face normal index", err)
-					faces = append(faces, &Face{vi, ni})
+				vi, err = strconv.Atoi(faceStr[0])
+				EoE("unsupported face vertex index", err)
+				ni, err = strconv.Atoi(faceStr[2])
+				EoE("unsupported face normal index", err)
+				if len(faceStr) == 4 {
+					ui, err = strconv.Atoi(faceStr[1])
+					EoE("unsupported face uv index", err)
 				} else {
-					EoE("Error Parsing Face (expected triangle)", errors.New(filename))
+					ui = 1
 				}
+				faces = append(faces, &Face{vi, ui, ni})
 			}
 		}
 	}
 
 	for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
+		fmt.Println(uvs)
 		vao = appendToVAO(vao, vertexs[f.VertIdx-1])
-		// TODO: parse material from mtllib *.mtl
-		vao = append(vao, 0)
-		vao = append(vao, 0)
+		if len(uvs) != 0 {
+			vao = appendToVAO(vao, uvs[f.UVIdx-1])
+		} else {
+			vao = appendToVAO(vao, []float32{0, 0})
+		}
 		vao = appendToVAO(vao, normals[f.NormIdx-1])
+		// TODO: parse material from mtllib *.mtl
 	}
 	return &Mesh{vertexs, uvs, normals, faces, vao}
 }
