@@ -3,7 +3,6 @@ package gg
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -43,8 +42,8 @@ func appendToVAO(vao []float32, vec []float32) []float32 {
 
 // LoadObject : opens a wavefront file and parses it into mesh
 func LoadObject(filename string) *Mesh {
-	file, err := os.Open(filename)
-	EoE("Error Opening File", err)
+	file, ferr := os.Open(filename)
+	EoE("Error Opening File", ferr)
 	defer file.Close()
 
 	vertexs := [][]float32{}
@@ -82,7 +81,7 @@ func LoadObject(filename string) *Mesh {
 			}
 			vertexs = append(vertexs, v)
 		case "vt":
-			if len(fields) != 2 {
+			if len(fields) != 3 {
 				EoE("Error Parsing UV coords", errors.New(filename))
 			}
 			var uv []float32
@@ -105,9 +104,12 @@ func LoadObject(filename string) *Mesh {
 			normals = append(normals, n)
 		case "f":
 			if len(fields) != 4 {
-				EoE("unsupported face: "+line, errors.New(filename))
+				EoE("unsupported face:"+string(len(fields))+" "+line, errors.New(filename))
 			}
-			var vi, ui, ni int
+			var (
+				vi, ui, ni int
+				err        error
+			)
 			for i := 1; i < 4; i++ {
 				faceStr := strings.Split(fields[i], "/")
 				vi, err = strconv.Atoi(faceStr[0])
@@ -126,7 +128,6 @@ func LoadObject(filename string) *Mesh {
 	}
 
 	for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
-		fmt.Println(uvs)
 		vao = appendToVAO(vao, vertexs[f.VertIdx-1])
 		if len(uvs) != 0 {
 			vao = appendToVAO(vao, uvs[f.UVIdx-1])
