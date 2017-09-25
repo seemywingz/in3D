@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/seemywingz/gg"
 )
 
@@ -20,6 +22,7 @@ func main() {
 	gopher.SceneLogic = func(s *gg.SceneData) {
 		s.YRotation++
 	}
+	fmt.Println(len(gopher.Mesh.MaterialGroups))
 
 	for !gg.ShouldClose() {
 		gg.Update()

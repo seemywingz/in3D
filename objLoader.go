@@ -3,6 +3,7 @@ package gg
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -68,9 +69,9 @@ func LoadObject(filename string) *Mesh {
 		vertexs        [][]float32
 		uvs            [][]float32
 		normals        [][]float32
-		materials      []*Material
+		materials      map[string]*Material
 		materialGroups []*MaterialGroup
-		materialGroup  MaterialGroup
+		materialGroup  *MaterialGroup
 		faces          []*Face
 	)
 
@@ -91,21 +92,26 @@ func LoadObject(filename string) *Mesh {
 		switch fields[0] {
 		case "mtllib":
 			materials = LoadMaterials(fields[1])
+			fmt.Println(materials)
 		case "usemtl":
-			matName := fields[1]
-			if materialGroup == (MaterialGroup{}) {
-				for _, m := range materials {
-					if m.Name == matName {
-						materialGroup.Material = m
-					}
-				}
-			} else {
-				materialGroup.VAO, materialGroup.VertCount = makeVAOfromFaces(faces, vertexs, uvs, normals)
-				materialGroups = append(materialGroups, &materialGroup)
-				// Reset temp values
-				faces = []*Face{}
-				materialGroup = MaterialGroup{}
-			}
+			// matName := fields[1]
+			// for _, mg := range materialGroups {
+			// 	if mg.Material.Name == matName {
+
+			// 	}
+			// }
+			// 	for _, m := range materials {
+			// 		if m.Name == matName {
+			// 			materialGroup.Material = m
+			// 		}
+			// 	}
+			// } else {
+			// 	materialGroup.VAO, materialGroup.VertCount = makeVAOfromFaces(faces, vertexs, uvs, normals)
+			// 	materialGroups = append(materialGroups, materialGroup)
+			// 	// Reset temp values
+			// 	faces = []*Face{}
+			// 	materialGroup = &MaterialGroup{}
+			// }
 		case "v":
 			if len(fields) != 4 {
 				EoE("Error Parsing Vertex too few feilds ", errors.New(filename))
@@ -165,23 +171,20 @@ func LoadObject(filename string) *Mesh {
 	}
 
 	materialGroup.VAO, materialGroup.VertCount = makeVAOfromFaces(faces, vertexs, uvs, normals)
-	materialGroups = append(materialGroups, &materialGroup)
+	materialGroups = append(materialGroups, materialGroup)
 	return &Mesh{materialGroups}
 }
 
 // LoadMaterials :
-func LoadMaterials(filename string) []*Material {
+func LoadMaterials(filename string) map[string]*Material {
 	file, ferr := os.Open(filename)
 	EoE("Error Opening Material File", ferr)
 	defer file.Close()
 
-	var (
-		materials []*Material
-		material  Material
-	)
-
 	line := ""
 	scanner := bufio.NewScanner(file)
+	materials := make(map[string]*Material)
+	currentMat := ""
 
 	for scanner.Scan() {
 		line = scanner.Text()
@@ -198,9 +201,14 @@ func LoadMaterials(filename string) []*Material {
 			if len(fields) != 2 {
 				EoE("unsupported material definition", errors.New(filename))
 			}
-
-			material = defaultMaterial
-			materials = append(materials, &material)
+			currentMat = fields[1]
+			materials[fields[1]] = &Material{
+				currentMat,
+				[]float32{0.1, 0.1, 0.1},
+				[]float32{1, 1, 1},
+				[]float32{0.8, 0.8, 0.8},
+				1,
+			}
 
 			continue
 		}
@@ -213,7 +221,7 @@ func LoadMaterials(filename string) []*Material {
 			for i := 0; i < 3; i++ {
 				f, err := strconv.ParseFloat(fields[i+1], 32)
 				EoE("Error parsing float", err)
-				material.Ambient[i] = float32(f)
+				materials[currentMat].Ambient[i] = float32(f)
 			}
 		case "Kd":
 			if len(fields) != 4 {
@@ -222,7 +230,7 @@ func LoadMaterials(filename string) []*Material {
 			for i := 0; i < 3; i++ {
 				f, err := strconv.ParseFloat(fields[i+1], 32)
 				EoE("Error parsing float", err)
-				material.Diffuse[i] = float32(f)
+				materials[currentMat].Diffuse[i] = float32(f)
 			}
 		case "Ks":
 			if len(fields) != 4 {
@@ -231,7 +239,7 @@ func LoadMaterials(filename string) []*Material {
 			for i := 0; i < 3; i++ {
 				f, err := strconv.ParseFloat(fields[i+1], 32)
 				EoE("Error parsing float", err)
-				material.Specular[i] = float32(f)
+				materials[currentMat].Specular[i] = float32(f)
 			}
 		case "Ns":
 			if len(fields) != 2 {
@@ -239,14 +247,14 @@ func LoadMaterials(filename string) []*Material {
 			}
 			f, err := strconv.ParseFloat(fields[1], 32)
 			EoE("Error parsing float", err)
-			material.Shininess = float32(f / 1000 * 128)
+			materials[currentMat].Shininess = float32(f / 1000 * 128)
 		case "d":
 			if len(fields) != 2 {
 				EoE("Error d Parse", errors.New(filename))
 			}
 			f, err := strconv.ParseFloat(fields[1], 32)
 			EoE("Error parsing float", err)
-			material.Shininess = float32(f)
+			materials[currentMat].Shininess = float32(f)
 		}
 	}
 

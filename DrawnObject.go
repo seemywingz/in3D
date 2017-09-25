@@ -80,9 +80,10 @@ func (d *DrawnObject) Draw() {
 	gl.UniformMatrix4fv(d.MVPID, 1, false, &camera.MVP[0])
 	gl.UniformMatrix4fv(d.ModelMatrixID, 1, false, &modelMatrix[0])
 	gl.UniformMatrix4fv(d.NormalMatrixID, 1, false, &normalMatrix[0])
-	gl.Uniform4f(d.ColorID, d.Color.R, d.Color.G, d.Color.B, d.Color.A)
+	// gl.Uniform4f(d.ColorID, d.Color.R, d.Color.G, d.Color.B, d.Color.A)
 
 	for _, m := range d.Mesh.MaterialGroups {
+		gl.Uniform4f(d.ColorID, m.Material.Diffuse[0], m.Material.Diffuse[1], m.Material.Diffuse[2], m.Material.Diffuse[3])
 		gl.BindVertexArray(m.VAO)
 		if d.Texture != NoTexture {
 			gl.Enable(gl.TEXTURE_2D)
