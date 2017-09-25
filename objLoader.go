@@ -10,11 +10,16 @@ import (
 
 // Mesh contains vertexes, normals, faces and GL approved VAO
 type Mesh struct {
-	Vertexes [][]float32
-	UVs      [][]float32
-	Normals  [][]float32
-	Faces    []*Face
-	VAO      []float32
+	Vertexes  [][]float32
+	UVs       [][]float32
+	Normals   [][]float32
+	Faces     []*Face
+	Materials []*Material
+	VAO       []float32
+}
+
+// MaterialGroup :
+type MaterialGroup struct {
 }
 
 // Face :
@@ -46,12 +51,13 @@ func LoadObject(filename string) *Mesh {
 	EoE("Error Opening File", ferr)
 	defer file.Close()
 
-	vertexs := [][]float32{}
-	uvs := [][]float32{}
 	var (
-		normals [][]float32
-		faces   []*Face
-		vao     []float32
+		vertexs   [][]float32
+		uvs       [][]float32
+		normals   [][]float32
+		faces     []*Face
+		materials []*Material
+		vao       []float32
 	)
 
 	scanner := bufio.NewScanner(file)
@@ -137,5 +143,5 @@ func LoadObject(filename string) *Mesh {
 		vao = appendToVAO(vao, normals[f.NormIdx-1])
 		// TODO: parse material from mtllib *.mtl
 	}
-	return &Mesh{vertexs, uvs, normals, faces, vao}
+	return &Mesh{vertexs, uvs, normals, faces, materials, vao}
 }
