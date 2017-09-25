@@ -3,7 +3,6 @@ package gg
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -45,6 +44,20 @@ var defaultMaterial = Material{
 	1,
 }
 
+func makeVAOfromFaces(faces []*Face, vertexs, uvs, normals [][]float32) (uint32, int32) {
+	vao := []float32{}
+	for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
+		vao = append(vao, vertexs[f.VertIdx-1]...)
+		if len(uvs) != 0 {
+			vao = append(vao, uvs[f.UVIdx-1]...)
+		} else {
+			vao = append(vao, []float32{0, 0}...)
+		}
+		vao = append(vao, normals[f.NormIdx-1]...)
+	}
+	return MakeVAO(vao, Shader["phong"]), int32(len(vao))
+}
+
 // LoadObject : opens a wavefront file and parses it into ObjData
 func LoadObject(filename string) *Mesh {
 	file, ferr := os.Open(filename)
@@ -78,7 +91,6 @@ func LoadObject(filename string) *Mesh {
 		switch fields[0] {
 		case "mtllib":
 			materials = LoadMaterials(fields[1])
-			println(materials)
 		case "usemtl":
 			matName := fields[1]
 			if materialGroup == (MaterialGroup{}) {
@@ -88,21 +100,8 @@ func LoadObject(filename string) *Mesh {
 					}
 				}
 			} else {
-				vao := []float32{}
-				for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
-					vao = append(vao, vertexs[f.VertIdx-1]...)
-					if len(uvs) != 0 {
-						vao = append(vao, uvs[f.UVIdx-1]...)
-					} else {
-						vao = append(vao, []float32{0, 0}...)
-					}
-					vao = append(vao, normals[f.NormIdx-1]...)
-				}
-				fmt.Println("!!!!!!!!!!!", vao)
-				materialGroup.VertCount = int32(len(vao))
-				materialGroup.VAO = MakeVAO(vao, Shader["phong"])
+				materialGroup.VAO, materialGroup.VertCount = makeVAOfromFaces(faces, vertexs, uvs, normals)
 				materialGroups = append(materialGroups, &materialGroup)
-
 				// Reset temp values
 				faces = []*Face{}
 				materialGroup = MaterialGroup{}
@@ -165,19 +164,7 @@ func LoadObject(filename string) *Mesh {
 		}
 	}
 
-	vao := []float32{}
-	for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
-		vao = append(vao, vertexs[f.VertIdx-1]...)
-		if len(uvs) != 0 {
-			vao = append(vao, uvs[f.UVIdx-1]...)
-		} else {
-			vao = append(vao, []float32{0, 0}...)
-		}
-		vao = append(vao, normals[f.NormIdx-1]...)
-	}
-	fmt.Println("!!!!!!!!!!!", vao)
-	materialGroup.VertCount = int32(len(vao))
-	materialGroup.VAO = MakeVAO(vao, Shader["phong"])
+	materialGroup.VAO, materialGroup.VertCount = makeVAOfromFaces(faces, vertexs, uvs, normals)
 	materialGroups = append(materialGroups, &materialGroup)
 	return &Mesh{materialGroups}
 }
