@@ -8,25 +8,16 @@ import (
 	"strings"
 )
 
-// Mesh contains vertexes, normals, faces and GL approved VAO
+// Mesh :
 type Mesh struct {
-	Vertexes  [][]float32
-	UVs       [][]float32
-	Normals   [][]float32
-	Faces     []*Face
-	Materials []*Material
-	VAO       []float32
+	MaterialGroups []*MaterialGroup
 }
 
 // MaterialGroup :
 type MaterialGroup struct {
-}
-
-// Face :
-type Face struct {
-	VertIdx int
-	UVIdx   int
-	NormIdx int
+	Material  *Material
+	VAO       uint32
+	VertCount int32
 }
 
 // Material represents a material
@@ -38,6 +29,22 @@ type Material struct {
 	Shininess float32
 }
 
+// ObjData contains vertexes, normals, faces and GL approved VAO
+type ObjData struct {
+	Vertexes       [][]float32
+	UVs            [][]float32
+	Normals        [][]float32
+	Faces          []*Face
+	MaterialGroups []*MaterialGroup
+}
+
+// Face :
+type Face struct {
+	VertIdx int
+	UVIdx   int
+	NormIdx int
+}
+
 func appendToVAO(vao []float32, vec []float32) []float32 {
 	for _, v := range vec {
 		vao = append(vao, v)
@@ -45,20 +52,30 @@ func appendToVAO(vao []float32, vec []float32) []float32 {
 	return vao
 }
 
-// LoadObject : opens a wavefront file and parses it into mesh
+var defaultMaterial Material
+
+// LoadObject : opens a wavefront file and parses it into ObjData
 func LoadObject(filename string) *Mesh {
 	file, ferr := os.Open(filename)
 	EoE("Error Opening File", ferr)
 	defer file.Close()
 
 	var (
-		vertexs   [][]float32
-		uvs       [][]float32
-		normals   [][]float32
-		faces     []*Face
-		materials []*Material
-		vao       []float32
+		vertexs        [][]float32
+		uvs            [][]float32
+		normals        [][]float32
+		faces          []*Face
+		vao            []float32
+		materialGroups []*MaterialGroup
 	)
+
+	defaultMaterial = Material{
+		"default",
+		[]float32{0.1, 0.1, 0.1},
+		[]float32{1, 1, 1},
+		[]float32{0.8, 0.8, 0.8},
+		1,
+	}
 
 	scanner := bufio.NewScanner(file)
 
@@ -143,5 +160,5 @@ func LoadObject(filename string) *Mesh {
 		vao = appendToVAO(vao, normals[f.NormIdx-1])
 		// TODO: parse material from mtllib *.mtl
 	}
-	return &Mesh{vertexs, uvs, normals, faces, materials, vao}
+	return &Mesh{materialGroups}
 }
