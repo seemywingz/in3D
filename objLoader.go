@@ -3,6 +3,7 @@ package gg
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -36,13 +37,6 @@ type Face struct {
 	NormIdx int
 }
 
-func appendToVAO(vao []float32, vec []float32) []float32 {
-	for _, v := range vec {
-		vao = append(vao, v)
-	}
-	return vao
-}
-
 var defaultMaterial = Material{
 	"default",
 	[]float32{0.1, 0.1, 0.1},
@@ -58,12 +52,13 @@ func LoadObject(filename string) *Mesh {
 	defer file.Close()
 
 	var (
-		vertexs [][]float32
-		uvs     [][]float32
-		normals [][]float32
-		faces   []*Face
-		// materials      []*Material
+		vertexs        [][]float32
+		uvs            [][]float32
+		normals        [][]float32
+		materials      []*Material
 		materialGroups []*MaterialGroup
+		materialGroup  MaterialGroup
+		faces          []*Face
 	)
 
 	scanner := bufio.NewScanner(file)
@@ -81,6 +76,37 @@ func LoadObject(filename string) *Mesh {
 		}
 
 		switch fields[0] {
+		case "mtllib":
+			materials = LoadMaterials(fields[1])
+			println(materials)
+		case "usemtl":
+			matName := fields[1]
+			if materialGroup == (MaterialGroup{}) {
+				for _, m := range materials {
+					if m.Name == matName {
+						materialGroup.Material = m
+					}
+				}
+			} else {
+				vao := []float32{}
+				for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
+					vao = append(vao, vertexs[f.VertIdx-1]...)
+					if len(uvs) != 0 {
+						vao = append(vao, uvs[f.UVIdx-1]...)
+					} else {
+						vao = append(vao, []float32{0, 0}...)
+					}
+					vao = append(vao, normals[f.NormIdx-1]...)
+				}
+				fmt.Println("!!!!!!!!!!!", vao)
+				materialGroup.VertCount = int32(len(vao))
+				materialGroup.VAO = MakeVAO(vao, Shader["phong"])
+				materialGroups = append(materialGroups, &materialGroup)
+
+				// Reset temp values
+				faces = []*Face{}
+				materialGroup = MaterialGroup{}
+			}
 		case "v":
 			if len(fields) != 4 {
 				EoE("Error Parsing Vertex too few feilds ", errors.New(filename))
@@ -139,16 +165,20 @@ func LoadObject(filename string) *Mesh {
 		}
 	}
 
-	// for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
-	// 	vao = appendToVAO(vao, vertexs[f.VertIdx-1])
-	// 	if len(uvs) != 0 {
-	// 		vao = appendToVAO(vao, uvs[f.UVIdx-1])
-	// 	} else {
-	// 		vao = appendToVAO(vao, []float32{0, 0})
-	// 	}
-	// 	vao = appendToVAO(vao, normals[f.NormIdx-1])
-	// 	// TODO: parse material from mtllib *.mtl
-	// }
+	vao := []float32{}
+	for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
+		vao = append(vao, vertexs[f.VertIdx-1]...)
+		if len(uvs) != 0 {
+			vao = append(vao, uvs[f.UVIdx-1]...)
+		} else {
+			vao = append(vao, []float32{0, 0}...)
+		}
+		vao = append(vao, normals[f.NormIdx-1]...)
+	}
+	fmt.Println("!!!!!!!!!!!", vao)
+	materialGroup.VertCount = int32(len(vao))
+	materialGroup.VAO = MakeVAO(vao, Shader["phong"])
+	materialGroups = append(materialGroups, &materialGroup)
 	return &Mesh{materialGroups}
 }
 
@@ -229,9 +259,7 @@ func LoadMaterials(filename string) []*Material {
 			}
 			f, err := strconv.ParseFloat(fields[1], 32)
 			EoE("Error parsing float", err)
-			material.Ambient[3] = float32(f)
-			material.Diffuse[3] = float32(f)
-			material.Specular[3] = float32(f)
+			material.Shininess = float32(f)
 		}
 	}
 

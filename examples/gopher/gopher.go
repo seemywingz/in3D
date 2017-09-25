@@ -14,8 +14,8 @@ func main() {
 	l.Radius = 30
 	// l.Draw = true
 
-	gg.SetDirPath("github.com/seemywingz/gg/examples/assets")
-	gopherMesh := gg.LoadObject("models/gopher.obj")
+	gg.SetDirPath("github.com/seemywingz/gg/examples/gopher")
+	gopherMesh := gg.LoadObject("gopher.obj")
 	gopher := gg.NewMeshObject(gg.Position{}, gopherMesh, gg.NoTexture, gg.Shader["phong"])
 	gopher.ZRotation = -90
 	gopher.SceneLogic = func(s *gg.SceneData) {
