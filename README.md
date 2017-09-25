@@ -1,7 +1,7 @@
 # GG
 A relatively simple Go powered OpenGL Graphics Engine
 
-Create a new Window, Get OpenGL Context, Setup Camera Projection, create 3D triangle, Draw!  
+Create a new Window, Get OpenGL Context, Setup Camera Projection, create 3D gopher, Draw!  
 Go Ahead, you can do it yourself...
 `go get github.com/seemywingz/gg`
 ```go
