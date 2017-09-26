@@ -61,7 +61,7 @@ func NewCustomLight(position Position, radius float32, iamb, idif, ispec []float
 	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
 
 	// mesh := &Mesh{}
-	drawnObject := NewPointsObject(position, Cube, NoTexture, Shader["color"])
+	drawnObject := NewPointsObject(position, Cube, NoTexture, []float32{1, 1, 1}, Shader["color"])
 
 	light := &Light{
 		radius,
@@ -92,7 +92,6 @@ func (l *LightManager) Update() {
 
 		if light.Draw {
 			light.DrawnObject.Position = light.Position
-			light.DrawnObject.Color = NewColor(light.Idif[0], light.Idif[1], light.Idif[2], 1)
 			light.DrawnObject.Draw()
 		}
 		gl.UseProgram(l.Program)

@@ -9,7 +9,7 @@ import (
 
 var (
 	texture      map[string]uint32
-	sceneObjects []gg.DrawnObject
+	sceneObjects []*gg.DrawnObject
 )
 
 func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr uint32) {
@@ -19,18 +19,19 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 		x := float32(rand.Intn(max-min) + min)
 		y := float32(rand.Intn(max-min) + min)
 		z := float32(rand.Intn(max-min) + min)
-
-		d := gg.NewPointsObject(gg.NewPosition(x, y, z), points, textr, shadr)
-		dy := rand.Float32() * 10
-		dx := rand.Float32() * 10
-		d.SceneLogic = func(d *gg.SceneData) {
-			d.XRotation += dx
-			d.YRotation += dy
+		color := []float32{
+			rand.Float32(),
+			rand.Float32(),
+			rand.Float32(),
 		}
-		if textr == gg.NoTexture {
-			d.Color = gg.NewColor(rand.Float32(), rand.Float32(), rand.Float32(), 1)
-		}
-		sceneObjects = append(sceneObjects, *d)
+		d := gg.NewPointsObject(gg.NewPosition(x, y, z), points, textr, color, shadr)
+		// dy := rand.Float32() * 1
+		// dx := rand.Float32() * 1
+		// d.SceneLogic = func(d *gg.SceneData) {
+		// 	d.XRotation += dx
+		// 	d.YRotation += dy
+		// }
+		sceneObjects = append(sceneObjects, d)
 	}
 }
 
@@ -52,7 +53,8 @@ func main() {
 	min, max := -20, 20
 	randObjects(200, min, max, gg.Cube, texture["none"], gg.Shader["fixedLight"])
 	randObjects(700, min, max, gg.Cube, texture["box"], gg.Shader["fixedLight"])
-	sceneObjects = append(sceneObjects, *gg.NewPointsObject(gg.NewPosition(0, 0, 0), gg.Cube, texture["none"], gg.Shader["basic"]))
+	lightBox := gg.NewPointsObject(gg.Position{}, gg.Cube, gg.NoTexture, []float32{1, 1, 1}, gg.Shader["basic"])
+	sceneObjects = append(sceneObjects, lightBox)
 
 	for !gg.ShouldClose() {
 		gg.Update()

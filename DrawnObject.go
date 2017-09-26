@@ -12,18 +12,24 @@ type DrawnObject struct {
 	ModelMatrixID  int32
 	NormalMatrixID int32
 	ColorID        int32
-	Color          Color
 	Texture        uint32
 	Scale          float32
 	SceneData
 }
 
 // NewPointsObject :
-func NewPointsObject(position Position, points []float32, texture uint32, program uint32) *DrawnObject {
+func NewPointsObject(position Position, points []float32, texture uint32, color []float32, program uint32) *DrawnObject {
 	vao := MakeVAO(points, program)
+	mat := &Material{
+		"default",
+		[]float32{},
+		color,
+		[]float32{},
+		1,
+	}
 	mg := make(map[string]*MaterialGroup)
 	mg["dfault"] = &MaterialGroup{
-		&defaultMaterial,
+		mat,
 		[]*Face{},
 		vao,
 		int32(len(points)),
@@ -46,7 +52,6 @@ func NewMeshObject(position Position, mesh *Mesh, texture uint32, program uint32
 		ModelMatrixID,
 		NormalMatrixID,
 		ColorID,
-		NewColor(1, 1, 1, 1),
 		texture,
 		1,
 		SceneData{},

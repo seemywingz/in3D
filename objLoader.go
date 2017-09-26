@@ -37,7 +37,7 @@ type Face struct {
 	NormIdx int
 }
 
-var defaultMaterial = Material{
+var defaultMaterial = &Material{
 	"default",
 	[]float32{0.1, 0.1, 0.1},
 	[]float32{1, 1, 1},
