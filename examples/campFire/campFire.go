@@ -28,7 +28,7 @@ func main() {
 
 	objFile := "campFire"
 	in3D.SetDirPath("github.com/seemywingz/in3D/examples/assets/models/" + objFile)
-	// all models are from: https://www.blendswap.com/  -- except the gopher
+	// all models are from: https://www.blendswap.com/
 	mesh := in3D.LoadObject(objFile + ".obj")
 	obj := in3D.NewMeshObject(in3D.Position{}, mesh, in3D.Shader["phong"])
 	obj.YRotation = 110
