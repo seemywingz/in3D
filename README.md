@@ -1,7 +1,8 @@
 # GG
 A relatively simple Go powered OpenGL Graphics Engine
 
-Create a new Window, Get OpenGL Context, Setup Camera Projection, create 3D gopher, Draw!  
+Create a new Window, Get OpenGL Context, Setup Camera Projection,  
+create 3D gopher from an .obj file, Draw!  
 Go Ahead, you can do it yourself...
 `go get github.com/seemywingz/gg`
 ```go
@@ -45,13 +46,15 @@ func main() {
 }
 
 ```
-### METODO:
-Update the Mesh loader to build textures from .mtl  
-  
-### YOUTODO:
+### ME-TODO:
+  •  Optimize all the things!  
+  •  Add Shadows, Ambient Occulsion and other light related things  
+  • Have more fun making weird examples! 
+
+### YOU-TODO:
 Checkout the other examples to see some more basic functionality
 
-#### Note:
-##### Some Names and method may change until version 1.0 is tagged
-##### Also, texture UVs are, for some reason, imported upside down. ( flip your texture vertiacally to render correctly  )
+##### Note:
+###### Some Names and method may change until version 1.0 is tagged
+###### Also, texture UVs are, for some reason, imported upside down. ( flip your texture vertiacally to render correctly  )
 
