@@ -21,7 +21,12 @@ func main() {
 	light := gg.NewLight([]float32{1, 1, 1})
 	light.Iamb = []float32{0.8, 0.8, 0.8}
 	light.Position = gg.NewPosition(-10, 10, 10)
-	light.Radius = 30
+	light.Radius = 300
+
+	light = gg.NewLight([]float32{1, 1, 1})
+	light.Iamb = []float32{0.001, 0.001, 0.001}
+	light.Position = gg.NewPosition(10, 0, 10)
+	light.Radius = 19
 
 	gg.SetDirPath("github.com/seemywingz/gg/examples/assets/models/gopher")
 	gopherMesh := gg.LoadObject("gopher.obj")
