@@ -13,20 +13,20 @@ func main() {
 
 	l := gg.NewLight()
 	l.Position = gg.NewPosition(-10, 10, 10)
-	l.Radius = 30
+	l.Radius = 300
 	// l.Draw = true
 
-	gg.SetDirPath("github.com/seemywingz/gg/examples/assets")
-	mesh := gg.LoadObject("models/buddha.obj")
-	obj := gg.NewMeshObject(gg.Position{}, mesh, gg.NewTexture("textures/buddha.jpg"), gg.Shader["phong"])
+	gg.SetDirPath("github.com/seemywingz/gg/examples/buddha")
+	mesh := gg.LoadObject("buddha.obj")
+	obj := gg.NewMeshObject(gg.Position{}, mesh, gg.NewTexture("buddha.jpg"), gg.Shader["phong"])
 	obj.SceneLogic = func(s *gg.SceneData) {
 		s.YRotation++
 	}
 	objects = append(objects, obj)
 
-	box := gg.NewPointsObject(gg.Position{}, gg.Cube, gg.NewTexture("textures/box.jpg"), gg.Shader["phong"])
-	box.Scale = 0.1
-	objects = append(objects, box)
+	// box := gg.NewPointsObject(gg.NewPosition(-1, 0, 0), gg.Cube, gg.NewTexture("buddha.jpg"), gg.Shader["phong"])
+	// box.Scale = 0.1
+	// objects = append(objects, box)
 
 	for !gg.ShouldClose() {
 		gg.Update()

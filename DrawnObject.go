@@ -7,7 +7,6 @@ import (
 
 // DrawnObject : a struct to hold openGL object data
 type DrawnObject struct {
-	Vao            uint32
 	Mesh           *Mesh
 	MVPID          int32
 	ModelMatrixID  int32
@@ -21,8 +20,15 @@ type DrawnObject struct {
 
 // NewPointsObject :
 func NewPointsObject(position Position, points []float32, texture uint32, program uint32) *DrawnObject {
-	mesh := &Mesh{}
-	mesh.VAO = points
+	vao := MakeVAO(points, program)
+	mg := make(map[string]*MaterialGroup)
+	mg["dfault"] = &MaterialGroup{
+		&defaultMaterial,
+		[]*Face{},
+		vao,
+		int32(len(points)),
+	}
+	mesh := &Mesh{mg}
 	return NewMeshObject(position, mesh, texture, program)
 }
 
@@ -35,7 +41,6 @@ func NewMeshObject(position Position, mesh *Mesh, texture uint32, program uint32
 	ColorID := gl.GetUniformLocation(program, gl.Str("COLOR\x00"))
 
 	d := &DrawnObject{
-		MakeVAO(mesh.VAO, program),
 		mesh,
 		MVPID,
 		ModelMatrixID,
@@ -75,16 +80,15 @@ func (d *DrawnObject) Draw() {
 	gl.UniformMatrix4fv(d.MVPID, 1, false, &camera.MVP[0])
 	gl.UniformMatrix4fv(d.ModelMatrixID, 1, false, &modelMatrix[0])
 	gl.UniformMatrix4fv(d.NormalMatrixID, 1, false, &normalMatrix[0])
-	gl.Uniform4f(d.ColorID, d.Color.R, d.Color.G, d.Color.B, d.Color.A)
 
-	gl.BindVertexArray(d.Vao)
-	if d.Texture != NoTexture {
+	for _, m := range d.Mesh.MaterialGroups {
+		gl.Uniform4f(d.ColorID, m.Material.Diffuse[0], m.Material.Diffuse[1], m.Material.Diffuse[2], 1)
+		gl.BindVertexArray(m.VAO)
 		gl.Enable(gl.TEXTURE_2D)
 		gl.BindTexture(gl.TEXTURE_2D, d.Texture)
-	}
 
-	gl.DrawArrays(gl.TRIANGLES, 0, int32(len(d.Mesh.VAO)))
-	gl.Disable(gl.TEXTURE_2D)
-	gl.BindTexture(gl.TEXTURE_2D, 0)
+		gl.DrawArrays(gl.TRIANGLES, 0, m.VertCount)
+		gl.BindTexture(gl.TEXTURE_2D, 0)
+	}
 
 }
