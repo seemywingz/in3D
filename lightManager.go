@@ -1,6 +1,7 @@
 package gg
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
@@ -38,12 +39,12 @@ func NewLightManager() *LightManager {
 }
 
 // NewLight :
-func NewLight() *Light {
+func NewLight(color []float32) *Light {
 	return NewCustomLight(
 		NewPosition(0, 0, 0), // position
 		50,                   // radius
 		[]float32{0.2, 0.2, 0.2}, // ambiant intensity
-		[]float32{1, 1, 1},       // diffuse intensity
+		color, // diffuse intensity
 		[]float32{0.8, 0.8, 0.8}, // specular intensity
 		false, // draw
 	)
@@ -52,6 +53,9 @@ func NewLight() *Light {
 // NewCustomLight :
 func NewCustomLight(position Position, radius float32, iamb, idif, ispec []float32, draw bool) *Light {
 	n := len(lightManager.Lights)
+	if n > MaxLights {
+		EoE("Error adding New Light:", errors.New("Max lights reached "+string(MaxLights)))
+	}
 	fmt.Println("Adding Light:", n)
 	uniform := fmt.Sprintf("Light[%v]", n)
 	LRadID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightRad\x00"))
@@ -60,8 +64,7 @@ func NewCustomLight(position Position, radius float32, iamb, idif, ispec []float
 	IdifID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Idif\x00"))
 	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
 
-	// mesh := &Mesh{}
-	drawnObject := NewPointsObject(position, Cube, NoTexture, []float32{1, 1, 1}, Shader["color"])
+	drawnObject := NewPointsObject(position, Cube, NoTexture, idif, Shader["color"])
 
 	light := &Light{
 		radius,

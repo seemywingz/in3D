@@ -3,6 +3,8 @@ package gg
 import "github.com/go-gl/glfw/v3.2/glfw"
 
 const (
+	// MaxLights :
+	MaxLights = 10
 	// Press :
 	Press = glfw.Press
 	// Releasese :
