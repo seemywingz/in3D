@@ -53,3 +53,4 @@ Checkout the other examples to see some more basic functionality
 
 ##### Note:
 Some Names and method may change until version 1.0 is tagged
+Also, texture UVs are for some reason imported upside down. (flip your texture vertiacall to correct rendering)
