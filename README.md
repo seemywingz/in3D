@@ -8,43 +8,36 @@ Go Ahead, you can do it yourself...
 package main
 
 import (
+	"fmt"
+
 	"github.com/seemywingz/gg"
 )
 
 func main() {
 
-  // Initialize gg
-	gg.Init(800, 600, "Gopher Loader")
+	gg.Init(800, 600, "Wavefront Loader")
 	gg.SetCameraPosition(gg.NewPosition(0, 0, 5))
 
-  // Create a new light for the scene
-	light := gg.NewLight()
-	light.Position = gg.NewPosition(-10, 10, 10)
-	light.Radius = 30
+	l := gg.NewLight()
+	l.Position = gg.NewPosition(-10, 10, 10)
+	l.Radius = 30
 
-  // Create a gopher
-	gg.SetDirPath("github.com/seemywingz/gge/assets")// this repo's location
-	// Load mesh from assets obj file
-	gopherMesh := gg.LoadObject("models/gopher.obj")
-	// Create a new gg mesh object from the loaded obj file
+	gg.SetDirPath("github.com/seemywingz/gg/examples/gopher")
+	gopherMesh := gg.LoadObject("gopher.obj")
 	gopher := gg.NewMeshObject(gg.Position{}, gopherMesh, gg.NoTexture, gg.Shader["phong"])
-	// Some tweaking -- not needed for every mesh
 	gopher.ZRotation = -90
-	// What to on draw tick
 	gopher.SceneLogic = func(s *gg.SceneData) {
 		s.YRotation++
 	}
+	fmt.Println(len(gopher.Mesh.MaterialGroups))
 
-  // While the window is open
 	for !gg.ShouldClose() {
-		// Update all the things
 		gg.Update()
-		// Draw the gopher
 		gopher.Draw()
-		// Swap the buffers
 		gg.SwapBuffers()
 	}
 }
+
 ```
 ### METODO:
 Add material loading from .mtl files
