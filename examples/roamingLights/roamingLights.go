@@ -72,7 +72,7 @@ func loadTextures() {
 func main() {
 
 	gg.Init(000, 600, "Roaming Light")
-	gg.SetCameraPosition(gg.NewPosition(0, 50, 300))
+	gg.SetCameraPosition(gg.NewPosition(0, 15, 130))
 	gg.Enable(gg.PointerLock, true)
 	gg.Enable(gg.FlyMode, true)
 

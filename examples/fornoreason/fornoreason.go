@@ -14,14 +14,19 @@ var (
 
 func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr uint32) {
 	for i := 0; i < numberOfObjects; i++ {
+		var color []float32
 		rand.Seed(time.Now().UnixNano())
 		x := float32(rand.Intn(max-min) + min)
 		y := float32(rand.Intn(max-min) + min)
 		z := float32(rand.Intn(max-min) + min)
-		color := []float32{
-			rand.Float32(),
-			rand.Float32(),
-			rand.Float32(),
+		if textr != gg.NoTexture {
+			color = []float32{1, 1, 1}
+		} else {
+			color = []float32{
+				rand.Float32(),
+				rand.Float32(),
+				rand.Float32(),
+			}
 		}
 		d := gg.NewPointsObject(gg.NewPosition(x, y, z), points, textr, color, shadr)
 		sceneObjects = append(sceneObjects, d)
@@ -38,16 +43,16 @@ func loadTextures() {
 func main() {
 
 	gg.Init(800, 600, "Good Game")
-	gg.SetCameraPosition(gg.NewPosition(0, 10, 100))
+	gg.SetCameraPosition(gg.NewPosition(0, 5, 100))
 	gg.Enable(gg.PointerLock, true)
 	gg.Enable(gg.FlyMode, true)
+	light := gg.NewLight([]float32{1, 1, 1})
+	light.Draw = true
 
 	loadTextures()
 	min, max := -20, 20
-	randObjects(200, min, max, gg.Cube, texture["none"], gg.Shader["fixedLight"])
-	randObjects(700, min, max, gg.Cube, texture["box"], gg.Shader["fixedLight"])
-	lightBox := gg.NewPointsObject(gg.Position{}, gg.Cube, gg.NoTexture, []float32{1, 1, 1}, gg.Shader["basic"])
-	sceneObjects = append(sceneObjects, lightBox)
+	randObjects(200, min, max, gg.Cube, texture["none"], gg.Shader["phong"])
+	randObjects(700, min, max, gg.Cube, texture["box"], gg.Shader["phong"])
 
 	for !gg.ShouldClose() {
 		gg.Update()
