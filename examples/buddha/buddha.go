@@ -24,10 +24,6 @@ func main() {
 	}
 	objects = append(objects, obj)
 
-	// box := gg.NewPointsObject(gg.NewPosition(-1, 0, 0), gg.Cube, gg.NewTexture("buddha.jpg"), gg.Shader["phong"])
-	// box.Scale = 0.1
-	// objects = append(objects, box)
-
 	for !gg.ShouldClose() {
 		gg.Update()
 		for _, o := range objects {
