@@ -14,14 +14,15 @@ func main() {
 	gg.Enable(gg.FlyMode, true)
 
 	fireColor := []float32{1, 0.5, 0}
-	fireLight := gg.NewLight(fireColor)
-	// fireLight.Iamb = fireColor
+	fireLight := gg.NewLight()
+	fireLight.Dif = fireColor
 	fireLight.Position = gg.NewPosition(0, 40, 10)
 	fireLight.Radius = 15
 	fireLight.Draw = true
 
 	moonColor := []float32{1, 1, 1}
-	moon := gg.NewLight(moonColor)
+	moon := gg.NewLight()
+	moon.Dif = moonColor
 	moon.Position = gg.NewPosition(100, 800, 0)
 	moon.Radius = 2000
 

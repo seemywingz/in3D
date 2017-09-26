@@ -85,7 +85,6 @@ func main() {
 	randObjects(100, min, max, gg.Cube, texture["box1"], gg.Shader["phong"])
 
 	centerLight := gg.NewLight()
-	centerLight.Idif = []float32{1, 1, 1}
 	centerLight.Draw = true
 	// centerLight.Radius = 200
 	println(centerLight.DrawnObject.IdifID)
