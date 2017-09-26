@@ -49,7 +49,7 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 	vao := []float32{}
 	for _, f := range group.Faces { // use face data to construct GL VAO XYZUVNXNYNZ
 		vao = append(vao, vertexs[f.VertIdx-1]...)
-		if len(uvs) != 0 {
+		if len(uvs) > 0 {
 			vao = append(vao, uvs[f.UVIdx-1]...)
 		} else {
 			vao = append(vao, []float32{0, 0}...)
@@ -139,7 +139,7 @@ func LoadObject(filename string) *Mesh {
 				EoE("unsupported face vertex index", err)
 				ni, err = strconv.Atoi(faceStr[2])
 				EoE("unsupported face normal index", err)
-				if len(faceStr) == 4 {
+				if faceStr[1] != "" {
 					ui, err = strconv.Atoi(faceStr[1])
 					EoE("unsupported face uv index", err)
 				} else {

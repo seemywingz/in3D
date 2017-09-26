@@ -24,8 +24,7 @@ func main() {
 	}
 	objects = append(objects, obj)
 
-	// gg.SetDirPath("github.com/seemywingz/gg/examples/buddha")
-	// box := gg.NewPointsObject(gg.Position{}, gg.Cube, gg.NewTexture("textures/box.jpg"), gg.Shader["phong"])
+	// box := gg.NewPointsObject(gg.NewPosition(-1, 0, 0), gg.Cube, gg.NewTexture("buddha.jpg"), gg.Shader["phong"])
 	// box.Scale = 0.1
 	// objects = append(objects, box)
 
