@@ -17,7 +17,7 @@ func main() {
 
 	gg.SetDirPath("github.com/seemywingz/gg/examples/buddha/assets")
 	mesh := gg.LoadObject("buddha.obj")
-	obj := gg.NewMeshObject(gg.Position{}, mesh, gg.NewTexture("buddha.jpg"), gg.Shader["phong"])
+	obj := gg.NewMeshObject(gg.Position{}, mesh, gg.Shader["phong"])
 	obj.SceneLogic = func(s *gg.SceneData) {
 		s.YRotation++
 	}
