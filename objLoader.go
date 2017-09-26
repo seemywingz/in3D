@@ -61,6 +61,7 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 }
 
 // LoadObject : opens a wavefront file and parses it into ObjData
+// TODO: Fix  UV coords, they are upside down...
 func LoadObject(filename string) *Mesh {
 	file, ferr := os.Open(filename)
 	EoE("Error Opening File", ferr)
@@ -89,7 +90,6 @@ func LoadObject(filename string) *Mesh {
 		switch fields[0] {
 		case "mtllib":
 			materialGroups = LoadMaterials(fields[1])
-			// fmt.Println(materialGroups)
 		case "usemtl":
 			currentGroup = fields[1]
 		case "v":
