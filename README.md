@@ -27,6 +27,7 @@ func main() {
 	gopherMesh := gg.LoadObject("gopher.obj")
 	gopher := gg.NewMeshObject(gg.Position{}, gopherMesh, gg.NoTexture, gg.Shader["phong"])
 	gopher.ZRotation = -90 // this .obj was exported sideways lol
+
 	gopher.SceneLogic = func(s *gg.SceneData) {
 		s.YRotation++
 	}
@@ -49,3 +50,4 @@ Checkout the other examples to see some more basic functionality
 #### Note:
 ##### Some Names and method may change until version 1.0 is tagged
 ##### Also, texture UVs are, for some reason, imported upside down. ( flip your texture vertiacally to render correctly  )
+
