@@ -26,6 +26,7 @@ func NewPointsObject(position Position, points []float32, texture uint32, color 
 		color,
 		[]float32{},
 		1,
+		texture,
 	}
 	mg := make(map[string]*MaterialGroup)
 	mg["dfault"] = &MaterialGroup{
