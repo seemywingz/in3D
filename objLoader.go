@@ -11,12 +11,13 @@ import (
 
 // Mesh :
 type Mesh struct {
-	MaterialGroups []*MaterialGroup
+	MaterialGroups map[string]*MaterialGroup
 }
 
 // MaterialGroup :
 type MaterialGroup struct {
 	Material  *Material
+	Faces     []*Face
 	VAO       uint32
 	VertCount int32
 }
@@ -45,9 +46,9 @@ var defaultMaterial = Material{
 	1,
 }
 
-func makeVAOfromFaces(faces []*Face, vertexs, uvs, normals [][]float32) (uint32, int32) {
+func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32) {
 	vao := []float32{}
-	for _, f := range faces { // use face data to construct GL VAO XYZUVNXNYNZ
+	for _, f := range group.Faces { // use face data to construct GL VAO XYZUVNXNYNZ
 		vao = append(vao, vertexs[f.VertIdx-1]...)
 		if len(uvs) != 0 {
 			vao = append(vao, uvs[f.UVIdx-1]...)
@@ -56,7 +57,8 @@ func makeVAOfromFaces(faces []*Face, vertexs, uvs, normals [][]float32) (uint32,
 		}
 		vao = append(vao, normals[f.NormIdx-1]...)
 	}
-	return MakeVAO(vao, Shader["phong"]), int32(len(vao))
+	group.VAO = MakeVAO(vao, Shader["phong"])
+	group.VertCount = int32(len(vao))
 }
 
 // LoadObject : opens a wavefront file and parses it into ObjData
@@ -65,21 +67,17 @@ func LoadObject(filename string) *Mesh {
 	EoE("Error Opening File", ferr)
 	defer file.Close()
 
-	var (
-		vertexs        [][]float32
-		uvs            [][]float32
-		normals        [][]float32
-		materials      map[string]*Material
-		materialGroups []*MaterialGroup
-		materialGroup  *MaterialGroup
-		faces          []*Face
-	)
+	vertexs := [][]float32{}
+	normals := [][]float32{}
+	uvs := [][]float32{}
 
+	materialGroups := make(map[string]*MaterialGroup)
+
+	currentGroup := "string"
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
 		line := scanner.Text()
-
 		if strings.HasPrefix(line, "#") || strings.HasPrefix(line, " ") {
 			continue
 		}
@@ -91,27 +89,10 @@ func LoadObject(filename string) *Mesh {
 
 		switch fields[0] {
 		case "mtllib":
-			materials = LoadMaterials(fields[1])
-			fmt.Println(materials)
+			materialGroups = LoadMaterials(fields[1])
+			fmt.Println(materialGroups)
 		case "usemtl":
-			// matName := fields[1]
-			// for _, mg := range materialGroups {
-			// 	if mg.Material.Name == matName {
-
-			// 	}
-			// }
-			// 	for _, m := range materials {
-			// 		if m.Name == matName {
-			// 			materialGroup.Material = m
-			// 		}
-			// 	}
-			// } else {
-			// 	materialGroup.VAO, materialGroup.VertCount = makeVAOfromFaces(faces, vertexs, uvs, normals)
-			// 	materialGroups = append(materialGroups, materialGroup)
-			// 	// Reset temp values
-			// 	faces = []*Face{}
-			// 	materialGroup = &MaterialGroup{}
-			// }
+			currentGroup = fields[1]
 		case "v":
 			if len(fields) != 4 {
 				EoE("Error Parsing Vertex too few feilds ", errors.New(filename))
@@ -165,26 +146,29 @@ func LoadObject(filename string) *Mesh {
 				} else {
 					ui = 1
 				}
-				faces = append(faces, &Face{vi, ui, ni})
+				materialGroups[currentGroup].Faces = append(materialGroups[currentGroup].Faces, &Face{vi, ui, ni})
 			}
 		}
 	}
 
-	materialGroup.VAO, materialGroup.VertCount = makeVAOfromFaces(faces, vertexs, uvs, normals)
-	materialGroups = append(materialGroups, materialGroup)
+	for _, g := range materialGroups {
+		buildVAOforMatGroup(g, vertexs, uvs, normals)
+	}
+
 	return &Mesh{materialGroups}
 }
 
 // LoadMaterials :
-func LoadMaterials(filename string) map[string]*Material {
+func LoadMaterials(filename string) map[string]*MaterialGroup {
+
 	file, ferr := os.Open(filename)
 	EoE("Error Opening Material File", ferr)
 	defer file.Close()
 
 	line := ""
 	scanner := bufio.NewScanner(file)
-	materials := make(map[string]*Material)
 	currentMat := ""
+	materialGroups := make(map[string]*MaterialGroup)
 
 	for scanner.Scan() {
 		line = scanner.Text()
@@ -202,13 +186,15 @@ func LoadMaterials(filename string) map[string]*Material {
 				EoE("unsupported material definition", errors.New(filename))
 			}
 			currentMat = fields[1]
-			materials[fields[1]] = &Material{
+			material := &Material{
 				currentMat,
 				[]float32{0.1, 0.1, 0.1},
 				[]float32{1, 1, 1},
 				[]float32{0.8, 0.8, 0.8},
 				1,
 			}
+			materialGroups[currentMat] = &MaterialGroup{}
+			materialGroups[currentMat].Material = material
 
 			continue
 		}
@@ -221,7 +207,7 @@ func LoadMaterials(filename string) map[string]*Material {
 			for i := 0; i < 3; i++ {
 				f, err := strconv.ParseFloat(fields[i+1], 32)
 				EoE("Error parsing float", err)
-				materials[currentMat].Ambient[i] = float32(f)
+				materialGroups[currentMat].Material.Ambient[i] = float32(f)
 			}
 		case "Kd":
 			if len(fields) != 4 {
@@ -230,7 +216,7 @@ func LoadMaterials(filename string) map[string]*Material {
 			for i := 0; i < 3; i++ {
 				f, err := strconv.ParseFloat(fields[i+1], 32)
 				EoE("Error parsing float", err)
-				materials[currentMat].Diffuse[i] = float32(f)
+				materialGroups[currentMat].Material.Diffuse[i] = float32(f)
 			}
 		case "Ks":
 			if len(fields) != 4 {
@@ -239,7 +225,7 @@ func LoadMaterials(filename string) map[string]*Material {
 			for i := 0; i < 3; i++ {
 				f, err := strconv.ParseFloat(fields[i+1], 32)
 				EoE("Error parsing float", err)
-				materials[currentMat].Specular[i] = float32(f)
+				materialGroups[currentMat].Material.Specular[i] = float32(f)
 			}
 		case "Ns":
 			if len(fields) != 2 {
@@ -247,18 +233,17 @@ func LoadMaterials(filename string) map[string]*Material {
 			}
 			f, err := strconv.ParseFloat(fields[1], 32)
 			EoE("Error parsing float", err)
-			materials[currentMat].Shininess = float32(f / 1000 * 128)
+			materialGroups[currentMat].Material.Shininess = float32(f / 1000 * 128)
 		case "d":
 			if len(fields) != 2 {
 				EoE("Error d Parse", errors.New(filename))
 			}
 			f, err := strconv.ParseFloat(fields[1], 32)
 			EoE("Error parsing float", err)
-			materials[currentMat].Shininess = float32(f)
+			materialGroups[currentMat].Material.Shininess = float32(f)
 		}
 	}
 
 	EoE("Scann Error", scanner.Err())
-
-	return materials
+	return materialGroups
 }

@@ -21,12 +21,12 @@ type DrawnObject struct {
 // NewPointsObject :
 func NewPointsObject(position Position, points []float32, texture uint32, program uint32) *DrawnObject {
 	vao := MakeVAO(points, program)
-	mg := []*MaterialGroup{
-		&MaterialGroup{
-			&defaultMaterial,
-			vao,
-			int32(len(points)),
-		},
+	mg := make(map[string]*MaterialGroup)
+	mg["dfault"] = &MaterialGroup{
+		&defaultMaterial,
+		[]*Face{},
+		vao,
+		int32(len(points)),
 	}
 	mesh := &Mesh{mg}
 	return NewMeshObject(position, mesh, texture, program)
