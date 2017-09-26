@@ -13,7 +13,7 @@ func main() {
 
 	l := gg.NewLight()
 	l.Position = gg.NewPosition(-10, 10, 10)
-	l.Radius = 30
+	l.Radius = 300
 	// l.Draw = true
 
 	gg.SetDirPath("github.com/seemywingz/gg/examples/buddha")
