@@ -1,4 +1,4 @@
-package gg
+package in3D
 
 import (
 	"bufio"

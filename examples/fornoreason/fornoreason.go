@@ -4,12 +4,12 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/seemywingz/gg"
+	"github.com/seemywingz/in3D"
 )
 
 var (
 	texture      map[string]uint32
-	sceneObjects []*gg.DrawnObject
+	sceneObjects []*in3D.DrawnObject
 )
 
 func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr uint32) {
@@ -19,7 +19,7 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 		x := float32(rand.Intn(max-min) + min)
 		y := float32(rand.Intn(max-min) + min)
 		z := float32(rand.Intn(max-min) + min)
-		if textr != gg.NoTexture {
+		if textr != in3D.NoTexture {
 			color = []float32{1, 1, 1}
 		} else {
 			color = []float32{
@@ -28,39 +28,39 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 				rand.Float32(),
 			}
 		}
-		d := gg.NewPointsObject(gg.NewPosition(x, y, z), points, textr, color, shadr)
+		d := in3D.NewPointsObject(in3D.NewPosition(x, y, z), points, textr, color, shadr)
 		sceneObjects = append(sceneObjects, d)
 	}
 }
 
 func loadTextures() {
 	texture = make(map[string]uint32)
-	texture["none"] = gg.NoTexture
-	gg.SetDirPath("github.com/seemywingz/gg/examples/assets/textures")
-	texture["box"] = gg.NewTexture("box.jpg")
+	texture["none"] = in3D.NoTexture
+	in3D.SetDirPath("github.com/seemywingz/in3D/examples/assets/textures")
+	texture["box"] = in3D.NewTexture("box.jpg")
 }
 
 func main() {
 
-	gg.Init(800, 600, "Good Game")
-	gg.SetCameraPosition(gg.NewPosition(0, 5, 100))
-	gg.Enable(gg.PointerLock, true)
-	gg.Enable(gg.FlyMode, true)
-	light := gg.NewLight()
+	in3D.Init(800, 600, "Good Game")
+	in3D.SetCameraPosition(in3D.NewPosition(0, 5, 100))
+	in3D.Enable(in3D.PointerLock, true)
+	in3D.Enable(in3D.FlyMode, true)
+	light := in3D.NewLight()
 	light.Draw = true
 
 	loadTextures()
 	min, max := -30, 30
-	randObjects(200, min, max, gg.Cube, texture["none"], gg.Shader["phong"])
-	randObjects(700, min, max, gg.Cube, texture["box"], gg.Shader["phong"])
+	randObjects(200, min, max, in3D.Cube, texture["none"], in3D.Shader["phong"])
+	randObjects(700, min, max, in3D.Cube, texture["box"], in3D.Shader["phong"])
 
-	for !gg.ShouldClose() {
-		gg.Update()
+	for !in3D.ShouldClose() {
+		in3D.Update()
 
 		for _, obj := range sceneObjects {
 			obj.Draw()
 		}
 
-		gg.SwapBuffers()
+		in3D.SwapBuffers()
 	}
 }

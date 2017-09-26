@@ -1,4 +1,4 @@
-package gg
+package in3D
 
 import (
 	"errors"
@@ -72,7 +72,7 @@ func InitFeatures() {
 // InitShaders :
 func InitShaders() {
 	Shader = make(map[string]uint32)
-	SetDirPath("github.com/seemywingz/gg/shaders")
+	SetDirPath("github.com/seemywingz/in3D/shaders")
 	Shader["basic"] = NewShader("Vect.glsl", "basicFrag.glsl")
 	Shader["color"] = NewShader("Vect.glsl", "colorFrag.glsl")
 	Shader["texture"] = NewShader("Vect.glsl", "textureFrag.glsl")

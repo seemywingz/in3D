@@ -4,13 +4,13 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/seemywingz/gg"
+	"github.com/seemywingz/in3D"
 )
 
 var (
 	texture      map[string]uint32
-	lights       []gg.Light
-	drawnObjects []*gg.DrawnObject
+	lights       []in3D.Light
+	drawnObjects []*in3D.DrawnObject
 )
 
 func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr uint32) {
@@ -18,14 +18,14 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 	for i := 0; i < numberOfObjects; i++ {
 
 		rand.Seed(time.Now().UnixNano())
-		x, y, z := gg.Random(min, max), gg.Random(min, max), gg.Random(min, max)
-		rx, ry, rz := gg.Randomf(), gg.Randomf(), gg.Randomf()
+		x, y, z := in3D.Random(min, max), in3D.Random(min, max), in3D.Random(min, max)
+		rx, ry, rz := in3D.Randomf(), in3D.Randomf(), in3D.Randomf()
 		if i%101 == 0 {
 			color := []float32{rx, ry, rz}
-			roamingLight := gg.NewColorLight([]float32{0.1, 0.1, 0.1}, color, color)
-			roamingLight.Position = gg.NewPosition(float32(x), float32(y), float32(z))
+			roamingLight := in3D.NewColorLight([]float32{0.1, 0.1, 0.1}, color, color)
+			roamingLight.Position = in3D.NewPosition(float32(x), float32(y), float32(z))
 			roamingLight.Draw = true
-			roamingLight.SceneLogic = func(s *gg.SceneData) {
+			roamingLight.SceneLogic = func(s *in3D.SceneData) {
 				s.X += rx * 3
 				s.Y += ry * 3
 				s.Z += rz * 3
@@ -41,18 +41,18 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 			}
 		} else {
 			var color []float32
-			// if textr == gg.NoTexture {
+			// if textr == in3D.NoTexture {
 			// 	color = []float32{rx, ry, rz}
 			// } else {
 			color = []float32{1, 1, 1}
 			// }
-			d := gg.NewPointsObject(
-				gg.NewPosition(float32(x), float32(y), float32(z)),
+			d := in3D.NewPointsObject(
+				in3D.NewPosition(float32(x), float32(y), float32(z)),
 				points,
 				textr,
 				color,
 				shadr)
-			// d.SceneLogic = func(s *gg.SceneData) {
+			// d.SceneLogic = func(s *in3D.SceneData) {
 			// s.XRotation += rx
 			// s.YRotation += ry
 			// s.ZRotation += rz
@@ -64,37 +64,37 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 
 func loadTextures() {
 	texture = make(map[string]uint32)
-	texture["none"] = gg.NoTexture
-	gg.SetDirPath("github.com/seemywingz/gg/examples/assets/textures")
-	texture["box"] = gg.NewTexture("box.jpg")
-	texture["box1"] = gg.NewTexture("box1.jpg")
+	texture["none"] = in3D.NoTexture
+	in3D.SetDirPath("github.com/seemywingz/in3D/examples/assets/textures")
+	texture["box"] = in3D.NewTexture("box.jpg")
+	texture["box1"] = in3D.NewTexture("box1.jpg")
 }
 
 func main() {
 
-	gg.Init(000, 600, "Roaming Light")
-	gg.SetCameraPosition(gg.NewPosition(0, 15, 130))
-	gg.Enable(gg.PointerLock, true)
-	gg.Enable(gg.FlyMode, true)
+	in3D.Init(000, 600, "Roaming Light")
+	in3D.SetCameraPosition(in3D.NewPosition(0, 15, 130))
+	in3D.Enable(in3D.PointerLock, true)
+	in3D.Enable(in3D.FlyMode, true)
 
 	loadTextures()
 
 	min, max := -100, 100
-	randObjects(800, min, max, gg.Cube, texture["none"], gg.Shader["phong"])
-	randObjects(100, min, max, gg.Cube, texture["box"], gg.Shader["phong"])
-	randObjects(100, min, max, gg.Cube, texture["box1"], gg.Shader["phong"])
+	randObjects(800, min, max, in3D.Cube, texture["none"], in3D.Shader["phong"])
+	randObjects(100, min, max, in3D.Cube, texture["box"], in3D.Shader["phong"])
+	randObjects(100, min, max, in3D.Cube, texture["box1"], in3D.Shader["phong"])
 
-	centerLight := gg.NewLight()
+	centerLight := in3D.NewLight()
 	centerLight.Draw = true
 	println(centerLight.DrawnObject.IdifID)
 
-	for !gg.ShouldClose() {
-		gg.Update()
+	for !in3D.ShouldClose() {
+		in3D.Update()
 
 		for _, obj := range drawnObjects {
 			obj.Draw()
 		}
 
-		gg.SwapBuffers()
+		in3D.SwapBuffers()
 	}
 }

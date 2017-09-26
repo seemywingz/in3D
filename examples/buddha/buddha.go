@@ -1,33 +1,33 @@
 package main
 
 import (
-	"github.com/seemywingz/gg"
+	"github.com/seemywingz/in3D"
 )
 
 func main() {
 
-	var objects []*gg.DrawnObject
+	var objects []*in3D.DrawnObject
 
-	gg.Init(800, 600, "Wavefront Loader")
-	gg.SetCameraPosition(gg.NewPosition(0, 0.5, 2))
+	in3D.Init(800, 600, "Wavefront Loader")
+	in3D.SetCameraPosition(in3D.NewPosition(0, 0.5, 2))
 
-	l := gg.NewLight()
-	l.Position = gg.NewPosition(-10, 10, 10)
+	l := in3D.NewLight()
+	l.Position = in3D.NewPosition(-10, 10, 10)
 	l.Radius = 300
 
-	gg.SetDirPath("github.com/seemywingz/gg/examples/assets/models/buddha")
-	mesh := gg.LoadObject("buddha.obj")
-	obj := gg.NewMeshObject(gg.Position{}, mesh, gg.Shader["phong"])
-	obj.SceneLogic = func(s *gg.SceneData) {
+	in3D.SetDirPath("github.com/seemywingz/in3D/examples/assets/models/buddha")
+	mesh := in3D.LoadObject("buddha.obj")
+	obj := in3D.NewMeshObject(in3D.Position{}, mesh, in3D.Shader["phong"])
+	obj.SceneLogic = func(s *in3D.SceneData) {
 		s.YRotation++
 	}
 	objects = append(objects, obj)
 
-	for !gg.ShouldClose() {
-		gg.Update()
+	for !in3D.ShouldClose() {
+		in3D.Update()
 		for _, o := range objects {
 			o.Draw()
 		}
-		gg.SwapBuffers()
+		in3D.SwapBuffers()
 	}
 }

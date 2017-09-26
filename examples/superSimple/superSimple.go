@@ -1,24 +1,26 @@
 package main
 
 import (
-	"github.com/seemywingz/gg"
+	"github.com/seemywingz/in3D"
 )
 
 func main() {
 
-	gg.Init(800, 600, "Simple Triangle")
+	in3D.Init(800, 600, "Simple Triangle")
 
-	tri := gg.NewPointsObject(
-		gg.NewPosition(0, 0, -5),
-		gg.Triangle,
+	tri := in3D.NewPointsObject(
+		in3D.NewPosition(0, 0, -5),
+		in3D.Triangle,
 		0,
 		[]float32{1, 0, 1},
-		gg.Shader["color"],
+		in3D.Shader["color"],
 	)
 
-	for !gg.ShouldClose() {
-		gg.Update()
+	for !in3D.ShouldClose() {
+		in3D.Update()
+		tri.XRotation++
+		tri.YRotation++
 		tri.Draw()
-		gg.SwapBuffers()
+		in3D.SwapBuffers()
 	}
 }
