@@ -25,9 +25,9 @@ func NewPointsObject(position Position, points []float32, texture uint32, color 
 	vao := MakeVAO(points, program)
 	mat := &Material{
 		"default",
-		[]float32{},
+		[]float32{0.1, 0.1, 0.1},
 		color,
-		[]float32{},
+		[]float32{0.9, 0.9, 0.9},
 		1,
 		texture,
 	}
