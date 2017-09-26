@@ -107,6 +107,9 @@ func (manager *LightManager) Update() {
 
 		if light.Draw {
 			light.DrawnObject.Position = light.Position
+			for _, mg := range light.DrawnObject.Mesh.MaterialGroups {
+				mg.Material.Diffuse = light.Dif
+			}
 			light.DrawnObject.Draw()
 		}
 		gl.UseProgram(manager.Program)

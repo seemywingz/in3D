@@ -86,6 +86,7 @@ func main() {
 
 	centerLight := gg.NewLight()
 	centerLight.Draw = true
+	centerLight.Dif = []float32{1, 0, 0}
 	// centerLight.Radius = 200
 	println(centerLight.DrawnObject.IdifID)
 
