@@ -15,15 +15,15 @@ func main() {
 
 	light := gg.NewLight([]float32{1, 1, 1})
 	light.Iamb = []float32{0.4, 0.4, 0.4}
-	light.Idif = []float32{0.4, 0.4, 0.4}
-	light.Ispec = []float32{0.4, 0.4, 0.4}
+	// light.Idif = []float32{0.9, 0.9, 0.9}
+	light.Ispec = []float32{0.9, 0.9, 0.9}
 	light.Position = gg.NewPosition(0, 40, 10)
-	light.Radius = 20
+	light.Radius = 25
 	light.Draw = true
 
 	objFile := "campFire"
 	gg.SetDirPath("github.com/seemywingz/gg/examples/assets/models/" + objFile)
-	// models from: https://www.blendswap.com/
+	// all models are from: https://www.blendswap.com/  -- except the gopher
 	mesh := gg.LoadObject(objFile + ".obj")
 	obj := gg.NewMeshObject(gg.Position{}, mesh, gg.Shader["phong"])
 	obj.YRotation = 45

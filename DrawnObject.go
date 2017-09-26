@@ -16,6 +16,7 @@ type DrawnObject struct {
 	IambID         int32
 	IdifID         int32
 	IspecID        int32
+	ShininessID    int32
 	Scale          float32
 	SceneData
 }
@@ -25,9 +26,9 @@ func NewPointsObject(position Position, points []float32, texture uint32, color 
 	vao := MakeVAO(points, program)
 	mat := &Material{
 		"default",
-		[]float32{0.1, 0.1, 0.1},
 		color,
-		[]float32{0.9, 0.9, 0.9},
+		color,
+		color,
 		1,
 		texture,
 	}
@@ -53,6 +54,7 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 	IambID := gl.GetUniformLocation(program, gl.Str(uniform+".Iamb\x00"))
 	IdifID := gl.GetUniformLocation(program, gl.Str(uniform+".Idif\x00"))
 	IspecID := gl.GetUniformLocation(program, gl.Str(uniform+".Ispec\x00"))
+	ShininessID := gl.GetUniformLocation(program, gl.Str(uniform+".shininess\x00"))
 
 	d := &DrawnObject{
 		mesh,
@@ -62,6 +64,7 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 		IambID,
 		IdifID,
 		IspecID,
+		ShininessID,
 		1,
 		SceneData{},
 	}
@@ -101,6 +104,7 @@ func (d *DrawnObject) Draw() {
 		gl.Uniform3fv(d.IambID, 1, &m.Material.Ambient[0])
 		gl.Uniform3fv(d.IspecID, 1, &m.Material.Specular[0])
 		gl.Uniform3fv(d.IdifID, 1, &m.Material.Diffuse[0])
+		gl.Uniform3fv(d.ShininessID, 1, &m.Material.Shininess)
 
 		gl.BindVertexArray(m.VAO)
 		gl.Enable(gl.TEXTURE_2D)

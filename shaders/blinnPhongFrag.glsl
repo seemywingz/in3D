@@ -13,6 +13,7 @@ in vec2 fragTexCoord;
 out vec4 finalColor;
 
 struct MaterialData{
+  float shininess;
   vec3
     Iamb,
     Idif,
@@ -46,13 +47,13 @@ void main() {
 
     float lambertian = max(dot(N,L), 0.0);
     float specular = 0.0;
-    float shininess = 16.0;
 
     if(lambertian > 0.0) {
       vec3 H = normalize(L + V);
       float specAngle = max(dot(H, N), 0.0);
-      float eConservation = ( 8.0 + shininess ) / ( 8.0 * pi );
-      specular = eConservation * pow(specAngle, shininess);
+      float x = 10.0;
+      float eConservation = ( x + Material.shininess ) / ( x * pi );
+      specular = eConservation * pow(specAngle, Material.shininess);
     }
     float diffuse = max(dot(normalize(fragNoraml), normalize(Light[i].lightPos)), 0.0);
 
@@ -62,13 +63,15 @@ void main() {
     }
 
     float
-    dist = distance(fragPos, Light[i].lightPos),
-    att = clamp(1.0 - dist*dist/(Light[i].lightRad*Light[i].lightRad), 0.0, 1.0); att *= att;
-
-    vec4 nColor =   vec4( att * texture * ((Material.Iamb * Light[i].Iamb) +
-                      lambertian * (Material.Idif * Light[i].Idif) +
-                      specular * (Material.Ispec * Light[i].Ispec) ) ,1);
-
-    finalColor = finalColor + nColor;
+      dist = distance(fragPos, Light[i].lightPos),
+      att = clamp(1.0 - dist*dist/(Light[i].lightRad*Light[i].lightRad), 0.0, 1.0); att *= att;
+    
+    
+    finalColor +=  vec4( att * texture *(Light[i].Iamb +
+                      lambertian * Light[i].Idif +
+                      specular * Light[i].Ispec ) ,1);
+    // finalColor += nColor;
   }
+  vec4 matColor =  vec4((Material.Iamb * Material.Idif * Material.Ispec),1);
+  finalColor = matColor * finalColor;
 }
