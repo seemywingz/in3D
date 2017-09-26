@@ -15,15 +15,15 @@ type LightManager struct {
 
 // Light : struct to hold light data
 type Light struct {
-	Radius float32
-	Amb    []float32
-	Dif    []float32
-	Spec   []float32
-	LRadID int32
-	LPosID int32
-	AmbID  int32
-	DifID  int32
-	SpecID int32
+	Radius   float32
+	Ambient  []float32
+	Difffuse []float32
+	Specular []float32
+	LRadID   int32
+	LPosID   int32
+	AmbID    int32
+	DifID    int32
+	SpecID   int32
 	SceneData
 	Draw        bool
 	DrawnObject *DrawnObject
@@ -108,15 +108,15 @@ func (manager *LightManager) Update() {
 		if light.Draw {
 			light.DrawnObject.Position = light.Position
 			for _, mg := range light.DrawnObject.Mesh.MaterialGroups {
-				mg.Material.Diffuse = light.Dif
+				mg.Material.Diffuse = light.Difffuse
 			}
 			light.DrawnObject.Draw()
 		}
 		gl.UseProgram(manager.Program)
 		gl.Uniform1f(light.LRadID, light.Radius)
 		gl.Uniform3fv(light.LPosID, 1, &[]float32{light.X, light.Y, light.Z}[0])
-		gl.Uniform3fv(light.AmbID, 1, &light.Amb[0])
-		gl.Uniform3fv(light.DifID, 1, &light.Dif[0])
-		gl.Uniform3fv(light.SpecID, 1, &light.Spec[0])
+		gl.Uniform3fv(light.AmbID, 1, &light.Ambient[0])
+		gl.Uniform3fv(light.DifID, 1, &light.Difffuse[0])
+		gl.Uniform3fv(light.SpecID, 1, &light.Specular[0])
 	}
 }

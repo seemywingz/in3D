@@ -46,7 +46,7 @@ func main() {
 	gg.SetCameraPosition(gg.NewPosition(0, 5, 100))
 	gg.Enable(gg.PointerLock, true)
 	gg.Enable(gg.FlyMode, true)
-	light := gg.NewLight([]float32{1, 1, 1})
+	light := gg.NewLight()
 	light.Draw = true
 
 	loadTextures()

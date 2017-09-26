@@ -11,7 +11,7 @@ func main() {
 	gg.Init(800, 600, "Wavefront Loader")
 	gg.SetCameraPosition(gg.NewPosition(0, 0.5, 2))
 
-	l := gg.NewLight([]float32{1, 1, 1})
+	l := gg.NewLight()
 	l.Position = gg.NewPosition(-10, 10, 10)
 	l.Radius = 300
 
