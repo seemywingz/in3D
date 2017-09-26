@@ -9,23 +9,27 @@ func main() {
 	var objects []*gg.DrawnObject
 
 	gg.Init(800, 600, "Wavefront Loader")
-	gg.SetCameraPosition(gg.NewPosition(0, 0.5, 2))
-	// gg.Enable(gg.PointerLock, true)
-	// gg.Enable(gg.FlyMode, true)
+	gg.SetCameraPosition(gg.NewPosition(0, 40, 50))
+	gg.Enable(gg.PointerLock, true)
+	gg.Enable(gg.FlyMode, true)
 
 	light := gg.NewLight([]float32{1, 1, 1})
 	light.Iamb = []float32{0.4, 0.4, 0.4}
-	light.Position = gg.NewPosition(-100, 100, 10)
-	light.Radius = 300
+	light.Idif = []float32{0.4, 0.4, 0.4}
+	light.Ispec = []float32{0.4, 0.4, 0.4}
+	light.Position = gg.NewPosition(0, 40, 10)
+	light.Radius = 20
+	light.Draw = true
 
-	objFile := "buddha"
+	objFile := "campFire"
 	gg.SetDirPath("github.com/seemywingz/gg/examples/assets/models/" + objFile)
 	// models from: https://www.blendswap.com/
 	mesh := gg.LoadObject(objFile + ".obj")
 	obj := gg.NewMeshObject(gg.Position{}, mesh, gg.Shader["phong"])
-	obj.SceneLogic = func(s *gg.SceneData) {
-		s.YRotation++
-	}
+	obj.YRotation = 45
+	// obj.SceneLogic = func(s *gg.SceneData) {
+	// 	s.YRotation++
+	// }
 	objects = append(objects, obj)
 
 	for !gg.ShouldClose() {
