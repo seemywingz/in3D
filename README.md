@@ -40,10 +40,10 @@ func main() {
 }
 
 ```
-#### METODO:
+### METODO:
 Update the Mesh loader to build textures from .mtl  
   
-#### YOUTODO:
+### YOUTODO:
 Checkout the other examples to see some more basic functionality
 
 #### Note:
