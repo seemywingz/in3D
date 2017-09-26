@@ -15,7 +15,7 @@ func main() {
 	l.Position = gg.NewPosition(-10, 10, 10)
 	l.Radius = 300
 
-	gg.SetDirPath("github.com/seemywingz/gg/examples/buddha/assets")
+	gg.SetDirPath("github.com/seemywingz/gg/examples/assets/models/buddha")
 	mesh := gg.LoadObject("buddha.obj")
 	obj := gg.NewMeshObject(gg.Position{}, mesh, gg.Shader["phong"])
 	obj.SceneLogic = func(s *gg.SceneData) {

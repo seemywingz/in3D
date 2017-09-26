@@ -14,7 +14,6 @@ var (
 
 func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr uint32) {
 	for i := 0; i < numberOfObjects; i++ {
-
 		rand.Seed(time.Now().UnixNano())
 		x := float32(rand.Intn(max-min) + min)
 		y := float32(rand.Intn(max-min) + min)
@@ -25,12 +24,6 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 			rand.Float32(),
 		}
 		d := gg.NewPointsObject(gg.NewPosition(x, y, z), points, textr, color, shadr)
-		// dy := rand.Float32() * 1
-		// dx := rand.Float32() * 1
-		// d.SceneLogic = func(d *gg.SceneData) {
-		// 	d.XRotation += dx
-		// 	d.YRotation += dy
-		// }
 		sceneObjects = append(sceneObjects, d)
 	}
 }
