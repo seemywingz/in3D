@@ -1,9 +1,15 @@
 #version 410
 
-uniform vec4 COLOR;
+struct MaterialData{
+  vec3
+    Iamb,
+    Idif,
+    Ispec;
+};
+uniform MaterialData Material;
 
 out vec4 finalColor;
 
 void main() {
-  finalColor = COLOR;
+  finalColor = vec4(Material.Idif, 1);
 }

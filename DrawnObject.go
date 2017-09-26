@@ -48,12 +48,11 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 	ModelMatrixID := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
 	MVPID := gl.GetUniformLocation(program, gl.Str("MVP\x00"))
-	// ColorID := gl.GetUniformLocation(program, gl.Str("COLOR\x00"))
 
 	uniform := fmt.Sprintf("Material")
-	IambID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Iamb\x00"))
-	IdifID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Idif\x00"))
-	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
+	IambID := gl.GetUniformLocation(program, gl.Str(uniform+".Iamb\x00"))
+	IdifID := gl.GetUniformLocation(program, gl.Str(uniform+".Idif\x00"))
+	IspecID := gl.GetUniformLocation(program, gl.Str(uniform+".Ispec\x00"))
 
 	d := &DrawnObject{
 		mesh,

@@ -85,7 +85,8 @@ func main() {
 
 	centerLight := gg.NewLight([]float32{1, 1, 1})
 	centerLight.Draw = true
-	// centerLight.Idif = []float32{1, 1, 0} // R G B
+	centerLight.Idif = []float32{1, 1, 1} // R G B
+	println(centerLight.DrawnObject.IdifID)
 
 	for !gg.ShouldClose() {
 		gg.Update()
