@@ -12,6 +12,14 @@ in vec2 fragTexCoord;
 
 out vec4 finalColor;
 
+struct MaterialData{
+  vec3
+    Iamb,
+    Idif,
+    Ispec;
+};
+uniform MaterialData Material;
+
 struct LightData {
   float lightRad;
   vec3
@@ -52,12 +60,15 @@ void main() {
     if(texture == vec3(0,0,0)){
       texture = vec3(1,1,1);// white default
     }
+
     float
     dist = distance(fragPos, Light[i].lightPos),
     att = clamp(1.0 - dist*dist/(Light[i].lightRad*Light[i].lightRad), 0.0, 1.0); att *= att;
-    vec4 nColor =  COLOR * vec4( att * texture * (Light[i].Iamb +
-                      lambertian * Light[i].Idif +
-                      specular * Light[i].Ispec ) ,1);
+
+    vec4 nColor =   vec4( att * texture * ((Material.Iamb * Light[i].Iamb) +
+                      lambertian * (Material.Idif * Light[i].Idif) +
+                      specular * (Material.Ispec * Light[i].Ispec) ) ,1);
+
     finalColor = finalColor + nColor;
   }
 }

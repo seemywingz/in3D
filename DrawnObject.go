@@ -1,6 +1,8 @@
 package gg
 
 import (
+	"fmt"
+
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
 )
@@ -11,7 +13,9 @@ type DrawnObject struct {
 	MVPID          int32
 	ModelMatrixID  int32
 	NormalMatrixID int32
-	ColorID        int32
+	IambID         int32
+	IdifID         int32
+	IspecID        int32
 	Scale          float32
 	SceneData
 }
@@ -44,14 +48,21 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 	ModelMatrixID := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
 	MVPID := gl.GetUniformLocation(program, gl.Str("MVP\x00"))
-	ColorID := gl.GetUniformLocation(program, gl.Str("COLOR\x00"))
+	// ColorID := gl.GetUniformLocation(program, gl.Str("COLOR\x00"))
+
+	uniform := fmt.Sprintf("Material")
+	IambID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Iamb\x00"))
+	IdifID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Idif\x00"))
+	IspecID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
 
 	d := &DrawnObject{
 		mesh,
 		MVPID,
 		ModelMatrixID,
 		NormalMatrixID,
-		ColorID,
+		IambID,
+		IdifID,
+		IspecID,
 		1,
 		SceneData{},
 	}
@@ -86,7 +97,12 @@ func (d *DrawnObject) Draw() {
 	gl.UniformMatrix4fv(d.NormalMatrixID, 1, false, &normalMatrix[0])
 
 	for _, m := range d.Mesh.MaterialGroups {
-		gl.Uniform4f(d.ColorID, m.Material.Diffuse[0], m.Material.Diffuse[1], m.Material.Diffuse[2], 1)
+
+		// Material
+		gl.Uniform3fv(d.IambID, 1, &m.Material.Ambient[0])
+		gl.Uniform3fv(d.IspecID, 1, &m.Material.Specular[0])
+		gl.Uniform3fv(d.IdifID, 1, &m.Material.Diffuse[0])
+
 		gl.BindVertexArray(m.VAO)
 		gl.Enable(gl.TEXTURE_2D)
 		gl.BindTexture(gl.TEXTURE_2D, m.Material.Texture)

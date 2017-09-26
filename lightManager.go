@@ -103,6 +103,5 @@ func (l *LightManager) Update() {
 		gl.Uniform3fv(light.IambID, 1, &light.Iamb[0])
 		gl.Uniform3fv(light.IdifID, 1, &light.Idif[0])
 		gl.Uniform3fv(light.IspecID, 1, &light.Ispec[0])
-
 	}
 }
