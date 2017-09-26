@@ -50,7 +50,7 @@ func main() {
 	light.Draw = true
 
 	loadTextures()
-	min, max := -20, 20
+	min, max := -30, 30
 	randObjects(200, min, max, gg.Cube, texture["none"], gg.Shader["phong"])
 	randObjects(700, min, max, gg.Cube, texture["box"], gg.Shader["phong"])
 
