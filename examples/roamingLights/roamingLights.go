@@ -21,11 +21,9 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 		x, y, z := gg.Random(min, max), gg.Random(min, max), gg.Random(min, max)
 		rx, ry, rz := gg.Randomf(), gg.Randomf(), gg.Randomf()
 		if i%101 == 0 {
-			roamingLight := gg.NewLight()
+			roamingLight := gg.NewLight([]float32{rx, ry, rz})
 			roamingLight.Position = gg.NewPosition(float32(x), float32(y), float32(z))
 			roamingLight.Draw = true
-			roamingLight.Idif = []float32{1, 0, 1}
-			// roamingLight.Idif = []float32{rx, ry, rz}
 			roamingLight.SceneLogic = func(s *gg.SceneData) {
 				s.X += rx * 3
 				s.Y += ry * 3
@@ -41,19 +39,23 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 				}
 			}
 		} else {
+			var color []float32
+			// if textr == gg.NoTexture {
+			// 	color = []float32{rx, ry, rz}
+			// } else {
+			color = []float32{1, 1, 1}
+			// }
 			d := gg.NewPointsObject(
 				gg.NewPosition(float32(x), float32(y), float32(z)),
 				points,
 				textr,
+				color,
 				shadr)
 			// d.SceneLogic = func(s *gg.SceneData) {
 			// s.XRotation += rx
 			// s.YRotation += ry
 			// s.ZRotation += rz
 			// }
-			if textr == gg.NoTexture {
-				// d.Color = gg.NewColor(rx, ry, rz, 1)
-			}
 			drawnObjects = append(drawnObjects, d)
 		}
 	}
@@ -81,7 +83,7 @@ func main() {
 	randObjects(100, min, max, gg.Cube, texture["box"], gg.Shader["phong"])
 	randObjects(100, min, max, gg.Cube, texture["box1"], gg.Shader["phong"])
 
-	centerLight := gg.NewLight()
+	centerLight := gg.NewLight([]float32{1, 1, 1})
 	centerLight.Draw = true
 	// centerLight.Idif = []float32{1, 1, 0} // R G B
 

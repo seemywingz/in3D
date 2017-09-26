@@ -11,10 +11,9 @@ func main() {
 	gg.Init(800, 600, "Wavefront Loader")
 	gg.SetCameraPosition(gg.NewPosition(0, 0.5, 2))
 
-	l := gg.NewLight()
+	l := gg.NewLight([]float32{1, 1, 1})
 	l.Position = gg.NewPosition(-10, 10, 10)
 	l.Radius = 300
-	// l.Draw = true
 
 	gg.SetDirPath("github.com/seemywingz/gg/examples/buddha")
 	mesh := gg.LoadObject("buddha.obj")
@@ -23,10 +22,6 @@ func main() {
 		s.YRotation++
 	}
 	objects = append(objects, obj)
-
-	// box := gg.NewPointsObject(gg.NewPosition(-1, 0, 0), gg.Cube, gg.NewTexture("buddha.jpg"), gg.Shader["phong"])
-	// box.Scale = 0.1
-	// objects = append(objects, box)
 
 	for !gg.ShouldClose() {
 		gg.Update()

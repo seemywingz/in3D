@@ -12,7 +12,8 @@ func main() {
 		gg.NewPosition(0, 0, -5),
 		gg.Triangle,
 		0,
-		gg.Shader["basic"],
+		[]float32{1, 0, 1},
+		gg.Shader["color"],
 	)
 
 	for !gg.ShouldClose() {
