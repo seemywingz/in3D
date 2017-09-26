@@ -1,6 +1,8 @@
 package gg
 
 import (
+	"fmt"
+
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
 )
@@ -83,7 +85,8 @@ func (d *DrawnObject) Draw() {
 	// gl.Uniform4f(d.ColorID, d.Color.R, d.Color.G, d.Color.B, d.Color.A)
 
 	for _, m := range d.Mesh.MaterialGroups {
-		gl.Uniform4f(d.ColorID, m.Material.Diffuse[0], m.Material.Diffuse[1], m.Material.Diffuse[2], m.Material.Diffuse[3])
+		fmt.Println(m.Material.Name, m.Material.Diffuse)
+		gl.Uniform4f(d.ColorID, m.Material.Diffuse[0], m.Material.Diffuse[1], m.Material.Diffuse[2], 1)
 		gl.BindVertexArray(m.VAO)
 		if d.Texture != NoTexture {
 			gl.Enable(gl.TEXTURE_2D)

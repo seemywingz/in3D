@@ -3,7 +3,6 @@ package gg
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -71,7 +70,7 @@ func LoadObject(filename string) *Mesh {
 	normals := [][]float32{}
 	uvs := [][]float32{}
 
-	materialGroups := make(map[string]*MaterialGroup)
+	var materialGroups map[string]*MaterialGroup
 
 	currentGroup := "string"
 	scanner := bufio.NewScanner(file)
@@ -90,7 +89,7 @@ func LoadObject(filename string) *Mesh {
 		switch fields[0] {
 		case "mtllib":
 			materialGroups = LoadMaterials(fields[1])
-			fmt.Println(materialGroups)
+			// fmt.Println(materialGroups)
 		case "usemtl":
 			currentGroup = fields[1]
 		case "v":
