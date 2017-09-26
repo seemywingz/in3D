@@ -104,7 +104,7 @@ func (d *DrawnObject) Draw() {
 		gl.Uniform3fv(d.IambID, 1, &m.Material.Ambient[0])
 		gl.Uniform3fv(d.IspecID, 1, &m.Material.Specular[0])
 		gl.Uniform3fv(d.IdifID, 1, &m.Material.Diffuse[0])
-		gl.Uniform3fv(d.ShininessID, 1, &m.Material.Shininess)
+		gl.Uniform1f(d.ShininessID, m.Material.Shininess)
 
 		gl.BindVertexArray(m.VAO)
 		gl.Enable(gl.TEXTURE_2D)
