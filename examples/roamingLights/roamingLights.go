@@ -21,7 +21,8 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 		x, y, z := gg.Random(min, max), gg.Random(min, max), gg.Random(min, max)
 		rx, ry, rz := gg.Randomf(), gg.Randomf(), gg.Randomf()
 		if i%101 == 0 {
-			roamingLight := gg.NewLight([]float32{rx, ry, rz})
+			color := []float32{rx, ry, rz}
+			roamingLight := gg.NewColorLight([]float32{0.1, 0.1, 0.1}, color, color)
 			roamingLight.Position = gg.NewPosition(float32(x), float32(y), float32(z))
 			roamingLight.Draw = true
 			roamingLight.SceneLogic = func(s *gg.SceneData) {
@@ -83,7 +84,8 @@ func main() {
 	randObjects(100, min, max, gg.Cube, texture["box"], gg.Shader["phong"])
 	randObjects(100, min, max, gg.Cube, texture["box1"], gg.Shader["phong"])
 
-	centerLight := gg.NewLight([]float32{1, 1, 1})
+	centerLight := gg.NewLight()
+	centerLight.Idif = []float32{1, 1, 1}
 	centerLight.Draw = true
 	// centerLight.Radius = 200
 	println(centerLight.DrawnObject.IdifID)

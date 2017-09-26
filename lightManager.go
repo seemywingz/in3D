@@ -39,19 +39,31 @@ func NewLightManager() *LightManager {
 }
 
 // NewLight :
-func NewLight(color []float32) *Light {
-	return NewCustomLight(
+func NewLight() *Light {
+	return BuildLight(
 		NewPosition(0, 0, 0), // position
 		50,                   // radius
 		[]float32{0.2, 0.2, 0.2}, // ambiant intensity
-		color, // diffuse intensity
-		[]float32{0.8, 0.8, 0.8}, // specular intensity
-		false, // draw
+		[]float32{1, 1, 1},       // diffuse intensity
+		[]float32{1, 1, 1},       // specular intensity
+		false,                    // draw
 	)
 }
 
-// NewCustomLight :
-func NewCustomLight(position Position, radius float32, iamb, idif, ispec []float32, draw bool) *Light {
+// NewColorLight :
+func NewColorLight(amb, dif, spec []float32) *Light {
+	return BuildLight(
+		NewPosition(0, 0, 0), // position
+		50,                   // radius
+		amb,                  // ambiant intensity
+		dif,                  // diffuse intensity
+		spec,                 // specular intensity
+		false,                // draw
+	)
+}
+
+// BuildLight :
+func BuildLight(position Position, radius float32, iamb, idif, ispec []float32, draw bool) *Light {
 	n := len(lightManager.Lights)
 	if n > MaxLights {
 		EoE("Error adding New Light:", errors.New("Max lights reached "+string(MaxLights)))
@@ -86,9 +98,9 @@ func NewCustomLight(position Position, radius float32, iamb, idif, ispec []float
 }
 
 // Update :
-func (l *LightManager) Update() {
+func (manager *LightManager) Update() {
 
-	for _, light := range l.Lights {
+	for _, light := range manager.Lights {
 		if light.SceneLogic != nil {
 			light.SceneLogic(&light.SceneData)
 		}
@@ -97,7 +109,7 @@ func (l *LightManager) Update() {
 			light.DrawnObject.Position = light.Position
 			light.DrawnObject.Draw()
 		}
-		gl.UseProgram(l.Program)
+		gl.UseProgram(manager.Program)
 		gl.Uniform1f(light.LRadID, light.Radius)
 		gl.Uniform3fv(light.LPosID, 1, &[]float32{light.X, light.Y, light.Z}[0])
 		gl.Uniform3fv(light.IambID, 1, &light.Iamb[0])
