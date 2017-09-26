@@ -16,9 +16,9 @@ func main() {
 	light.Position = gg.NewPosition(-10, 10, 10)
 	light.Radius = 30
 
-	gg.SetDirPath("github.com/seemywingz/gg/examples/gopher")
+	gg.SetDirPath("github.com/seemywingz/gg/examples/assets/models/gopher")
 	gopherMesh := gg.LoadObject("gopher.obj")
-	gopher := gg.NewMeshObject(gg.Position{}, gopherMesh, gg.NoTexture, gg.Shader["phong"])
+	gopher := gg.NewMeshObject(gg.Position{}, gopherMesh, gg.Shader["phong"])
 	gopher.ZRotation = -90 // this .obj was exported sideways lol
 	gopher.SceneLogic = func(s *gg.SceneData) {
 		s.YRotation++

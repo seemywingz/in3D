@@ -12,7 +12,6 @@ type DrawnObject struct {
 	ModelMatrixID  int32
 	NormalMatrixID int32
 	ColorID        int32
-	Texture        uint32
 	Scale          float32
 	SceneData
 }
@@ -26,6 +25,7 @@ func NewPointsObject(position Position, points []float32, texture uint32, color 
 		color,
 		[]float32{},
 		1,
+		texture,
 	}
 	mg := make(map[string]*MaterialGroup)
 	mg["dfault"] = &MaterialGroup{
@@ -35,11 +35,11 @@ func NewPointsObject(position Position, points []float32, texture uint32, color 
 		int32(len(points)),
 	}
 	mesh := &Mesh{mg}
-	return NewMeshObject(position, mesh, texture, program)
+	return NewMeshObject(position, mesh, program)
 }
 
 // NewMeshObject : Create new DrawnObject
-func NewMeshObject(position Position, mesh *Mesh, texture uint32, program uint32) *DrawnObject {
+func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 
 	ModelMatrixID := gl.GetUniformLocation(program, gl.Str("MODEL\x00"))
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
@@ -52,7 +52,6 @@ func NewMeshObject(position Position, mesh *Mesh, texture uint32, program uint32
 		ModelMatrixID,
 		NormalMatrixID,
 		ColorID,
-		texture,
 		1,
 		SceneData{},
 	}
@@ -90,7 +89,7 @@ func (d *DrawnObject) Draw() {
 		gl.Uniform4f(d.ColorID, m.Material.Diffuse[0], m.Material.Diffuse[1], m.Material.Diffuse[2], 1)
 		gl.BindVertexArray(m.VAO)
 		gl.Enable(gl.TEXTURE_2D)
-		gl.BindTexture(gl.TEXTURE_2D, d.Texture)
+		gl.BindTexture(gl.TEXTURE_2D, m.Material.Texture)
 
 		gl.DrawArrays(gl.TRIANGLES, 0, m.VertCount)
 		gl.BindTexture(gl.TEXTURE_2D, 0)

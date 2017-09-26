@@ -28,6 +28,7 @@ type Material struct {
 	Diffuse   []float32
 	Specular  []float32
 	Shininess float32
+	Texture   uint32
 }
 
 // Face :
@@ -43,6 +44,7 @@ var defaultMaterial = &Material{
 	[]float32{1, 1, 1},
 	[]float32{0.8, 0.8, 0.8},
 	1,
+	NoTexture,
 }
 
 func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32) {
@@ -60,7 +62,7 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 	group.VertCount = int32(len(vao))
 }
 
-// LoadObject : opens a wavefront file and parses it into ObjData
+// LoadObject : opens a wavefront file and parses it into Material Groups
 // TODO: Fix  UV coords, they are upside down...
 func LoadObject(filename string) *Mesh {
 	file, ferr := os.Open(filename)
@@ -190,6 +192,7 @@ func LoadMaterials(filename string) map[string]*MaterialGroup {
 				[]float32{1, 1, 1},
 				[]float32{0.8, 0.8, 0.8},
 				1,
+				NoTexture,
 			}
 			materialGroups[currentMat] = &MaterialGroup{}
 			materialGroups[currentMat].Material = material
@@ -239,6 +242,10 @@ func LoadMaterials(filename string) map[string]*MaterialGroup {
 			f, err := strconv.ParseFloat(fields[1], 32)
 			EoE("Error parsing float", err)
 			materialGroups[currentMat].Material.Shininess = float32(f)
+		case "map_Kd":
+			textureFile := fields[1]
+			texture := NewTexture(textureFile)
+			materialGroups[currentMat].Material.Texture = texture
 		}
 	}
 
