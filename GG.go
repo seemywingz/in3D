@@ -237,6 +237,11 @@ func SetCameraPosition(position Position) {
 	camera.Position = position
 }
 
+// SetClearColor :
+func SetClearColor(r, g, b, a float32) {
+	gl.ClearColor(r, g, b, a)
+}
+
 // TogglePointerLock :
 func TogglePointerLock() {
 	fmt.Println("PointerLock Enabled:", Feature[PointerLock])
