@@ -13,7 +13,7 @@ func main() {
 	in3D.Enable(in3D.PointerLock, true)
 	in3D.Enable(in3D.FlyMode, true)
 
-	moonColor := []float32{0.3, 0.3, 0.8}
+	moonColor := []float32{0.8, 0.8, 1}
 	moon := in3D.NewLight()
 	moon.Difffuse = moonColor
 	moon.Position = in3D.NewPosition(100, 800, 0)
@@ -24,7 +24,12 @@ func main() {
 	fireLight.Specular = []float32{1, 0, 0}
 	fireLight.Position = in3D.NewPosition(0, 45, 10)
 	fireLight.Radius = 25
-	fireLight.Draw = true
+	// fireLight.Draw = true
+
+	flickerLight := in3D.NewLight()
+	flickerLight.Position = in3D.NewPosition(0, 45, 10)
+	flickerLight.Radius = 25
+	// flickerLight.Draw = true
 
 	objFile := "campFire"
 	in3D.SetDirPath("github.com/seemywingz/in3D/examples/assets/models/" + objFile)
@@ -36,6 +41,9 @@ func main() {
 
 	for !in3D.ShouldClose() {
 		in3D.Update()
+		if in3D.Random(0, 100)%2 == 0 {
+			flickerLight.Radius = in3D.Randomf() * 20
+		}
 		for _, o := range objects {
 			o.Draw()
 		}
