@@ -1,12 +1,14 @@
 package in3D
 
 import (
+	"errors"
 	"fmt"
-	"go/build"
 	"log"
 	"math/rand"
 	"os"
-	"strconv"
+	"path/filepath"
+	"regexp"
+	"runtime"
 	"time"
 )
 
@@ -26,16 +28,15 @@ func EoE(msg string, err error) {
 	}
 }
 
-// SetDirPath : resolves the absolute path from importPath.
-// There doesn't need to be a valid Go package inside that import path, but the directory must exist.
-func SetDirPath(importPath string) {
-	// importPath = "github.com/seemywingz/gtils"
-	path, err := build.Import(importPath, "", build.FindOnly)
-	EoE("Unable to find Go package in your GOPATH, it's needed to load assets:", err)
-
-	err = os.Chdir(path.Dir)
-	EoE("Error Setting Package Dir", err)
-	// println(path.Dir)
+// SetRelPath : resolves the absolute path for provided relative path.
+func SetRelPath(relPath string) {
+	if _, filename, _, ok := runtime.Caller(1); ok {
+		re := regexp.MustCompile("[a-zA-Z0-9-]*.go$")
+		path := filepath.Join(re.ReplaceAllString(filename, ""), relPath)
+		EoE("Error Accessing relPath:", os.Chdir(path))
+	} else {
+		EoE("Error Getting Caller Location", errors.New(filename))
+	}
 }
 
 // Random : return pseudo random number in range
@@ -50,14 +51,12 @@ func Randomf() float32 {
 	return rand.Float32()
 }
 
-// FtoA : convert float32 to string
-func FtoA(n float32) string {
-	return strconv.FormatFloat(float64(n), 'f', 6, 32)
-}
-
-// Mkdir : make a directory if it does not exist
-func Mkdir(filePath string) {
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		os.Mkdir(filePath, os.ModePerm)
+// ExecPath :
+func ExecPath() string {
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
 	}
+	exPath := filepath.Dir(ex)
+	return exPath
 }

@@ -1,14 +1,10 @@
 package in3D
 
 import (
-	"errors"
 	"fmt"
-	"image"
-	"image/draw"
 	_ "image/jpeg" // include jpeg support
 	_ "image/png"  // include png support
 	"io/ioutil"
-	"os"
 	"runtime"
 	"strings"
 
@@ -52,6 +48,10 @@ func InitGL() {
 	EoE("Error Initializing OpenGL", gl.Init())
 
 	gl.Enable(gl.DEPTH_TEST)
+
+	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+	gl.Enable(gl.BLEND)
+
 	gl.DepthFunc(gl.LESS)
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))
@@ -72,7 +72,7 @@ func InitFeatures() {
 // InitShaders :
 func InitShaders() {
 	Shader = make(map[string]uint32)
-	SetDirPath("github.com/seemywingz/in3D/shaders")
+	SetRelPath("shaders")
 	Shader["basic"] = NewShader("Vect.glsl", "basicFrag.glsl")
 	Shader["color"] = NewShader("Vect.glsl", "colorFrag.glsl")
 	Shader["texture"] = NewShader("Vect.glsl", "textureFrag.glsl")
@@ -167,43 +167,6 @@ func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 	gl.DeleteShader(vertexShader)
 	gl.DeleteShader(fragmentShader)
 	return program
-}
-
-// NewTexture : greate GL reference to provided texture
-func NewTexture(file string) uint32 {
-	imgFile, err := os.Open(file)
-	EoE("Error Loading Texture", err)
-
-	img, _, err := image.Decode(imgFile)
-	EoE("Error Decoding Image", err)
-
-	rgba := image.NewRGBA(img.Bounds())
-	if rgba.Stride != rgba.Rect.Size().X*4 {
-		EoE("Error Getting RGB Strride", errors.New("unsupported stride"))
-	}
-	draw.Draw(rgba, rgba.Bounds(), img, image.Point{0, 0}, draw.Src)
-
-	var texture uint32
-	gl.Enable(gl.TEXTURE_2D)
-	gl.GenTextures(1, &texture)
-	gl.BindTexture(gl.TEXTURE_2D, texture)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
-	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
-	gl.TexImage2D(
-		gl.TEXTURE_2D,
-		0,
-		gl.RGBA,
-		int32(rgba.Rect.Size().X),
-		int32(rgba.Rect.Size().Y),
-		0,
-		gl.RGBA,
-		gl.UNSIGNED_BYTE,
-		gl.Ptr(rgba.Pix))
-	gl.BindTexture(gl.TEXTURE_2D, 0)
-	gl.Disable(gl.TEXTURE_2D)
-	return texture
 }
 
 // ShouldClose : wraper for glfw

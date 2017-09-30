@@ -1,6 +1,8 @@
 package main
 
-import "github.com/seemywingz/in3D"
+import (
+	"github.com/seemywingz/in3D"
+)
 
 func main() {
 
@@ -13,23 +15,18 @@ func main() {
 	in3D.Enable(in3D.FlyMode, true)
 
 	light := in3D.NewLight()
-	light.Ambient = []float32{0, 0, 0}
-	light.Position = in3D.NewPosition(-10, 10, 10)
-	light.Radius = 200
+	light.Position = in3D.NewPosition(5, 100, 1)
+	light.Radius = 100000
 
-	light = in3D.NewLight()
-	light.Position = in3D.NewPosition(5, 10, 1)
-	light.Radius = 1000
-
-	model := "trex"
-	in3D.SetDirPath("github.com/seemywingz/in3D/examples/assets/models/" + model)
 	// all models are from: https://www.blendswap.com/
+	model := "sky"
+	in3D.SetRelPath("../assets/models/" + model)
+
 	mesh := in3D.LoadObject(model + ".obj")
-	obj := in3D.NewMeshObject(in3D.Position{}, mesh, in3D.Shader["phong"])
-	obj.SceneLogic = func(s *in3D.SceneData) {
-		s.YRotation++
-	}
+	obj := in3D.NewMeshObject(in3D.Position{}, mesh, in3D.Shader["texture"])
+	obj.Scale = 10000
 	objects = append(objects, obj)
+	objects = append(objects, in3D.NewPointsObject(in3D.NewPosition(0, 0, -5), in3D.Cube, in3D.NoTexture, []float32{1, 1, 1}, in3D.Shader["phong"]))
 
 	for !in3D.ShouldClose() {
 		in3D.Update()
