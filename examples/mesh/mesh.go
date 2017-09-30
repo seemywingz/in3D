@@ -26,9 +26,10 @@ func main() {
 	in3D.SetRelPath("../assets/textures")
 	txt := in3D.NewTexture("Sky02.jpg")
 
+	// all models are from: https://www.blendswap.com/
 	model := "sky"
 	in3D.SetRelPath("../assets/models/" + model)
-	// all models are from: https://www.blendswap.com/
+
 	mesh := in3D.LoadObject(model + ".obj")
 	obj := in3D.NewMeshObject(in3D.Position{}, mesh, in3D.Shader["phong"])
 	obj.SceneLogic = func(s *in3D.SceneData) {

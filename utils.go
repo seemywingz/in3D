@@ -28,8 +28,7 @@ func EoE(msg string, err error) {
 	}
 }
 
-// SetRelPath : resolves the absolute path from importPath.
-// There doesn't need to be a valid Go package inside that import path, but the directory must exist.
+// SetRelPath : resolves the absolute path for provided relative path.
 func SetRelPath(relPath string) {
 	if _, filename, _, ok := runtime.Caller(1); ok {
 		re := regexp.MustCompile("[a-zA-Z0-9-]*.go$")
