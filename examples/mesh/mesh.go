@@ -1,6 +1,8 @@
 package main
 
-import "github.com/seemywingz/in3D"
+import (
+	"github.com/seemywingz/in3D"
+)
 
 func main() {
 
@@ -21,8 +23,11 @@ func main() {
 	light.Position = in3D.NewPosition(5, 10, 1)
 	light.Radius = 1000
 
-	model := "trex"
-	in3D.SetDirPath("github.com/seemywingz/in3D/examples/assets/models/" + model)
+	in3D.SetRelPath("../assets/textures")
+	txt := in3D.NewTexture("Sky02.jpg")
+
+	model := "sky"
+	in3D.SetRelPath("../assets/models/" + model)
 	// all models are from: https://www.blendswap.com/
 	mesh := in3D.LoadObject(model + ".obj")
 	obj := in3D.NewMeshObject(in3D.Position{}, mesh, in3D.Shader["phong"])
@@ -30,6 +35,7 @@ func main() {
 		s.YRotation++
 	}
 	objects = append(objects, obj)
+	objects = append(objects, in3D.NewPointsObject(in3D.Position{}, in3D.Cube, txt, []float32{1, 1, 1}, in3D.Shader["phong"]))
 
 	for !in3D.ShouldClose() {
 		in3D.Update()

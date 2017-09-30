@@ -86,7 +86,7 @@ func main() {
 		f := rand.Float32()
 		points = append(points, f)
 	}
-	points = in3D.Cube
+	// points = in3D.Cube
 	for i, f := range points {
 		if i < len(points)-1 && points[i+1] < 4 {
 			points[i] = points[i+1] * 3
