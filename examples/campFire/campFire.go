@@ -31,9 +31,9 @@ func main() {
 	flickerLight.Radius = 25
 	// flickerLight.Draw = true
 
-	objFile := "campFire"
-	in3D.SetDirPath("github.com/seemywingz/in3D/examples/assets/models/" + objFile)
 	// all models are from: https://www.blendswap.com/
+	objFile := "campFire"
+	in3D.SetRelPath("../assets/models/" + objFile)
 	mesh := in3D.LoadObject(objFile + ".obj")
 	obj := in3D.NewMeshObject(in3D.Position{}, mesh, in3D.Shader["phong"])
 	obj.YRotation = 110

@@ -15,18 +15,24 @@ func main() {
 	in3D.Enable(in3D.FlyMode, true)
 
 	light := in3D.NewLight()
-	light.Position = in3D.NewPosition(5, 100, 1)
+	light.Ambient = []float32{0.6, 0.6, 0.6}
+	light.Position = in3D.NewPosition(0, 100, -100)
 	light.Radius = 100000
 
 	// all models are from: https://www.blendswap.com/
 	model := "sky"
 	in3D.SetRelPath("../assets/models/" + model)
 
-	mesh := in3D.LoadObject(model + ".obj")
-	obj := in3D.NewMeshObject(in3D.Position{}, mesh, in3D.Shader["texture"])
-	obj.Scale = 10000
-	objects = append(objects, obj)
-	objects = append(objects, in3D.NewPointsObject(in3D.NewPosition(0, 0, -5), in3D.Cube, in3D.NoTexture, []float32{1, 1, 1}, in3D.Shader["phong"]))
+	skymesh := in3D.LoadObject(model + ".obj")
+	sky := in3D.NewMeshObject(in3D.Position{}, skymesh, in3D.Shader["texture"])
+	sky.Scale = 10000
+	objects = append(objects, sky)
+
+	model = "buddha"
+	in3D.SetRelPath("../assets/models/" + model)
+	bmesh := in3D.LoadObject(model + ".obj")
+	buddha := in3D.NewMeshObject(in3D.Position{}, bmesh, in3D.Shader["phong"])
+	objects = append(objects, buddha)
 
 	for !in3D.ShouldClose() {
 		in3D.Update()
