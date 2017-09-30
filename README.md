@@ -1,10 +1,8 @@
 # in3D
 A relatively simple Go powered OpenGL Graphics Engine
 
-Create a new Window, Get OpenGL Context, Setup Camera Projection,  
-create 3D object, Draw!  
-Go Ahead, you can do it yourself...
-`go get github.com/seemywingz/in3D`
+Create a new Window, Get OpenGL Context, Setup Camera Projection, create 3D object, Draw!  
+Go Ahead, you can do it yourself... `go get github.com/seemywingz/in3D`
 ```go
 package main
 
