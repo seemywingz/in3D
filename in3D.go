@@ -48,6 +48,10 @@ func InitGL() {
 	EoE("Error Initializing OpenGL", gl.Init())
 
 	gl.Enable(gl.DEPTH_TEST)
+
+	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+	gl.Enable(gl.BLEND)
+
 	gl.DepthFunc(gl.LESS)
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))

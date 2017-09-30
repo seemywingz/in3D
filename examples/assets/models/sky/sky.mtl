@@ -1,12 +1,13 @@
-# Blender MTL File: 'Skydome.blend'
+# Blender MTL File: 'None'
 # Material Count: 1
 
 newmtl Material.001
 Ns 96.078431
-Ka 0.629371 0.629371 0.629371
-Kd 0.270413 0.634064 0.800000
-Ks 0.269231 0.269231 0.269231
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
-illum 3
+illum 2
+map_Kd sky.jpg

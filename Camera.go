@@ -33,7 +33,7 @@ func NewCamera() *Camera {
 	//    display range : 0.1 unit <-> 1000 units
 	w, h := window.GetSize()
 	ratio := float32(w) / float32(h)
-	projection := mgl32.Perspective(mgl32.DegToRad(45.0), ratio, 0.1, 1000)
+	projection := mgl32.Perspective(mgl32.DegToRad(45.0), ratio, 0.1, 11000)
 
 	// Create new Camera instance
 	camera = &Camera{projection, CameraData{}}
