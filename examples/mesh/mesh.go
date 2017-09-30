@@ -21,7 +21,7 @@ func main() {
 	light.Position = in3D.NewPosition(5, 10, 1)
 	light.Radius = 1000
 
-	model := "buddha"
+	model := "trex"
 	in3D.SetDirPath("github.com/seemywingz/in3D/examples/assets/models/" + model)
 	// all models are from: https://www.blendswap.com/
 	mesh := in3D.LoadObject(model + ".obj")
