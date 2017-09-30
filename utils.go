@@ -6,7 +6,6 @@ import (
 	"log"
 	"math/rand"
 	"os"
-	"strconv"
 	"time"
 )
 
@@ -48,16 +47,4 @@ func Random(min, max int) int {
 func Randomf() float32 {
 	rand.Seed(time.Now().UnixNano())
 	return rand.Float32()
-}
-
-// FtoA : convert float32 to string
-func FtoA(n float32) string {
-	return strconv.FormatFloat(float64(n), 'f', 6, 32)
-}
-
-// Mkdir : make a directory if it does not exist
-func Mkdir(filePath string) {
-	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		os.Mkdir(filePath, os.ModePerm)
-	}
 }
