@@ -10,7 +10,7 @@ func main() {
 	in3D.NewLight().Position =
 		in3D.Position{X: 10, Y: 1, Z: 10}
 
-	in3D.SetDirPath("github.com/seemywingz/in3D/examples/assets/textures")
+	in3D.SetRelPath("../assets/textures")
 	texture := in3D.NewTexture("seemywingz.jpg")
 
 	color := []float32{1, 1, 1}
