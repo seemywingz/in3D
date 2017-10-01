@@ -23,12 +23,13 @@ type MaterialGroup struct {
 
 // Material represents a material
 type Material struct {
-	Name      string
-	Ambient   []float32
-	Diffuse   []float32
-	Specular  []float32
-	Shininess float32
-	Texture   uint32
+	Name       string
+	Ambient    []float32
+	Diffuse    []float32
+	Specular   []float32
+	Shininess  float32
+	DiffuseTex uint32
+	NormalTex  uint32
 }
 
 // Face :
@@ -38,12 +39,13 @@ type Face struct {
 	NormIdx int
 }
 
-var defaultMaterial = &Material{
+var defaultMaterial = Material{
 	"default",
 	[]float32{0.1, 0.1, 0.1},
 	[]float32{1, 1, 1},
 	[]float32{0.8, 0.8, 0.8},
 	1,
+	NoTexture,
 	NoTexture,
 }
 
@@ -193,6 +195,7 @@ func LoadMaterials(filename string) map[string]*MaterialGroup {
 				[]float32{0.8, 0.8, 0.8},
 				1,
 				NoTexture,
+				NoTexture,
 			}
 			materialGroups[currentMat] = &MaterialGroup{}
 			materialGroups[currentMat].Material = material
@@ -243,9 +246,13 @@ func LoadMaterials(filename string) map[string]*MaterialGroup {
 			EoE("Error parsing float", err)
 			materialGroups[currentMat].Material.Shininess = float32(f)
 		case "map_Kd":
-			textureFile := fields[1]
-			texture := NewTexture(textureFile)
-			materialGroups[currentMat].Material.Texture = texture
+			DiffuseTexFile := fields[1]
+			DiffuseTex := NewTexture(DiffuseTexFile)
+			materialGroups[currentMat].Material.DiffuseTex = DiffuseTex
+		case "map_Bump":
+			NormalTexFile := fields[1]
+			NormalTex := NewTexture(NormalTexFile)
+			materialGroups[currentMat].Material.NormalTex = NormalTex
 		}
 	}
 

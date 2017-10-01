@@ -112,11 +112,13 @@ func (manager *LightManager) Update() {
 			}
 			light.DrawnObject.Draw()
 		}
-		gl.UseProgram(manager.Program)
-		gl.Uniform1f(light.LRadID, light.Radius)
-		gl.Uniform3fv(light.LPosID, 1, &[]float32{light.X, light.Y, light.Z}[0])
-		gl.Uniform3fv(light.AmbID, 1, &light.Ambient[0])
-		gl.Uniform3fv(light.DifID, 1, &light.Difffuse[0])
-		gl.Uniform3fv(light.SpecID, 1, &light.Specular[0])
+		for _, p := range Shader {
+			gl.UseProgram(p)
+			gl.Uniform1f(light.LRadID, light.Radius)
+			gl.Uniform3fv(light.LPosID, 1, &[]float32{light.X, light.Y, light.Z}[0])
+			gl.Uniform3fv(light.AmbID, 1, &light.Ambient[0])
+			gl.Uniform3fv(light.DifID, 1, &light.Difffuse[0])
+			gl.Uniform3fv(light.SpecID, 1, &light.Specular[0])
+		}
 	}
 }

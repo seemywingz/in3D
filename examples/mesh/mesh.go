@@ -31,7 +31,7 @@ func main() {
 	model = "buddha"
 	in3D.SetRelPath("../assets/models/" + model)
 	bmesh := in3D.LoadObject(model + ".obj")
-	buddha := in3D.NewMeshObject(in3D.Position{}, bmesh, in3D.Shader["phong"])
+	buddha := in3D.NewMeshObject(in3D.Position{}, bmesh, in3D.Shader["normalMap"])
 	objects = append(objects, buddha)
 
 	for !in3D.ShouldClose() {

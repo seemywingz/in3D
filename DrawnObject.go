@@ -31,6 +31,7 @@ func NewPointsObject(position Position, points []float32, texture uint32, color 
 		color,
 		1,
 		texture,
+		NoTexture,
 	}
 	mg := make(map[string]*MaterialGroup)
 	mg["dfault"] = &MaterialGroup{
@@ -108,7 +109,7 @@ func (d *DrawnObject) Draw() {
 
 		gl.BindVertexArray(m.VAO)
 		gl.Enable(gl.TEXTURE_2D)
-		gl.BindTexture(gl.TEXTURE_2D, m.Material.Texture)
+		gl.BindTexture(gl.TEXTURE_2D, m.Material.DiffuseTex)
 
 		gl.DrawArrays(gl.TRIANGLES, 0, m.VertCount)
 		gl.BindTexture(gl.TEXTURE_2D, 0)
