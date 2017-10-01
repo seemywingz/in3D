@@ -2,7 +2,7 @@
 const float pi = 3.14159265;
 const int maxLights = 11;
 
-uniform sampler2D tex;
+uniform sampler2D dtex, ntex;
 uniform mat4 MVP, MODEL;
 uniform vec4 COLOR;
 
@@ -57,7 +57,7 @@ void main() {
     }
     float diffuse = max(dot(normalize(fragNoraml), normalize(Light[i].lightPos)), 0.0);
 
-    vec3 texture = texture(tex, fragTexCoord).rgb;
+    vec3 texture = texture(dtex, fragTexCoord).rgb;
     if(texture == vec3(0,0,0)){
       texture = vec3(1,1,1);// white default
     }

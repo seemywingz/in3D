@@ -16,7 +16,7 @@ func main() {
 
 	light := in3D.NewLight()
 	light.Ambient = []float32{0.6, 0.6, 0.6}
-	light.Position = in3D.NewPosition(0, 100, -100)
+	light.Position = in3D.NewPosition(0, 100, 100)
 	light.Radius = 100000
 
 	// all models are from: https://www.blendswap.com/
@@ -31,7 +31,7 @@ func main() {
 	model = "buddha"
 	in3D.SetRelPath("../assets/models/" + model)
 	bmesh := in3D.LoadObject(model + ".obj")
-	buddha := in3D.NewMeshObject(in3D.Position{}, bmesh, in3D.Shader["normalMap"])
+	buddha := in3D.NewMeshObject(in3D.Position{}, bmesh, in3D.Shader["phong"])
 	objects = append(objects, buddha)
 
 	for !in3D.ShouldClose() {

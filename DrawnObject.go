@@ -109,6 +109,11 @@ func (d *DrawnObject) Draw() {
 
 		gl.BindVertexArray(m.VAO)
 		gl.Enable(gl.TEXTURE_2D)
+
+		gl.ActiveTexture(gl.TEXTURE0)
+		gl.BindTexture(gl.TEXTURE_2D, m.Material.DiffuseTex)
+
+		gl.ActiveTexture(gl.TEXTURE1)
 		gl.BindTexture(gl.TEXTURE_2D, m.Material.DiffuseTex)
 
 		gl.DrawArrays(gl.TRIANGLES, 0, m.VertCount)
