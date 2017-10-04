@@ -107,28 +107,30 @@ func (d *DrawnObject) Draw() {
 	gl.UniformMatrix4fv(d.NormalMatrixID, 1, false, &normalMatrix[0])
 
 	for _, m := range d.Mesh.MaterialGroups {
+		gl.UseProgram(d.Program)
 
 		// Material
 		gl.Uniform3fv(d.IambID, 1, &m.Material.Ambient[0])
 		gl.Uniform3fv(d.IspecID, 1, &m.Material.Specular[0])
 		gl.Uniform3fv(d.IdifID, 1, &m.Material.Diffuse[0])
 		gl.Uniform1f(d.ShininessID, m.Material.Shininess)
+
 		gl.Uniform1i(d.TextureID, 0)
 		gl.Uniform1i(d.NormalMapID, 1)
-
-		gl.BindVertexArray(m.VAO)
 
 		// Bind our diffuse texture in Texture Unit 0
 		gl.ActiveTexture(gl.TEXTURE0)
 		gl.BindTexture(gl.TEXTURE_2D, m.Material.DiffuseTex)
 
-		gl.ActiveTexture(gl.TEXTURE1)
+		gl.ActiveTexture(gl.TEXTURE1 + 1)
 		gl.BindTexture(gl.TEXTURE_2D, m.Material.NormalTex)
+
+		gl.BindVertexArray(m.VAO)
 
 		gl.DrawArrays(gl.TRIANGLES, 0, m.VertCount)
 
-		gl.ActiveTexture(gl.TEXTURE0)
-		gl.BindTexture(gl.TEXTURE_2D, 0)
+		// gl.ActiveTexture(gl.TEXTURE0)
+		// gl.BindTexture(gl.TEXTURE_2D, 0)
 		// gl.ActiveTexture(gl.TEXTURE1)
 		// gl.BindTexture(gl.TEXTURE_2D, 0)
 	}

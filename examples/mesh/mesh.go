@@ -16,9 +16,11 @@ func main() {
 	in3D.Enable(in3D.FlyMode, true)
 
 	light := in3D.NewLight()
-	light.Ambient = []float32{1, 1, 1}
-	light.Specular = []float32{1, 0.6, 0.3}
-	light.Position = in3D.NewPosition(0, 100, -100)
+	light.Ambient = []float32{0.5, 0.5, 0.5}
+	light.Specular = []float32{1, 1, 1}
+	light.Position = in3D.NewPosition(1, 0, 0)
+	light.Draw = true
+	light.DrawnObject.Scale = 0.1
 	light.Radius = 100000
 
 	model := "sky"
@@ -38,7 +40,7 @@ func main() {
 		s.YRotation++
 	}
 	objects = append(objects, buddha)
-	objects = append(objects, in3D.NewPointsObject(in3D.NewPosition(1, 1, -10), in3D.Cube, in3D.NoTexture, []float32{1, 1, 1}, in3D.Shader["normalMap"]))
+	// objects = append(objects, in3D.NewPointsObject(in3D.NewPosition(1, 1, -10), in3D.Cube, in3D.NoTexture, []float32{1, 1, 1}, in3D.Shader["normalMap"]))
 
 	for !in3D.ShouldClose() {
 		in3D.Update()

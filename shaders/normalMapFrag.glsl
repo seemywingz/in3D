@@ -46,7 +46,7 @@ void main() {
   if(textr == vec3(0,0,0)){
     textr = vec3(1,1,1);// white default
   }
-  vec3 nmap =  texture(NORMAL_MAP, fragTexCoord).rgb;
+  // vec3 nmap =  texture(NORMAL_MAP, fragTexCoord).rgb;
 
   for(int i=0;i<maxLights;++i) {
     vec3 L = normalize(Light[i].lightPos - fragPos);
