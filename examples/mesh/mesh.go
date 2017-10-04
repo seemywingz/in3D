@@ -17,11 +17,11 @@ func main() {
 
 	light := in3D.NewLight()
 	light.Ambient = []float32{0.5, 0.5, 0.5}
-	light.Specular = []float32{1, 1, 1}
+	light.Specular = []float32{10, 10, 10}
 	light.Position = in3D.NewPosition(1, 0, 0)
 	light.Draw = true
-	light.DrawnObject.Scale = 0.1
-	light.Radius = 100000
+	light.DrawnObject.Scale = 0.05
+	light.Radius = 10
 
 	model := "sky"
 	in3D.SetRelPath("../assets/models/" + model)
