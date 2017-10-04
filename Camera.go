@@ -21,6 +21,7 @@ type CameraData struct {
 	LastX     float64
 	LastY     float64
 	MVP       mgl32.Mat4
+	Speed     float32
 	Position
 }
 
@@ -37,6 +38,8 @@ func NewCamera() *Camera {
 
 	// Create new Camera instance
 	camera = &Camera{projection, CameraData{}}
+	// camera.Speed = 0.1
+	camera.Speed = 1
 	return camera
 }
 
@@ -72,36 +75,36 @@ func (c *Camera) KeyControls() {
 	// Press w
 	if window.GetKey(glfw.KeyW) == glfw.Press {
 		// move forward
-		c.X += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
-		c.Z -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
-		c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
+		c.X += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+		c.Z -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+		c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation)))) * c.Speed
 	}
 	// Press A
 	if window.GetKey(glfw.KeyA) == glfw.Press {
 		// Move left
-		c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
-		c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
+		c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+		c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
 	}
 	// Press s
 	if window.GetKey(glfw.KeyS) == glfw.Press {
 		// Move Backward
-		c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
-		c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
-		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation))))
+		c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+		c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation)))) * c.Speed
 	}
 	// Press d
 	if window.GetKey(glfw.KeyD) == glfw.Press {
 		// Move Right
-		c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation))))
-		c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation))))
+		c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+		c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
 	}
 	// Press space
 	if window.GetKey(glfw.KeySpace) == glfw.Press {
 		if Feature[FlyMode] {
 			if window.GetKey(glfw.KeyLeftShift) == glfw.Press {
-				c.Y--
+				c.Y -= c.Speed
 			} else {
-				c.Y++
+				c.Y += c.Speed
 			}
 		} else {
 			//jump

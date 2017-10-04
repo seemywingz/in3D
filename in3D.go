@@ -201,6 +201,11 @@ func SetCameraPosition(position Position) {
 	camera.Position = position
 }
 
+// SetCameraSpeed :
+func SetCameraSpeed(speed float32) {
+	camera.Speed = speed
+}
+
 // SetClearColor :
 func SetClearColor(r, g, b, a float32) {
 	gl.ClearColor(r, g, b, a)

@@ -2,7 +2,8 @@
 const float pi = 3.14159265;
 const int maxLights = 11;
 
-uniform sampler2D dtex, ntex;
+uniform sampler2D TEXTURE;
+uniform sampler2D NORMAL_MAP;
 uniform mat4 MVP, MODEL;
 uniform vec4 COLOR;
 
@@ -40,6 +41,13 @@ float dinstance(vec3 p0, vec3 p1){
 }
 
 void main() {
+
+  vec3 textr = texture(TEXTURE, fragTexCoord).rgb;
+  if(textr == vec3(0,0,0)){
+    textr = vec3(1,1,1);// white default
+  }
+  vec3 nmap =  texture(NORMAL_MAP, fragTexCoord).rgb;
+
   for(int i=0;i<maxLights;++i) {
     vec3 L = normalize(Light[i].lightPos - fragPos);
     vec3 N = normalize(fragNoraml);
@@ -57,16 +65,11 @@ void main() {
     }
     float diffuse = max(dot(normalize(fragNoraml), normalize(Light[i].lightPos)), 0.0);
 
-    vec3 texture = texture(dtex, fragTexCoord).rgb;
-    if(texture == vec3(0,0,0)){
-      texture = vec3(1,1,1);// white default
-    }
-
     float
       dist = distance(fragPos, Light[i].lightPos),
       att = clamp(1.0 - dist*dist/(Light[i].lightRad*Light[i].lightRad), 0.0, 1.0); att *= att;
     
-    finalColor +=  vec4( att * texture *(Light[i].Iamb +
+    finalColor +=  vec4( att * textr *(Light[i].Iamb +
                       lambertian * Light[i].Idif +
                       specular * Light[i].Ispec ) ,1);
   }

@@ -17,6 +17,8 @@ type DrawnObject struct {
 	IdifID         int32
 	IspecID        int32
 	ShininessID    int32
+	TextureID      int32
+	NormalMapID    int32
 	Scale          float32
 	SceneData
 }
@@ -56,6 +58,9 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 	IdifID := gl.GetUniformLocation(program, gl.Str(uniform+".Idif\x00"))
 	IspecID := gl.GetUniformLocation(program, gl.Str(uniform+".Ispec\x00"))
 	ShininessID := gl.GetUniformLocation(program, gl.Str(uniform+".shininess\x00"))
+	TextureID := gl.GetUniformLocation(program, gl.Str("TEXTURE\x00"))
+	NoramalMapID := gl.GetUniformLocation(program, gl.Str("NORMAL_MAP\x00"))
+	println(TextureID, NoramalMapID)
 
 	d := &DrawnObject{
 		mesh,
@@ -66,6 +71,8 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 		IdifID,
 		IspecID,
 		ShininessID,
+		TextureID,
+		NoramalMapID,
 		1,
 		SceneData{},
 	}
@@ -106,18 +113,24 @@ func (d *DrawnObject) Draw() {
 		gl.Uniform3fv(d.IspecID, 1, &m.Material.Specular[0])
 		gl.Uniform3fv(d.IdifID, 1, &m.Material.Diffuse[0])
 		gl.Uniform1f(d.ShininessID, m.Material.Shininess)
+		gl.Uniform1i(d.TextureID, 0)
+		gl.Uniform1i(d.NormalMapID, 1)
 
 		gl.BindVertexArray(m.VAO)
-		gl.Enable(gl.TEXTURE_2D)
 
+		// Bind our diffuse texture in Texture Unit 0
 		gl.ActiveTexture(gl.TEXTURE0)
 		gl.BindTexture(gl.TEXTURE_2D, m.Material.DiffuseTex)
 
 		gl.ActiveTexture(gl.TEXTURE1)
-		gl.BindTexture(gl.TEXTURE_2D, m.Material.DiffuseTex)
+		gl.BindTexture(gl.TEXTURE_2D, m.Material.NormalTex)
 
 		gl.DrawArrays(gl.TRIANGLES, 0, m.VertCount)
+
+		gl.ActiveTexture(gl.TEXTURE0)
 		gl.BindTexture(gl.TEXTURE_2D, 0)
+		// gl.ActiveTexture(gl.TEXTURE1)
+		// gl.BindTexture(gl.TEXTURE_2D, 0)
 	}
 
 }
