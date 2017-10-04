@@ -122,7 +122,7 @@ func (d *DrawnObject) Draw() {
 		gl.ActiveTexture(gl.TEXTURE0)
 		gl.BindTexture(gl.TEXTURE_2D, m.Material.DiffuseTex)
 
-		gl.ActiveTexture(gl.TEXTURE1 + 1)
+		gl.ActiveTexture(gl.TEXTURE0 + 1)
 		gl.BindTexture(gl.TEXTURE_2D, m.Material.NormalTex)
 
 		gl.BindVertexArray(m.VAO)
