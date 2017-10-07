@@ -128,10 +128,10 @@ func (d *DrawnObject) Draw() {
 
 		gl.DrawArrays(gl.TRIANGLES, 0, m.VertCount)
 
-		// gl.ActiveTexture(gl.TEXTURE0)
-		// gl.BindTexture(gl.TEXTURE_2D, 0)
-		// gl.ActiveTexture(gl.TEXTURE1)
-		// gl.BindTexture(gl.TEXTURE_2D, 0)
+		gl.ActiveTexture(gl.TEXTURE0)
+		gl.BindTexture(gl.TEXTURE_2D, 0)
+		gl.ActiveTexture(gl.TEXTURE1)
+		gl.BindTexture(gl.TEXTURE_2D, 0)
 	}
 
 }
