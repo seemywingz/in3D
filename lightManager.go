@@ -33,7 +33,7 @@ type Light struct {
 func NewLightManager() *LightManager {
 	lightManager = &LightManager{
 		[]*Light{},
-		Shader["phong"],
+		Shader["normalMap"],
 	}
 	return lightManager
 }

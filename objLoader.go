@@ -60,7 +60,7 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 		}
 		vao = append(vao, normals[f.NormIdx-1]...)
 	}
-	group.VAO = MakeVAO(vao, Shader["phong"])
+	group.VAO = MakeVAO(vao, lightManager.Program)
 	group.VertCount = int32(len(vao))
 }
 
