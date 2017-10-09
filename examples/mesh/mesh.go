@@ -24,20 +24,21 @@ func main() {
 	light.Radius = 100000
 
 	model := "sky"
+	skyShader := in3D.Shader["texture"]
 	in3D.SetRelPath("../assets/models/" + model)
-
-	skymesh := in3D.LoadObject(model + ".obj")
-	sky := in3D.NewMeshObject(in3D.Position{}, skymesh, in3D.Shader["texture"])
+	skymesh := in3D.LoadObject(model+".obj", skyShader)
+	sky := in3D.NewMeshObject(in3D.Position{}, skymesh, skyShader)
 	sky.Scale = 10000
 	objects = append(objects, sky)
 
-	model = "trex"
 	// all models are from: https://www.blendswap.com/
+	model = "buddha"
+	meshShader := in3D.Shader["normalMap"]
 	in3D.SetRelPath("../assets/models/" + model)
-	bmesh := in3D.LoadObject(model + ".obj")
-	buddha := in3D.NewMeshObject(in3D.Position{}, bmesh, in3D.Shader["normalMap"])
+	mesh := in3D.LoadObject(model+".obj", meshShader)
+	buddha := in3D.NewMeshObject(in3D.Position{}, mesh, meshShader)
 	buddha.SceneLogic = func(s *in3D.SceneData) {
-		// s.YRotation++
+		s.YRotation++
 	}
 	objects = append(objects, buddha)
 	// objects = append(objects, in3D.NewPointsObject(in3D.NewPosition(1, 1, -10), in3D.Cube, in3D.NoTexture, []float32{1, 1, 1}, in3D.Shader["normalMap"]))

@@ -49,7 +49,7 @@ type Face struct {
 // 	NoTexture,
 // }
 
-func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32) {
+func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32, program uint32) {
 	var (
 		vao []float32
 		p0  []float32
@@ -83,13 +83,13 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 		vao = append(vao, tangent...)
 	}
 
-	group.VAO = MakeVAO(vao, lightManager.Program)
+	group.VAO = MakeVAO(vao, program)
 	group.VertCount = int32(len(vao))
 }
 
 // LoadObject : opens a wavefront file and parses it into Material Groups
 // TODO: Fix  UV coords, they are upside down...
-func LoadObject(filename string) *Mesh {
+func LoadObject(filename string, program uint32) *Mesh {
 	file, ferr := os.Open(filename)
 	EoE("Error Opening File", ferr)
 	defer file.Close()
@@ -177,7 +177,7 @@ func LoadObject(filename string) *Mesh {
 	}
 
 	for _, g := range materialGroups {
-		buildVAOforMatGroup(g, vertexs, uvs, normals)
+		buildVAOforMatGroup(g, vertexs, uvs, normals, program)
 	}
 
 	return &Mesh{materialGroups}
