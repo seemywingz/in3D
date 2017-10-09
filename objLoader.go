@@ -51,14 +51,19 @@ var defaultMaterial = Material{
 
 func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32) {
 	vao := []float32{}
+	tangetns := []float32{}
 	for _, f := range group.Faces { // use face data to construct GL VAO XYZUVNXNYNZ
 		vao = append(vao, vertexs[f.VertIdx-1]...)
 		if f.UVIdx >= 0 {
 			vao = append(vao, uvs[f.UVIdx-1]...)
+			tangetns = []float32{0, 0, 0}
 		} else {
 			vao = append(vao, []float32{0, 0}...)
+			tangetns = []float32{0, 0, 0}
 		}
 		vao = append(vao, normals[f.NormIdx-1]...)
+		vao = append(vao, tangetns...)
+
 	}
 	group.VAO = MakeVAO(vao, lightManager.Program)
 	group.VertCount = int32(len(vao))
