@@ -73,12 +73,12 @@ func InitFeatures() {
 func InitShaders() {
 	Shader = make(map[string]uint32)
 	SetRelPath("shaders")
-	Shader["basic"] = NewShader("Vect.glsl", "basicFrag.glsl")
-	Shader["color"] = NewShader("Vect.glsl", "colorFrag.glsl")
-	Shader["texture"] = NewShader("Vect.glsl", "textureFrag.glsl")
-	Shader["fixedLight"] = NewShader("Vect.glsl", "fixedLightFrag.glsl")
-	Shader["phong"] = NewShader("Vect.glsl", "blinnPhongFrag.glsl")
-	Shader["normalMap"] = NewShader("normalMapVect.glsl", "normalMapFrag.glsl")
+	Shader["basic"] = NewShader("Vert.glsl", "basicFrag.glsl")
+	Shader["color"] = NewShader("Vert.glsl", "colorFrag.glsl")
+	Shader["texture"] = NewShader("Vert.glsl", "textureFrag.glsl")
+	Shader["fixedLight"] = NewShader("Vert.glsl", "fixedLightFrag.glsl")
+	Shader["phong"] = NewShader("Vert.glsl", "blinnPhongFrag.glsl")
+	Shader["normalMap"] = NewShader("normalMapVert.glsl", "normalMapFrag.glsl")
 }
 
 // MakeVAO initializes and returns a vertex array from the points provided.

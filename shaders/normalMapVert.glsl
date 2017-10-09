@@ -6,6 +6,7 @@ in vec3 vert;
 in vec2 vertTexCoord;
 in vec3 vertNormal;
 in vec3 vertTangent;
+in vec3 vertBitangent;
 
 out vec3 fragPos;
 out vec2 fragTexCoord;
