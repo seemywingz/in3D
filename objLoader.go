@@ -3,6 +3,7 @@ package in3D
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -34,62 +35,63 @@ type Material struct {
 
 // Face :
 type Face struct {
-	VertID int
-	UVID   int
-	NormID int
+	VertID []int
+	UVID   []int
+	NormID []int
 }
 
 func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32, program uint32) {
 	var (
-		vao       []float32
-		vec       []float32
-		uv        []float32
-		normal    []float32
-		tangent   []float32
-		bitangent []float32
+		vao []float32
 	)
 
 	for _, f := range group.Faces { // use face data to construct GL VAO: XYZ UV [3]normal [3]tangent
+		fmt.Println(f)
+		vec0 := vertexs[f.VertID[0]-1]
+		vec1 := vertexs[f.VertID[1]-1]
+		vec2 := vertexs[f.VertID[2]-1]
 
-		vec = vertexs[f.VertID-1]
-		normal = normals[f.NormID-1]
+		normal0 := normals[f.NormID[0]-1]
+		normal1 := normals[f.NormID[1]-1]
+		normal2 := normals[f.NormID[2]-1]
 
-		if f.UVID >= 0 {
-			uv = uvs[f.UVID-1]
-			tangent = []float32{0, 0, 0}
-			bitangent = []float32{0, 0, 0}
-		} else {
-			uv = []float32{0, 0}
+		uv0 := []float32{0, 0}
+		uv1 := []float32{0, 0}
+		uv2 := []float32{0, 0}
+
+		tangent := []float32{0, 0}
+		bitangent := []float32{0, 0}
+
+		if f.UVID[0] >= 0 {
+			uv0 = uvs[f.UVID[0]-1]
+			uv1 = uvs[f.UVID[1]-1]
+			uv2 = uvs[f.UVID[2]-1]
 			tangent = []float32{0, 0, 0}
 			bitangent = []float32{0, 0, 0}
 		}
 
-		vao = append(vao, vec...)
-		vao = append(vao, uv...)
-		vao = append(vao, normal...)
+		// This is UGLY!!
+		vao = append(vao, vec0...)
+		vao = append(vao, uv0...)
+		vao = append(vao, normal0...)
+		vao = append(vao, tangent...)
+		vao = append(vao, bitangent...)
+
+		vao = append(vao, vec1...)
+		vao = append(vao, uv1...)
+		vao = append(vao, normal1...)
+		vao = append(vao, tangent...)
+		vao = append(vao, bitangent...)
+
+		vao = append(vao, vec2...)
+		vao = append(vao, uv2...)
+		vao = append(vao, normal2...)
 		vao = append(vao, tangent...)
 		vao = append(vao, bitangent...)
 	}
 
 	group.VAO = MakeVAO(vao, program)
 	group.VertCount = int32(len(vao))
-
-	// p0 := mgl32.NewVecNFromData(vertexs[f.VertID-1])
-	// i := f.VertID
-	// if i == len(vertexs) {
-	// 	i = 0
-	// }
-	// p1 := mgl32.NewVecNFromData(vertexs[i])
-
-	// edge := p1.Sub(nil, p0)
-	// fmt.Println(edge)
-	// var uv1 []float32
-
-	// i := f.VertID
-	// if i == len(uvs) {
-	// 	i = 0
-	// }
-	// uv1 = uvs[i]
 }
 
 // LoadObject : opens a wavefront file and parses it into Material Groups
@@ -162,22 +164,25 @@ func LoadObject(filename string, program uint32) *Mesh {
 				EoE("unsupported face:"+string(len(fields))+" "+line, errors.New(filename))
 			}
 			var (
-				vi, ui, ni int
-				err        error
+				vi, ui, ni []int
 			)
 			for i := 1; i < 4; i++ {
 				faceStr := strings.Split(fields[i], "/")
-				vi, err = strconv.Atoi(faceStr[0])
+				svi, err := strconv.Atoi(faceStr[0])
+				vi = append(vi, svi)
 				EoE("unsupported face vertex index", err)
-				ni, err = strconv.Atoi(faceStr[2])
+				sni, err := strconv.Atoi(faceStr[2])
+				ni = append(ni, sni)
 				EoE("unsupported face normal index", err)
 				if faceStr[1] == "" {
+					// set negative value as placeholder for .obj with no UV mapping
 					faceStr[1] = "-1"
 				}
-				ui, err = strconv.Atoi(faceStr[1])
+				sui, err := strconv.Atoi(faceStr[1])
+				ui = append(ui, sui)
 				EoE("unsupported face uv index", err)
-				materialGroups[currentGroup].Faces = append(materialGroups[currentGroup].Faces, &Face{vi, ui, ni})
 			}
+			materialGroups[currentGroup].Faces = append(materialGroups[currentGroup].Faces, &Face{vi, ui, ni})
 		}
 	}
 
