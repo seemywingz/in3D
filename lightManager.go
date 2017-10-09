@@ -16,9 +16,9 @@ type LightManager struct {
 // Light : struct to hold light data
 type Light struct {
 	Radius   float32
-	Ambient  [3]float32
-	Difffuse [3]float32
-	Specular [3]float32
+	Ambient  []float32
+	Difffuse []float32
+	Specular []float32
 	LRadID   int32
 	LPosID   int32
 	AmbID    int32
@@ -43,15 +43,15 @@ func NewLight() *Light {
 	return BuildLight(
 		NewPosition(0, 0, 0), // position
 		50,                   // radius
-		[3]float32{0.2, 0.2, 0.2}, // ambiant intensity
-		[3]float32{1, 1, 1},       // diffuse intensity
-		[3]float32{1, 1, 1},       // specular intensity
-		false,                     // draw
+		[]float32{0.2, 0.2, 0.2}, // ambiant intensity
+		[]float32{1, 1, 1},       // diffuse intensity
+		[]float32{1, 1, 1},       // specular intensity
+		false,                    // draw
 	)
 }
 
 // NewColorLight :
-func NewColorLight(amb, dif, spec [3]float32) *Light {
+func NewColorLight(amb, dif, spec []float32) *Light {
 	return BuildLight(
 		NewPosition(0, 0, 0), // position
 		50,                   // radius
@@ -63,7 +63,7 @@ func NewColorLight(amb, dif, spec [3]float32) *Light {
 }
 
 // BuildLight :
-func BuildLight(position Position, radius float32, amb, dif, spec [3]float32, draw bool) *Light {
+func BuildLight(position Position, radius float32, amb, dif, spec []float32, draw bool) *Light {
 	n := len(lightManager.Lights)
 	if n > MaxLights {
 		EoE("Error adding New Light:", errors.New("Max lights reached "+string(MaxLights)))

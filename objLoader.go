@@ -24,9 +24,9 @@ type MaterialGroup struct {
 // Material represents a material
 type Material struct {
 	Name       string
-	Ambient    [3]float32
-	Diffuse    [3]float32
-	Specular   [3]float32
+	Ambient    []float32
+	Diffuse    []float32
+	Specular   []float32
 	Shininess  float32
 	DiffuseTex uint32
 	NormalTex  uint32
@@ -197,9 +197,9 @@ func LoadMaterials(filename string) map[string]*MaterialGroup {
 			currentMat = fields[1]
 			material := &Material{
 				currentMat,
-				[3]float32{0.1, 0.1, 0.1},
-				[3]float32{1, 1, 1},
-				[3]float32{0.8, 0.8, 0.8},
+				[]float32{0.1, 0.1, 0.1},
+				[]float32{1, 1, 1},
+				[]float32{0.8, 0.8, 0.8},
 				1,
 				NoTexture,
 				NoTexture,

@@ -24,7 +24,7 @@ type DrawnObject struct {
 }
 
 // NewPointsObject :
-func NewPointsObject(position Position, points []float32, texture uint32, color [3]float32, program uint32) *DrawnObject {
+func NewPointsObject(position Position, points []float32, texture uint32, color []float32, program uint32) *DrawnObject {
 	vao := MakeVAO(points, program)
 	mat := &Material{
 		"default",
