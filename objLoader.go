@@ -24,9 +24,9 @@ type MaterialGroup struct {
 // Material represents a material
 type Material struct {
 	Name       string
-	Ambient    []float32
-	Diffuse    []float32
-	Specular   []float32
+	Ambient    [3]float32
+	Diffuse    [3]float32
+	Specular   [3]float32
 	Shininess  float32
 	DiffuseTex uint32
 	NormalTex  uint32
@@ -39,32 +39,34 @@ type Face struct {
 	NormIdx int
 }
 
-var defaultMaterial = Material{
-	"default",
-	[]float32{0.1, 0.1, 0.1},
-	[]float32{1, 1, 1},
-	[]float32{0.8, 0.8, 0.8},
-	1,
-	NoTexture,
-	NoTexture,
-}
+// var defaultMaterial = Material{
+// 	"default",
+// 	[]float32{0.1, 0.1, 0.1},
+// 	[]float32{1, 1, 1},
+// 	[]float32{0.8, 0.8, 0.8},
+// 	1,
+// 	NoTexture,
+// 	NoTexture,
+// }
 
 func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32) {
 	vao := []float32{}
-	tangetns := []float32{}
+	tangent := []float32{}
+
 	for _, f := range group.Faces { // use face data to construct GL VAO XYZUVNXNYNZ
 		vao = append(vao, vertexs[f.VertIdx-1]...)
 		if f.UVIdx >= 0 {
 			vao = append(vao, uvs[f.UVIdx-1]...)
-			tangetns = []float32{0, 0, 0}
+
+			tangent = []float32{0, 0, 0}
 		} else {
 			vao = append(vao, []float32{0, 0}...)
-			tangetns = []float32{0, 0, 0}
+			tangent = []float32{0, 0, 0}
 		}
 		vao = append(vao, normals[f.NormIdx-1]...)
-		vao = append(vao, tangetns...)
-
+		vao = append(vao, tangent...)
 	}
+
 	group.VAO = MakeVAO(vao, lightManager.Program)
 	group.VertCount = int32(len(vao))
 }
@@ -195,9 +197,9 @@ func LoadMaterials(filename string) map[string]*MaterialGroup {
 			currentMat = fields[1]
 			material := &Material{
 				currentMat,
-				[]float32{0.1, 0.1, 0.1},
-				[]float32{1, 1, 1},
-				[]float32{0.8, 0.8, 0.8},
+				[3]float32{0.1, 0.1, 0.1},
+				[3]float32{1, 1, 1},
+				[3]float32{0.8, 0.8, 0.8},
 				1,
 				NoTexture,
 				NoTexture,

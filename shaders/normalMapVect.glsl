@@ -10,7 +10,7 @@ in vec3 vertTangent;
 out vec3 fragPos;
 out vec2 fragTexCoord;
 out vec3 fragNoraml;
-out vec3 fragTangent;
+// out vec3 fragTangent;
 
 void main(){
   vec4 fragPos4 = MODEL * vec4(vert, 1.0);

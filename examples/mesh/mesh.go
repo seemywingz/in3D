@@ -16,8 +16,8 @@ func main() {
 	in3D.Enable(in3D.FlyMode, true)
 
 	light := in3D.NewLight()
-	light.Ambient = []float32{0.5, 0.5, 0.5}
-	light.Specular = []float32{10, 10, 10}
+	light.Ambient = [3]float32{0.5, 0.5, 0.5}
+	light.Specular = [3]float32{10, 10, 10}
 	light.Position = in3D.NewPosition(1, 1, 0)
 	light.Draw = true
 	light.DrawnObject.Scale = 0.05
