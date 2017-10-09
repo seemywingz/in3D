@@ -45,12 +45,14 @@ void main() {
 
   vec3 textr = texture(TEXTURE, fragTexCoord).rgb;
   if (textr == vec3(0,0,0)) {
+    // if no texture set white
     textr = vec3(1,1,1);
   }
+
   vec3 normal = texture(NORMAL_MAP, fragTexCoord).rgb;
   normal = normalize(normal * 2.0 - 1.0);   
+
   vec3 N = normalize(fragTBN * normal); 
-  //  N = normalize(fragNoraml);
   vec3 V = normalize(-fragPos);
   
   for(int i=0;i<maxLights;++i) {
