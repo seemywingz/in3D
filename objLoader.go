@@ -39,52 +39,57 @@ type Face struct {
 	NormIdx int
 }
 
-// var defaultMaterial = Material{
-// 	"default",
-// 	[]float32{0.1, 0.1, 0.1},
-// 	[]float32{1, 1, 1},
-// 	[]float32{0.8, 0.8, 0.8},
-// 	1,
-// 	NoTexture,
-// 	NoTexture,
-// }
-
 func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32, program uint32) {
 	var (
-		vao []float32
-		p0  []float32
-		// p1      []float32
-		uv      []float32
-		normal  []float32
-		tangent []float32
+		vao       []float32
+		vec       []float32
+		uv        []float32
+		normal    []float32
+		tangent   []float32
+		bitangent []float32
 	)
 
-	for _, f := range group.Faces { // use face data to construct GL VAO XYZUVNXNYNZ
-		p0 = vertexs[f.VertIdx-1]
-		i := f.VertIdx
-		if i == len(vertexs) {
-			i = 0
-		}
-		// p1 = vertexs[i]
+	for _, f := range group.Faces { // use face data to construct GL VAO XYZ UV [3]normal [3]tangent
+
+		vec = vertexs[f.VertIdx-1]
 		normal = normals[f.NormIdx-1]
-		// fmt.Println(p1)
 
 		if f.UVIdx >= 0 {
 			uv = uvs[f.UVIdx-1]
 			tangent = []float32{0, 0, 0}
+			bitangent = []float32{0, 0, 0}
 		} else {
 			uv = []float32{0, 0}
 			tangent = []float32{0, 0, 0}
+			bitangent = []float32{0, 0, 0}
 		}
 
-		vao = append(vao, p0...)
+		vao = append(vao, vec...)
 		vao = append(vao, uv...)
 		vao = append(vao, normal...)
 		vao = append(vao, tangent...)
+		vao = append(vao, bitangent...)
 	}
 
 	group.VAO = MakeVAO(vao, program)
 	group.VertCount = int32(len(vao))
+
+	// p0 := mgl32.NewVecNFromData(vertexs[f.VertIdx-1])
+	// i := f.VertIdx
+	// if i == len(vertexs) {
+	// 	i = 0
+	// }
+	// p1 := mgl32.NewVecNFromData(vertexs[i])
+
+	// edge := p1.Sub(nil, p0)
+	// fmt.Println(edge)
+	// var uv1 []float32
+
+	// i := f.VertIdx
+	// if i == len(uvs) {
+	// 	i = 0
+	// }
+	// uv1 = uvs[i]
 }
 
 // LoadObject : opens a wavefront file and parses it into Material Groups

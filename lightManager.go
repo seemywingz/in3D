@@ -18,11 +18,6 @@ type Light struct {
 	Ambient  []float32
 	Difffuse []float32
 	Specular []float32
-	// LRadID   int32
-	// LPosID   int32
-	// AmbID    int32
-	// DifID    int32
-	// SpecID   int32
 	SceneData
 	Draw        bool
 	DrawnObject *DrawnObject
@@ -67,12 +62,6 @@ func BuildLight(position Position, radius float32, amb, dif, spec []float32, dra
 		EoE("Error adding New Light:", errors.New("Max lights reached "+string(MaxLights)))
 	}
 	fmt.Println("Adding Light:", n)
-	// uniform := fmt.Sprintf("Light[%v]", n)
-	// LRadID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightRad\x00"))
-	// LPosID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightPos\x00"))
-	// ambID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Iamb\x00"))
-	// difID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Idif\x00"))
-	// specID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
 
 	drawnObject := NewPointsObject(position, Cube, NoTexture, dif, Shader["color"])
 
@@ -81,11 +70,6 @@ func BuildLight(position Position, radius float32, amb, dif, spec []float32, dra
 		amb,
 		dif,
 		spec,
-		// LRadID,
-		// LPosID,
-		// ambID,
-		// difID,
-		// specID,
 		SceneData{},
 		draw,
 		drawnObject,

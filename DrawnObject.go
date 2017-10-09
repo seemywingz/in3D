@@ -60,7 +60,7 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 	ShininessID := gl.GetUniformLocation(program, gl.Str(uniform+".shininess\x00"))
 	TextureID := gl.GetUniformLocation(program, gl.Str("TEXTURE\x00"))
 	NoramalMapID := gl.GetUniformLocation(program, gl.Str("NORMAL_MAP\x00"))
-	println(TextureID, NoramalMapID)
+	// println(TextureID, NoramalMapID)
 
 	d := &DrawnObject{
 		mesh,
