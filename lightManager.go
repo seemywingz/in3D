@@ -9,8 +9,7 @@ import (
 
 // LightManager :
 type LightManager struct {
-	Lights  []*Light
-	Program uint32
+	Lights []*Light
 }
 
 // Light : struct to hold light data
@@ -19,11 +18,6 @@ type Light struct {
 	Ambient  []float32
 	Difffuse []float32
 	Specular []float32
-	LRadID   int32
-	LPosID   int32
-	AmbID    int32
-	DifID    int32
-	SpecID   int32
 	SceneData
 	Draw        bool
 	DrawnObject *DrawnObject
@@ -33,7 +27,6 @@ type Light struct {
 func NewLightManager() *LightManager {
 	lightManager = &LightManager{
 		[]*Light{},
-		Shader["phong"],
 	}
 	return lightManager
 }
@@ -69,12 +62,6 @@ func BuildLight(position Position, radius float32, amb, dif, spec []float32, dra
 		EoE("Error adding New Light:", errors.New("Max lights reached "+string(MaxLights)))
 	}
 	fmt.Println("Adding Light:", n)
-	uniform := fmt.Sprintf("Light[%v]", n)
-	LRadID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightRad\x00"))
-	LPosID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".lightPos\x00"))
-	ambID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Iamb\x00"))
-	difID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Idif\x00"))
-	specID := gl.GetUniformLocation(lightManager.Program, gl.Str(uniform+".Ispec\x00"))
 
 	drawnObject := NewPointsObject(position, Cube, NoTexture, dif, Shader["color"])
 
@@ -83,11 +70,6 @@ func BuildLight(position Position, radius float32, amb, dif, spec []float32, dra
 		amb,
 		dif,
 		spec,
-		LRadID,
-		LPosID,
-		ambID,
-		difID,
-		specID,
 		SceneData{},
 		draw,
 		drawnObject,
@@ -100,7 +82,7 @@ func BuildLight(position Position, radius float32, amb, dif, spec []float32, dra
 // Update :
 func (manager *LightManager) Update() {
 
-	for _, light := range manager.Lights {
+	for n, light := range manager.Lights {
 		if light.SceneLogic != nil {
 			light.SceneLogic(&light.SceneData)
 		}
@@ -112,11 +94,21 @@ func (manager *LightManager) Update() {
 			}
 			light.DrawnObject.Draw()
 		}
-		gl.UseProgram(manager.Program)
-		gl.Uniform1f(light.LRadID, light.Radius)
-		gl.Uniform3fv(light.LPosID, 1, &[]float32{light.X, light.Y, light.Z}[0])
-		gl.Uniform3fv(light.AmbID, 1, &light.Ambient[0])
-		gl.Uniform3fv(light.DifID, 1, &light.Difffuse[0])
-		gl.Uniform3fv(light.SpecID, 1, &light.Specular[0])
+		for _, program := range Shader {
+
+			uniform := fmt.Sprintf("Light[%v]", n)
+			LRadID := gl.GetUniformLocation(program, gl.Str(uniform+".lightRad\x00"))
+			LPosID := gl.GetUniformLocation(program, gl.Str(uniform+".lightPos\x00"))
+			AmbID := gl.GetUniformLocation(program, gl.Str(uniform+".Iamb\x00"))
+			DifID := gl.GetUniformLocation(program, gl.Str(uniform+".Idif\x00"))
+			SpecID := gl.GetUniformLocation(program, gl.Str(uniform+".Ispec\x00"))
+
+			gl.UseProgram(program)
+			gl.Uniform1f(LRadID, light.Radius)
+			gl.Uniform3fv(LPosID, 1, &[]float32{light.X, light.Y, light.Z}[0])
+			gl.Uniform3fv(AmbID, 1, &light.Ambient[0])
+			gl.Uniform3fv(DifID, 1, &light.Difffuse[0])
+			gl.Uniform3fv(SpecID, 1, &light.Specular[0])
+		}
 	}
 }

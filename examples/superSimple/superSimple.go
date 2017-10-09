@@ -12,8 +12,8 @@ func main() {
 
 	in3D.SetRelPath("../assets/textures")
 	texture := in3D.NewTexture("seemywingz.jpg")
-
 	color := []float32{1, 1, 1}
+
 	obj := in3D.NewPointsObject(
 		in3D.NewPosition(0, 0, -7),
 		in3D.Cube,

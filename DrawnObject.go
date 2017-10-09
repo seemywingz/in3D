@@ -17,6 +17,8 @@ type DrawnObject struct {
 	IdifID         int32
 	IspecID        int32
 	ShininessID    int32
+	TextureID      int32
+	NormalMapID    int32
 	Scale          float32
 	SceneData
 }
@@ -31,6 +33,7 @@ func NewPointsObject(position Position, points []float32, texture uint32, color 
 		color,
 		1,
 		texture,
+		NoTexture,
 	}
 	mg := make(map[string]*MaterialGroup)
 	mg["dfault"] = &MaterialGroup{
@@ -55,6 +58,9 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 	IdifID := gl.GetUniformLocation(program, gl.Str(uniform+".Idif\x00"))
 	IspecID := gl.GetUniformLocation(program, gl.Str(uniform+".Ispec\x00"))
 	ShininessID := gl.GetUniformLocation(program, gl.Str(uniform+".shininess\x00"))
+	TextureID := gl.GetUniformLocation(program, gl.Str("TEXTURE\x00"))
+	NoramalMapID := gl.GetUniformLocation(program, gl.Str("NORMAL_MAP\x00"))
+	// println(TextureID, NoramalMapID)
 
 	d := &DrawnObject{
 		mesh,
@@ -65,6 +71,8 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 		IdifID,
 		IspecID,
 		ShininessID,
+		TextureID,
+		NoramalMapID,
 		1,
 		SceneData{},
 	}
@@ -99,6 +107,8 @@ func (d *DrawnObject) Draw() {
 	gl.UniformMatrix4fv(d.NormalMatrixID, 1, false, &normalMatrix[0])
 
 	for _, m := range d.Mesh.MaterialGroups {
+		gl.UseProgram(d.Program)
+		gl.BindVertexArray(m.VAO)
 
 		// Material
 		gl.Uniform3fv(d.IambID, 1, &m.Material.Ambient[0])
@@ -106,11 +116,21 @@ func (d *DrawnObject) Draw() {
 		gl.Uniform3fv(d.IdifID, 1, &m.Material.Diffuse[0])
 		gl.Uniform1f(d.ShininessID, m.Material.Shininess)
 
-		gl.BindVertexArray(m.VAO)
-		gl.Enable(gl.TEXTURE_2D)
-		gl.BindTexture(gl.TEXTURE_2D, m.Material.Texture)
+		gl.Uniform1i(d.TextureID, 0)
+		gl.Uniform1i(d.NormalMapID, 1)
+
+		// Bind our diffuse texture in Texture Unit 0
+		gl.ActiveTexture(gl.TEXTURE0)
+		gl.BindTexture(gl.TEXTURE_2D, m.Material.DiffuseTex)
+
+		gl.ActiveTexture(gl.TEXTURE1)
+		gl.BindTexture(gl.TEXTURE_2D, m.Material.NormalTex)
 
 		gl.DrawArrays(gl.TRIANGLES, 0, m.VertCount)
+
+		gl.ActiveTexture(gl.TEXTURE0)
+		gl.BindTexture(gl.TEXTURE_2D, 0)
+		gl.ActiveTexture(gl.TEXTURE1)
 		gl.BindTexture(gl.TEXTURE_2D, 0)
 	}
 

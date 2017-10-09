@@ -6,6 +6,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/go-gl/mathgl/mgl32"
 )
 
 // Mesh :
@@ -23,48 +25,89 @@ type MaterialGroup struct {
 
 // Material represents a material
 type Material struct {
-	Name      string
-	Ambient   []float32
-	Diffuse   []float32
-	Specular  []float32
-	Shininess float32
-	Texture   uint32
+	Name       string
+	Ambient    []float32
+	Diffuse    []float32
+	Specular   []float32
+	Shininess  float32
+	DiffuseTex uint32
+	NormalTex  uint32
 }
 
 // Face :
 type Face struct {
-	VertIdx int
-	UVIdx   int
-	NormIdx int
+	VertID []int
+	UVID   []int
+	NormID []int
 }
 
-var defaultMaterial = &Material{
-	"default",
-	[]float32{0.1, 0.1, 0.1},
-	[]float32{1, 1, 1},
-	[]float32{0.8, 0.8, 0.8},
-	1,
-	NoTexture,
-}
+func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32, program uint32) {
+	var (
+		vao []float32
+	)
 
-func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32) {
-	vao := []float32{}
-	for _, f := range group.Faces { // use face data to construct GL VAO XYZUVNXNYNZ
-		vao = append(vao, vertexs[f.VertIdx-1]...)
-		if f.UVIdx >= 0 {
-			vao = append(vao, uvs[f.UVIdx-1]...)
-		} else {
-			vao = append(vao, []float32{0, 0}...)
+	for _, f := range group.Faces { // use face data to construct GL VAO: XYZ UV [3]normal [3]tangent
+		// This is UGLY!!
+		vec0 := mgl32.NewVecNFromData(vertexs[f.VertID[0]-1])
+		vec1 := mgl32.NewVecNFromData(vertexs[f.VertID[1]-1])
+		vec2 := mgl32.NewVecNFromData(vertexs[f.VertID[2]-1])
+
+		normal0 := normals[f.NormID[0]-1]
+		normal1 := normals[f.NormID[1]-1]
+		normal2 := normals[f.NormID[2]-1]
+
+		uv0 := mgl32.NewVecNFromData([]float32{0, 0})
+		uv1 := mgl32.NewVecNFromData([]float32{0, 0})
+		uv2 := mgl32.NewVecNFromData([]float32{0, 0})
+
+		tangent := mgl32.NewVecNFromData([]float32{0, 0, 0})
+
+		if f.UVID[0] >= 0 {
+			// if we have UV mappings, calculate tangentent and bitangent for normal map
+			uv0 = mgl32.NewVecNFromData(uvs[f.UVID[0]-1])
+			uv1 = mgl32.NewVecNFromData(uvs[f.UVID[1]-1])
+			uv2 = mgl32.NewVecNFromData(uvs[f.UVID[2]-1])
+
+			e1 := vec1.Sub(nil, vec0)
+			e2 := vec2.Sub(nil, vec0)
+
+			dUV1 := uv1.Sub(nil, uv0)
+			dUV2 := uv2.Sub(nil, uv0)
+			x, y, z := 0, 1, 2
+			f := 1.0 / (dUV1.Get(x)*dUV2.Get(y) - dUV2.Get(x)*dUV1.Get(y))
+			// print(f)
+
+			tangent.Set(x, f*(dUV2.Get(y)*e1.Get(x)-dUV1.Get(y)*e2.Get(x)))
+			tangent.Set(y, f*(dUV2.Get(y)*e1.Get(y)-dUV1.Get(y)*e2.Get(y)))
+			tangent.Set(z, f*(dUV2.Get(y)*e1.Get(z)-dUV1.Get(y)*e2.Get(z)))
+			tangent = tangent.Normalize(nil)
+			// println(tangent)
 		}
-		vao = append(vao, normals[f.NormIdx-1]...)
+
+		// This is UGLY!!
+		vao = append(vao, vec0.Raw()...)
+		vao = append(vao, uv0.Raw()...)
+		vao = append(vao, normal0...)
+		vao = append(vao, tangent.Raw()...)
+
+		vao = append(vao, vec1.Raw()...)
+		vao = append(vao, uv1.Raw()...)
+		vao = append(vao, normal1...)
+		vao = append(vao, tangent.Raw()...)
+
+		vao = append(vao, vec2.Raw()...)
+		vao = append(vao, uv2.Raw()...)
+		vao = append(vao, normal2...)
+		vao = append(vao, tangent.Raw()...)
 	}
-	group.VAO = MakeVAO(vao, Shader["phong"])
+
+	group.VAO = MakeVAO(vao, program)
 	group.VertCount = int32(len(vao))
 }
 
 // LoadObject : opens a wavefront file and parses it into Material Groups
 // TODO: Fix  UV coords, they are upside down...
-func LoadObject(filename string) *Mesh {
+func LoadObject(filename string, program uint32) *Mesh {
 	file, ferr := os.Open(filename)
 	EoE("Error Opening File", ferr)
 	defer file.Close()
@@ -132,27 +175,30 @@ func LoadObject(filename string) *Mesh {
 				EoE("unsupported face:"+string(len(fields))+" "+line, errors.New(filename))
 			}
 			var (
-				vi, ui, ni int
-				err        error
+				vi, ui, ni []int
 			)
 			for i := 1; i < 4; i++ {
 				faceStr := strings.Split(fields[i], "/")
-				vi, err = strconv.Atoi(faceStr[0])
+				svi, err := strconv.Atoi(faceStr[0])
+				vi = append(vi, svi)
 				EoE("unsupported face vertex index", err)
-				ni, err = strconv.Atoi(faceStr[2])
+				sni, err := strconv.Atoi(faceStr[2])
+				ni = append(ni, sni)
 				EoE("unsupported face normal index", err)
 				if faceStr[1] == "" {
+					// set negative value as placeholder for .obj with no UV mapping
 					faceStr[1] = "-1"
 				}
-				ui, err = strconv.Atoi(faceStr[1])
+				sui, err := strconv.Atoi(faceStr[1])
+				ui = append(ui, sui)
 				EoE("unsupported face uv index", err)
-				materialGroups[currentGroup].Faces = append(materialGroups[currentGroup].Faces, &Face{vi, ui, ni})
 			}
+			materialGroups[currentGroup].Faces = append(materialGroups[currentGroup].Faces, &Face{vi, ui, ni})
 		}
 	}
 
 	for _, g := range materialGroups {
-		buildVAOforMatGroup(g, vertexs, uvs, normals)
+		buildVAOforMatGroup(g, vertexs, uvs, normals, program)
 	}
 
 	return &Mesh{materialGroups}
@@ -192,6 +238,7 @@ func LoadMaterials(filename string) map[string]*MaterialGroup {
 				[]float32{1, 1, 1},
 				[]float32{0.8, 0.8, 0.8},
 				1,
+				NoTexture,
 				NoTexture,
 			}
 			materialGroups[currentMat] = &MaterialGroup{}
@@ -243,9 +290,13 @@ func LoadMaterials(filename string) map[string]*MaterialGroup {
 			EoE("Error parsing float", err)
 			materialGroups[currentMat].Material.Shininess = float32(f)
 		case "map_Kd":
-			textureFile := fields[1]
-			texture := NewTexture(textureFile)
-			materialGroups[currentMat].Material.Texture = texture
+			DiffuseTexFile := fields[1]
+			DiffuseTex := NewTexture(DiffuseTexFile)
+			materialGroups[currentMat].Material.DiffuseTex = DiffuseTex
+		case "map_Bump":
+			NormalTexFile := fields[1]
+			NormalTex := NewTexture(NormalTexFile)
+			materialGroups[currentMat].Material.NormalTex = NormalTex
 		}
 	}
 

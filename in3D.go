@@ -73,11 +73,12 @@ func InitFeatures() {
 func InitShaders() {
 	Shader = make(map[string]uint32)
 	SetRelPath("shaders")
-	Shader["basic"] = NewShader("Vect.glsl", "basicFrag.glsl")
-	Shader["color"] = NewShader("Vect.glsl", "colorFrag.glsl")
-	Shader["texture"] = NewShader("Vect.glsl", "textureFrag.glsl")
-	Shader["fixedLight"] = NewShader("Vect.glsl", "fixedLightFrag.glsl")
-	Shader["phong"] = NewShader("Vect.glsl", "blinnPhongFrag.glsl")
+	Shader["basic"] = NewShader("Vert.glsl", "basicFrag.glsl")
+	Shader["color"] = NewShader("Vert.glsl", "colorFrag.glsl")
+	Shader["texture"] = NewShader("Vert.glsl", "textureFrag.glsl")
+	Shader["fixedLight"] = NewShader("Vert.glsl", "fixedLightFrag.glsl")
+	Shader["phong"] = NewShader("Vert.glsl", "blinnPhongFrag.glsl")
+	Shader["normalMap"] = NewShader("normalMapVert.glsl", "normalMapFrag.glsl")
 }
 
 // MakeVAO initializes and returns a vertex array from the points provided.
@@ -94,15 +95,19 @@ func MakeVAO(points []float32, program uint32) uint32 {
 
 	vertAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vert\x00")))
 	gl.EnableVertexAttribArray(vertAttrib)
-	gl.VertexAttribPointer(vertAttrib, 3, gl.FLOAT, false, 8*4, gl.PtrOffset(0))
+	gl.VertexAttribPointer(vertAttrib, 3, gl.FLOAT, false, 11*4, gl.PtrOffset(0))
 
-	texCoordAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertTexCoord\x00")))
-	gl.EnableVertexAttribArray(texCoordAttrib)
-	gl.VertexAttribPointer(texCoordAttrib, 2, gl.FLOAT, false, 8*4, gl.PtrOffset(3*4))
+	vertTexCoordAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertTexCoord\x00")))
+	gl.EnableVertexAttribArray(vertTexCoordAttrib)
+	gl.VertexAttribPointer(vertTexCoordAttrib, 2, gl.FLOAT, false, 11*4, gl.PtrOffset(3*4))
 
 	vertNormalAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertNormal\x00")))
 	gl.EnableVertexAttribArray(vertNormalAttrib)
-	gl.VertexAttribPointer(vertNormalAttrib, 3, gl.FLOAT, true, 8*4, gl.PtrOffset(5*4))
+	gl.VertexAttribPointer(vertNormalAttrib, 3, gl.FLOAT, true, 11*4, gl.PtrOffset(5*4))
+
+	vertTangentAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertTangent\x00")))
+	gl.EnableVertexAttribArray(vertTangentAttrib)
+	gl.VertexAttribPointer(vertTangentAttrib, 3, gl.FLOAT, true, 11*4, gl.PtrOffset(8*4))
 
 	return vao
 }
@@ -198,6 +203,11 @@ func GetWindow() *glfw.Window {
 // SetCameraPosition :
 func SetCameraPosition(position Position) {
 	camera.Position = position
+}
+
+// SetCameraSpeed :
+func SetCameraSpeed(speed float32) {
+	camera.Speed = speed
 }
 
 // SetClearColor :
