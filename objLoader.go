@@ -3,10 +3,11 @@ package in3D
 import (
 	"bufio"
 	"errors"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/go-gl/mathgl/mgl32"
 )
 
 // Mesh :
@@ -46,48 +47,66 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 	)
 
 	for _, f := range group.Faces { // use face data to construct GL VAO: XYZ UV [3]normal [3]tangent
-		fmt.Println(f)
-		vec0 := vertexs[f.VertID[0]-1]
-		vec1 := vertexs[f.VertID[1]-1]
-		vec2 := vertexs[f.VertID[2]-1]
+		vec0 := mgl32.NewVecNFromData(vertexs[f.VertID[0]-1])
+		vec1 := mgl32.NewVecNFromData(vertexs[f.VertID[1]-1])
+		vec2 := mgl32.NewVecNFromData(vertexs[f.VertID[2]-1])
 
 		normal0 := normals[f.NormID[0]-1]
 		normal1 := normals[f.NormID[1]-1]
 		normal2 := normals[f.NormID[2]-1]
 
-		uv0 := []float32{0, 0}
-		uv1 := []float32{0, 0}
-		uv2 := []float32{0, 0}
+		uv0 := mgl32.NewVecNFromData([]float32{0, 0})
+		uv1 := mgl32.NewVecNFromData([]float32{0, 0})
+		uv2 := mgl32.NewVecNFromData([]float32{0, 0})
 
-		tangent := []float32{0, 0}
-		bitangent := []float32{0, 0}
+		tangent := mgl32.NewVecNFromData([]float32{0, 0, 0})
+		bitangent := mgl32.NewVecNFromData([]float32{0, 0, 0})
 
 		if f.UVID[0] >= 0 {
-			uv0 = uvs[f.UVID[0]-1]
-			uv1 = uvs[f.UVID[1]-1]
-			uv2 = uvs[f.UVID[2]-1]
-			tangent = []float32{0, 0, 0}
-			bitangent = []float32{0, 0, 0}
+			// if we have UV mappings, calculate tangentent and bitangent for normal map
+			uv0 = mgl32.NewVecNFromData(uvs[f.UVID[0]-1])
+			uv1 = mgl32.NewVecNFromData(uvs[f.UVID[1]-1])
+			uv2 = mgl32.NewVecNFromData(uvs[f.UVID[2]-1])
+
+			e1 := vec1.Sub(nil, vec0)
+			e2 := vec2.Sub(nil, vec0)
+
+			dUV1 := uv1.Sub(nil, uv0)
+			dUV2 := uv2.Sub(nil, uv0)
+			x, y, z := 0, 1, 2
+			f := 1.0 / (dUV1.Get(x)*dUV2.Get(y) - dUV2.Get(x)*dUV1.Get(y))
+			// print(f)
+
+			tangent.Set(x, f*(dUV2.Get(y)*e1.Get(x)-dUV1.Get(y)*e2.Get(x)))
+			tangent.Set(y, f*(dUV2.Get(y)*e1.Get(y)-dUV1.Get(y)*e2.Get(y)))
+			tangent.Set(z, f*(dUV2.Get(y)*e1.Get(z)-dUV1.Get(y)*e2.Get(z)))
+			tangent = tangent.Normalize(nil)
+			// println(tangent)
+
+			bitangent.Set(x, f*(-dUV2.Get(x)*e1.Get(x)+dUV1.Get(x)*e2.Get(x)))
+			bitangent.Set(y, f*(-dUV2.Get(x)*e1.Get(y)+dUV1.Get(x)*e2.Get(y)))
+			bitangent.Set(z, f*(-dUV2.Get(x)*e1.Get(z)+dUV1.Get(x)*e2.Get(z)))
+			bitangent = bitangent.Normalize(nil)
 		}
 
 		// This is UGLY!!
-		vao = append(vao, vec0...)
-		vao = append(vao, uv0...)
+		vao = append(vao, vec0.Raw()...)
+		vao = append(vao, uv0.Raw()...)
 		vao = append(vao, normal0...)
-		vao = append(vao, tangent...)
-		vao = append(vao, bitangent...)
+		vao = append(vao, tangent.Raw()...)
+		vao = append(vao, bitangent.Raw()...)
 
-		vao = append(vao, vec1...)
-		vao = append(vao, uv1...)
+		vao = append(vao, vec1.Raw()...)
+		vao = append(vao, uv1.Raw()...)
 		vao = append(vao, normal1...)
-		vao = append(vao, tangent...)
-		vao = append(vao, bitangent...)
+		vao = append(vao, tangent.Raw()...)
+		vao = append(vao, bitangent.Raw()...)
 
-		vao = append(vao, vec2...)
-		vao = append(vao, uv2...)
+		vao = append(vao, vec2.Raw()...)
+		vao = append(vao, uv2.Raw()...)
 		vao = append(vao, normal2...)
-		vao = append(vao, tangent...)
-		vao = append(vao, bitangent...)
+		vao = append(vao, tangent.Raw()...)
+		vao = append(vao, bitangent.Raw()...)
 	}
 
 	group.VAO = MakeVAO(vao, program)
