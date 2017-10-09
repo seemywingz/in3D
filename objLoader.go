@@ -282,13 +282,13 @@ func LoadMaterials(filename string) map[string]*MaterialGroup {
 			f, err := strconv.ParseFloat(fields[1], 32)
 			EoE("Error parsing float", err)
 			materialGroups[currentMat].Material.Shininess = float32(f / 1000 * 128)
-		case "d":
-			if len(fields) != 2 {
-				EoE("Error d Parse", errors.New(filename))
-			}
-			f, err := strconv.ParseFloat(fields[1], 32)
-			EoE("Error parsing float", err)
-			materialGroups[currentMat].Material.Shininess = float32(f)
+		// case "d":
+		// 	if len(fields) != 2 {
+		// 		EoE("Error d Parse", errors.New(filename))
+		// 	}
+		// 	f, err := strconv.ParseFloat(fields[1], 32)
+		// 	EoE("Error parsing float", err)
+		// 	materialGroups[currentMat].Material.Shininess = float32(f)
 		case "map_Kd":
 			DiffuseTexFile := fields[1]
 			DiffuseTex := NewTexture(DiffuseTexFile)
