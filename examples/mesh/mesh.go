@@ -18,10 +18,10 @@ func main() {
 	light := in3D.NewLight()
 	light.Ambient = []float32{0.5, 0.5, 0.5}
 	light.Specular = []float32{10, 10, 10}
-	light.Position = in3D.NewPosition(100, 1, 0)
+	light.Position = in3D.NewPosition(1, 1, 0)
 	light.Draw = true
 	light.DrawnObject.Scale = 0.05
-	light.Radius = 100000
+	light.Radius = 10
 
 	model := "sky"
 	skyShader := in3D.Shader["texture"]
@@ -38,7 +38,7 @@ func main() {
 	mesh := in3D.LoadObject(model+".obj", meshShader)
 	buddha := in3D.NewMeshObject(in3D.Position{}, mesh, meshShader)
 	buddha.SceneLogic = func(s *in3D.SceneData) {
-		s.YRotation++
+		s.YRotation += 0.1
 	}
 	objects = append(objects, buddha)
 	// objects = append(objects, in3D.NewPointsObject(in3D.NewPosition(1, 1, -10), in3D.Cube, in3D.NoTexture, []float32{1, 1, 1}, in3D.Shader["normalMap"]))
