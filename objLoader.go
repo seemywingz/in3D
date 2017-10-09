@@ -34,9 +34,9 @@ type Material struct {
 
 // Face :
 type Face struct {
-	VertIdx int
-	UVIdx   int
-	NormIdx int
+	VertID int
+	UVID   int
+	NormID int
 }
 
 func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32, program uint32) {
@@ -49,13 +49,13 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 		bitangent []float32
 	)
 
-	for _, f := range group.Faces { // use face data to construct GL VAO XYZ UV [3]normal [3]tangent
+	for _, f := range group.Faces { // use face data to construct GL VAO: XYZ UV [3]normal [3]tangent
 
-		vec = vertexs[f.VertIdx-1]
-		normal = normals[f.NormIdx-1]
+		vec = vertexs[f.VertID-1]
+		normal = normals[f.NormID-1]
 
-		if f.UVIdx >= 0 {
-			uv = uvs[f.UVIdx-1]
+		if f.UVID >= 0 {
+			uv = uvs[f.UVID-1]
 			tangent = []float32{0, 0, 0}
 			bitangent = []float32{0, 0, 0}
 		} else {
@@ -74,8 +74,8 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 	group.VAO = MakeVAO(vao, program)
 	group.VertCount = int32(len(vao))
 
-	// p0 := mgl32.NewVecNFromData(vertexs[f.VertIdx-1])
-	// i := f.VertIdx
+	// p0 := mgl32.NewVecNFromData(vertexs[f.VertID-1])
+	// i := f.VertID
 	// if i == len(vertexs) {
 	// 	i = 0
 	// }
@@ -85,7 +85,7 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 	// fmt.Println(edge)
 	// var uv1 []float32
 
-	// i := f.VertIdx
+	// i := f.VertID
 	// if i == len(uvs) {
 	// 	i = 0
 	// }
