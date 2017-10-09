@@ -18,10 +18,10 @@ func main() {
 	light := in3D.NewLight()
 	light.Ambient = []float32{0.5, 0.5, 0.5}
 	light.Specular = []float32{10, 10, 10}
-	light.Position = in3D.NewPosition(1, 1, 0)
+	light.Position = in3D.NewPosition(100, 1, 0)
 	light.Draw = true
 	light.DrawnObject.Scale = 0.05
-	light.Radius = 100
+	light.Radius = 100000
 
 	model := "sky"
 	in3D.SetRelPath("../assets/models/" + model)
@@ -31,7 +31,7 @@ func main() {
 	sky.Scale = 10000
 	objects = append(objects, sky)
 
-	model = "buddha"
+	model = "trex"
 	// all models are from: https://www.blendswap.com/
 	in3D.SetRelPath("../assets/models/" + model)
 	bmesh := in3D.LoadObject(model + ".obj")

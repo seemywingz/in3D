@@ -43,9 +43,12 @@ float dinstance(vec3 p0, vec3 p1){
 void main() {
 
   vec3 textr = texture(TEXTURE, fragTexCoord).rgb;
+  if (textr == vec3(0,0,0)) {
+    textr = vec3(1,1,1);
+  }
   vec3 normalMap =  texture(NORMAL_MAP, fragTexCoord).rgb; 
-  vec3 N = normalize(normalMap  * 2.0 - 1.0);
-  // vec3 N = normalize(fragNoraml);
+  // vec3 N = normalize(normalMap  * 2.0 - 1.0);
+  vec3 N = normalize(fragNoraml);
   vec3 V = normalize(-fragPos);
   
   for(int i=0;i<maxLights;++i) {

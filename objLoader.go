@@ -50,20 +50,36 @@ type Face struct {
 // }
 
 func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32) {
-	vao := []float32{}
-	tangent := []float32{}
+	var (
+		vao []float32
+		p0  []float32
+		// p1      []float32
+		uv      []float32
+		normal  []float32
+		tangent []float32
+	)
 
 	for _, f := range group.Faces { // use face data to construct GL VAO XYZUVNXNYNZ
-		vao = append(vao, vertexs[f.VertIdx-1]...)
-		if f.UVIdx >= 0 {
-			vao = append(vao, uvs[f.UVIdx-1]...)
+		p0 = vertexs[f.VertIdx-1]
+		i := f.VertIdx
+		if i == len(vertexs) {
+			i = 0
+		}
+		// p1 = vertexs[i]
+		normal = normals[f.NormIdx-1]
+		// fmt.Println(p1)
 
+		if f.UVIdx >= 0 {
+			uv = uvs[f.UVIdx-1]
 			tangent = []float32{0, 0, 0}
 		} else {
-			vao = append(vao, []float32{0, 0}...)
+			uv = []float32{0, 0}
 			tangent = []float32{0, 0, 0}
 		}
-		vao = append(vao, normals[f.NormIdx-1]...)
+
+		vao = append(vao, p0...)
+		vao = append(vao, uv...)
+		vao = append(vao, normal...)
 		vao = append(vao, tangent...)
 	}
 
