@@ -9,16 +9,16 @@ func main() {
 	var objects []*in3D.DrawnObject
 
 	in3D.Init(800, 600, "Wavefront Loader")
-	in3D.SetClearColor(0.1, 0.1, 0.1, 1)
+	// in3D.SetClearColor(0.1, 0.1, 0.1, 1)
 	in3D.SetCameraPosition(in3D.NewPosition(0, 0.55, 2))
-	in3D.SetCameraSpeed(0.1)
+	in3D.SetCameraSpeed(0.01)
 	in3D.Enable(in3D.PointerLock, true)
 	in3D.Enable(in3D.FlyMode, true)
 
 	light := in3D.NewLight()
+	light.Position = in3D.NewPosition(0, 1, 1)
 	light.Ambient = []float32{0.5, 0.5, 0.5}
 	light.Specular = []float32{10, 10, 10}
-	light.Position = in3D.NewPosition(0, 1, 1)
 	light.Draw = true
 	light.Radius = 10
 
@@ -32,21 +32,21 @@ func main() {
 
 	// all models are from: https://www.blendswap.com/
 	model = "buddha"
-	meshShader := in3D.Shader["normalMap"]
+	meshShader := in3D.Shader["phong"]
 	in3D.SetRelPath("../assets/models/" + model)
 	mesh := in3D.LoadObject(model+".obj", meshShader)
 	buddha := in3D.NewMeshObject(in3D.NewPosition(-0.5, 0, 0), mesh, meshShader)
 	buddha.SceneLogic = func(s *in3D.SceneData) {
-		s.YRotation += 0.1
+		s.YRotation += 0.5
 	}
 	objects = append(objects, buddha)
 
 	model = "buddha"
-	meshShader = in3D.Shader["phong"]
+	meshShader = in3D.Shader["normalMap"]
 	mesh = in3D.LoadObject(model+".obj", meshShader)
 	buddha = in3D.NewMeshObject(in3D.NewPosition(0.5, 0, 0), mesh, meshShader)
 	buddha.SceneLogic = func(s *in3D.SceneData) {
-		s.YRotation += 0.1
+		s.YRotation += 0.5
 	}
 	objects = append(objects, buddha)
 
