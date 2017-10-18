@@ -24,7 +24,7 @@ func main() {
 	fireLight.Specular = []float32{1, 0, 0}
 	fireLight.Position = in3D.NewPosition(0, 45, 10)
 	fireLight.Radius = 25
-	fireLight.Draw = true
+	// fireLight.Draw = true
 
 	flickerLight := in3D.NewLight()
 	flickerLight.Position = in3D.NewPosition(0, 45, 10)
