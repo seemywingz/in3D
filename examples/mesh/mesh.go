@@ -16,12 +16,21 @@ func main() {
 	in3D.Enable(in3D.FlyMode, true)
 
 	light := in3D.NewLight()
-	light.Ambient = []float32{0.5, 0.5, 0.5}
-	light.Specular = []float32{10, 10, 10}
+	// light.Specular = []float32{50, 50, 50}
 	light.Position = in3D.NewPosition(0, 1, 1)
 	light.Draw = true
 	light.DrawnObject.Scale = 0.05
 	light.Radius = 10
+
+	dx := float32(0.01)
+	n := float32(0)
+	light.SceneLogic = func(s *in3D.SceneData) {
+		n += dx
+		if n > 2 || n < -2 {
+			dx = -dx
+		}
+		s.Position.Z = n
+	}
 
 	model := "sky"
 	skyShader := in3D.Shader["texture"]
@@ -31,24 +40,24 @@ func main() {
 	sky.Scale = 10000
 	objects = append(objects, sky)
 
+	// rotateY := func(s *in3D.SceneData) {
+	// 	s.YRotation += 0.1
+	// }
+
 	// all models are from: https://www.blendswap.com/
 	model = "buddha"
 	meshShader := in3D.Shader["normalMap"]
 	in3D.SetRelPath("../assets/models/" + model)
 	mesh := in3D.LoadObject(model+".obj", meshShader)
-	buddha := in3D.NewMeshObject(in3D.NewPosition(-0.5, 0, 0), mesh, meshShader)
-	buddha.SceneLogic = func(s *in3D.SceneData) {
-		s.YRotation += 0.1
-	}
-	objects = append(objects, buddha)
+	meshObject := in3D.NewMeshObject(in3D.NewPosition(-0.5, 0, 0), mesh, meshShader)
+	meshObject.YRotation = 90
+	objects = append(objects, meshObject)
 
 	model = "buddha"
 	meshShader = in3D.Shader["phong"]
 	mesh = in3D.LoadObject(model+".obj", meshShader)
-	buddha = in3D.NewMeshObject(in3D.NewPosition(0.5, 0, 0), mesh, meshShader)
-	buddha.SceneLogic = func(s *in3D.SceneData) {
-		s.YRotation += 0.1
-	}
+	buddha := in3D.NewMeshObject(in3D.NewPosition(0.5, 0, 0), mesh, meshShader)
+	buddha.YRotation = -90
 	objects = append(objects, buddha)
 
 	for !in3D.ShouldClose() {
