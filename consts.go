@@ -9,12 +9,12 @@ const (
 	Press = glfw.Press
 	// Releasese :
 	Releasese = glfw.Release
-	// NoMode :
-	NoMode = iota
-	// FlyMode :
+)
+
+const (
+	_ = iota
+	// FlyMode : Allow "Flying" Through Scene
 	FlyMode
-	// FirstPersonMode :a
-	FirstPersonMode
 	// PointerLock :
 	PointerLock
 	// Look :

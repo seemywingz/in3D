@@ -66,7 +66,6 @@ func InitFeatures() {
 	Feature[Move] = false
 	Feature[FlyMode] = false
 	Feature[PointerLock] = false
-	Feature[FirstPersonMode] = false
 }
 
 // InitShaders :
@@ -239,8 +238,6 @@ func Enable(feature int, enabled bool) {
 		camera.LastY = y
 	case PointerLock:
 		TogglePointerLock()
-	case FirstPersonMode:
-		fallthrough
 	case FlyMode:
 		Feature[Look] = enabled
 		Feature[Move] = enabled
