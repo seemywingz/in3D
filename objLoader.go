@@ -67,7 +67,6 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 			uv0 = mgl32.NewVecNFromData(uvs[f.UVID[0]-1])
 			uv1 = mgl32.NewVecNFromData(uvs[f.UVID[1]-1])
 			uv2 = mgl32.NewVecNFromData(uvs[f.UVID[2]-1])
-<<<<<<< HEAD
 
 			e1 := vec1.Sub(nil, vec0)
 			e2 := vec2.Sub(nil, vec0)
@@ -78,18 +77,6 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 			f := 1.0 / (dUV1.Get(x)*dUV2.Get(y) - dUV2.Get(x)*dUV1.Get(y))
 			// print(f)
 
-=======
-
-			e1 := vec1.Sub(nil, vec0)
-			e2 := vec2.Sub(nil, vec0)
-
-			dUV1 := uv1.Sub(nil, uv0)
-			dUV2 := uv2.Sub(nil, uv0)
-			x, y, z := 0, 1, 2
-			f := 1.0 / (dUV1.Get(x)*dUV2.Get(y) - dUV2.Get(x)*dUV1.Get(y))
-			// print(f)
-
->>>>>>> 2ab2d1029ffc6c0306242bda4398eb26bc448345
 			tangent.Set(x, f*(dUV2.Get(y)*e1.Get(x)-dUV1.Get(y)*e2.Get(x)))
 			tangent.Set(y, f*(dUV2.Get(y)*e1.Get(y)-dUV1.Get(y)*e2.Get(y)))
 			tangent.Set(z, f*(dUV2.Get(y)*e1.Get(z)-dUV1.Get(y)*e2.Get(z)))
