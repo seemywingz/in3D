@@ -49,11 +49,6 @@ func main() {
 ### YOU-TODO:
   * Checkout the other examples to see some more basic functionality
 
-##### Note:
-###### Some Names and method may change until version 1.0 is tagged
-###### Texture UVs are imported upside down due to the openGL/texture mapping coordinate systems ( flip your texture vertiacally to render correctly  )
-
-
 ### Installation on Ubuntu
 ```
 apt-get install libgl1-mesa-dev
@@ -68,4 +63,9 @@ apt-get install libxinerama-dev
 
 go get github.com/seemywingz/in3D
 
-```
+```  
+  
+##### Note:
+###### Some Names and method may change until version 1.0 is tagged
+###### Texture UVs are imported upside down due to the openGL/texture coordinate systems ( flip your texture vertiacally to render correctly  )
+
