@@ -64,6 +64,7 @@ func BuildLight(position Position, radius float32, amb, dif, spec []float32, dra
 	fmt.Println("Adding Light:", n)
 
 	drawnObject := NewPointsObject(position, Cube, NoTexture, dif, Shader["color"])
+	drawnObject.Scale = 0.05
 
 	light := &Light{
 		radius,

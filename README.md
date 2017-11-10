@@ -1,7 +1,7 @@
 # in3D
 A relatively simple Go powered OpenGL Graphics Engine
 
-Create a new Window, Get OpenGL Context, Setup Camera Projection, create 3D object, Draw!
+Create a new Window, Get OpenGL Context, Setup Camera Projection, create 3D object, Draw!  
 Go Ahead, you can do it yourself... `go get github.com/seemywingz/in3D`
 ```go
 package main
@@ -18,8 +18,8 @@ func main() {
 
 	in3D.SetRelPath("../assets/textures")
 	texture := in3D.NewTexture("seemywingz.jpg")
-
 	color := []float32{1, 1, 1}
+
 	obj := in3D.NewPointsObject(
 		in3D.NewPosition(0, 0, -7),
 		in3D.Cube,
@@ -42,16 +42,16 @@ func main() {
 ```
 ![Simple Rotating Cude in3D](./examples/assets/textures/readme.png)
 ### ME-TODO:
-  •  Optimize all the things!
-  •  Add Shadows, Ambient Occulsion and other light related things
-  • Have more fun making weird examples!
+  *  Optimize all the things!  
+  *  Add Shadows, Ambient Occulsion and other light related things  
+  * Have more fun making weird examples!  
 
 ### YOU-TODO:
-Checkout the other examples to see some more basic functionality
+  * Checkout the other examples to see some more basic functionality
 
 ##### Note:
 ###### Some Names and method may change until version 1.0 is tagged
-###### Also, texture UVs are, for some reason, imported upside down. ( flip your texture vertiacally to render correctly  )
+###### Texture UVs are imported upside down due to the openGL/texture mapping coordinate systems ( flip your texture vertiacally to render correctly  )
 
 
 ### Installation on Ubuntu
