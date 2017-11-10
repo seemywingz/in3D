@@ -1,8 +1,6 @@
 package in3D
 
 import (
-	"fmt"
-
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
 )
@@ -53,7 +51,7 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 	NormalMatrixID := gl.GetUniformLocation(program, gl.Str("NormalMatrix\x00"))
 	MVPID := gl.GetUniformLocation(program, gl.Str("MVP\x00"))
 
-	uniform := fmt.Sprintf("Material")
+	uniform := "Material"
 	IambID := gl.GetUniformLocation(program, gl.Str(uniform+".Iamb\x00"))
 	IdifID := gl.GetUniformLocation(program, gl.Str(uniform+".Idif\x00"))
 	IspecID := gl.GetUniformLocation(program, gl.Str(uniform+".Ispec\x00"))
