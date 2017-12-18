@@ -47,23 +47,16 @@ func main() {
   * Have more fun making weird examples!  
 
 ### YOU-TODO:
-  * Checkout the other examples to see some more basic functionality
+  * Checkout the other examples to see some more basic functionality  
+  * `go run examples/mesh/mesh.go`
 
 ### Installation on Ubuntu
 ```
-apt-get install libgl1-mesa-dev
-
-apt-get install libxrandr-dev
-
-apt-get install libxcursor-dev
-
-apt-get install libxi-dev
-
-apt-get install libxinerama-dev
+apt-get install libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev
 
 go get github.com/seemywingz/in3D
-
 ```  
+##### Make sure you are using the prorietary driver provided by the vendor of your graphics card 
   
 ##### Note:
 ###### Some Names and method may change until version 1.0 is tagged
