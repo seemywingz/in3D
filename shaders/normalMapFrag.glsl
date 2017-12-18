@@ -45,7 +45,7 @@ void main() {
 
   vec3 textr = texture(TEXTURE, fragTexCoord).rgb;
   if (textr == vec3(0,0,0)) {
-    // if no texture set white
+    // if no texture, set color to white
     textr = vec3(1,1,1);
   }
 

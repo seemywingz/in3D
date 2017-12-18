@@ -32,23 +32,24 @@ func main() {
 
 	// all models are from: https://www.blendswap.com/
 	model = "buddha"
-	meshShader := in3D.Shader["phong"]
 	in3D.SetRelPath("../assets/models/" + model)
+
+	meshShader := in3D.Shader["phong"]
 	mesh := in3D.LoadObject(model+".obj", meshShader)
 	buddha := in3D.NewMeshObject(in3D.NewPosition(-0.5, 0, 0), mesh, meshShader)
-	buddha.SceneLogic = func(s *in3D.SceneData) {
-		s.YRotation += 0.5
-	}
-	objects = append(objects, buddha)
 
-	model = "buddha"
 	meshShader = in3D.Shader["normalMap"]
 	mesh = in3D.LoadObject(model+".obj", meshShader)
-	buddha = in3D.NewMeshObject(in3D.NewPosition(0.5, 0, 0), mesh, meshShader)
-	buddha.SceneLogic = func(s *in3D.SceneData) {
+	buddha1 := in3D.NewMeshObject(in3D.NewPosition(0.5, 0, 0), mesh, meshShader)
+
+	rotate := func(s *in3D.SceneData) {
 		s.YRotation += 0.5
 	}
+
+	buddha.SceneLogic = rotate
+	buddha1.SceneLogic = rotate
 	objects = append(objects, buddha)
+	objects = append(objects, buddha1)
 
 	for !in3D.ShouldClose() {
 		in3D.Update()
