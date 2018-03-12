@@ -47,7 +47,7 @@ func main() {
 
 	// all models are from: https://www.blendswap.com/
 	model = "buddha"
-	meshShader := in3D.Shader["normalMap"]
+	meshShader := in3D.Shader["in3D"]
 	in3D.SetRelPath("../assets/models/" + model)
 	mesh := in3D.LoadObject("buddha.obj", meshShader)
 	meshObject := in3D.NewMeshObject(in3D.NewPosition(-0.5, 0, 0), mesh, meshShader)
