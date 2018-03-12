@@ -22,5 +22,5 @@ const (
 	// Move :
 	Move
 	// NoTexture :
-	NoTexture
+	NoTexture = 999
 )
