@@ -65,14 +65,15 @@ func main() {
 		in3D.Plane, in3D.NoTexture,
 		[]float32{1, 1, 1},
 		in3D.Shader["color"])
+
 	plane.XRotation = -90
 	plane.Scale = 500
 	objects = append(objects, plane)
 
 	for !in3D.ShouldClose() {
 		in3D.Update()
-		for _, o := range objects {
-			o.Draw()
+		for _, object := range objects {
+			object.Draw()
 		}
 		in3D.SwapBuffers()
 	}
