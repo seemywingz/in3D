@@ -80,7 +80,7 @@ func InitShaders() {
 	Shader["normalMap"] = NewShader("normalMapVert.glsl", "normalMapFrag.glsl")
 }
 
-// MakeVAO initializes and returns a vertex array from the points provided.
+// MakeVAO : initializes and returns a vertex array from the points provided.
 func MakeVAO(points []float32, program uint32) uint32 {
 
 	var vao uint32
