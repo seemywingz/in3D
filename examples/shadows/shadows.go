@@ -64,8 +64,7 @@ func main() {
 		in3D.NewPosition(0, 0, 0),
 		in3D.Plane, in3D.NoTexture,
 		[]float32{1, 1, 1},
-		in3D.Shader["color"])
-
+		in3D.Shader["phong"])
 	plane.XRotation = -90
 	plane.Scale = 500
 	objects = append(objects, plane)
