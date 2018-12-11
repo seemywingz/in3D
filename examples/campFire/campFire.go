@@ -47,6 +47,7 @@ func main() {
 		for _, o := range objects {
 			o.Draw()
 		}
+		in3D.CenterWindow()
 		in3D.SwapBuffers()
 	}
 }

@@ -12,7 +12,7 @@ func main() {
 	in3D.SetClearColor(0.1, 0.1, 0.1, 1)
 	in3D.SetCameraPosition(in3D.NewPosition(0, 0.55, 2))
 	in3D.SetCameraSpeed(0.1)
-	in3D.Enable(in3D.PointerLock, true)
+	// in3D.Enable(in3D.PointerLock, true)
 	in3D.Enable(in3D.FlyMode, true)
 
 	light := in3D.NewLight()

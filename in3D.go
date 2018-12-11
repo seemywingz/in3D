@@ -17,7 +17,7 @@ func Init(width, height int, title string) {
 	runtime.LockOSThread()
 
 	EoE("Error Initializing GLFW", glfw.Init())
-	glfw.WindowHint(glfw.Resizable, glfw.False)
+	glfw.WindowHint(glfw.Resizable, glfw.True)
 	glfw.WindowHint(glfw.ContextVersionMajor, 4)
 	glfw.WindowHint(glfw.ContextVersionMinor, 1)
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
@@ -198,6 +198,18 @@ func GetCamera() *Camera {
 // GetWindow : return pounter to gg window
 func GetWindow() *glfw.Window {
 	return window
+}
+
+// CenterWindow : center the window -- workaround for macOS Mojave
+func CenterWindow() {
+	x, y := glfw.PrimaryMonitor().Size()
+	width, height := window.Bounds().Size().XY()
+	window.SetPos(x/2-width/2, y/2-height/2)
+}
+
+// MoveWindow : move window to x, y screen position
+func MoveWindow(x int, y int) {
+	window.SetPos(x, y)
 }
 
 // SetCameraPosition :
