@@ -28,15 +28,15 @@ func Init(width, height int, title string) {
 		mode := glfw.GetPrimaryMonitor().GetVideoMode()
 		width = mode.Width
 		height = mode.Height
-		window, err = glfw.CreateWindow(width, height, title, glfw.GetPrimaryMonitor(), nil)
+		Window, err = glfw.CreateWindow(width, height, title, glfw.GetPrimaryMonitor(), nil)
 	} else {
-		window, err = glfw.CreateWindow(width, height, title, nil, nil)
+		Window, err = glfw.CreateWindow(width, height, title, nil, nil)
 	}
 	EoE("Error Creating GLFW Window", err)
-	window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
-	window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
+	Window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+	Window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
 	TogglePointerLock()
-	window.MakeContextCurrent()
+	Window.MakeContextCurrent()
 	InitGL()
 	InitFeatures()
 	NewCamera()
@@ -116,8 +116,8 @@ func MakeVAO(points []float32, program uint32) uint32 {
 func CompileShader(source string, shaderType uint32) uint32 {
 	shader := gl.CreateShader(shaderType)
 
-	csources, free := gl.Strs(source)
-	gl.ShaderSource(shader, 1, csources, nil)
+	sources, free := gl.Strs(source)
+	gl.ShaderSource(shader, 1, sources, nil)
 	free()
 	gl.CompileShader(shader)
 
@@ -176,12 +176,12 @@ func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 
 // ShouldClose : wraper for glfw
 func ShouldClose() bool {
-	return window.ShouldClose()
+	return Window.ShouldClose()
 }
 
 // SwapBuffers : wrapper for glfw
 func SwapBuffers() {
-	window.SwapBuffers()
+	Window.SwapBuffers()
 }
 
 // Update :
@@ -195,21 +195,9 @@ func GetCamera() *Camera {
 	return camera
 }
 
-// GetWindow : return pounter to gg window
+// GetWindow : return pointer to gg Window
 func GetWindow() *glfw.Window {
-	return window
-}
-
-// CenterWindow : center the window -- workaround for macOS Mojave
-func CenterWindow() {
-	x, y := glfw.PrimaryMonitor().Size()
-	width, height := window.Bounds().Size().XY()
-	window.SetPos(x/2-width/2, y/2-height/2)
-}
-
-// MoveWindow : move window to x, y screen position
-func MoveWindow(x int, y int) {
-	window.SetPos(x, y)
+	return Window
 }
 
 // SetCameraPosition :
@@ -231,13 +219,21 @@ func SetClearColor(r, g, b, a float32) {
 func TogglePointerLock() {
 	fmt.Println("PointerLock Enabled:", Feature[PointerLock])
 	if Feature[PointerLock] {
-		x, y := window.GetCursorPos()
+		x, y := Window.GetCursorPos()
 		camera.LastX = x
 		camera.LastY = y
-		window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
+		Window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
 	} else {
-		window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
+		Window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 	}
+}
+
+// MojaveWorkaround : move window 1 pixel as OpenGL workaround -- https://github.com/glfw/glfw/issues/1334
+func MojaveWorkaround()  {
+	// macOS Mojave workaround
+	x, y := Window.GetPos()
+	Update()
+	Window.SetPos(x + 1, y)
 }
 
 // Enable :
@@ -246,7 +242,7 @@ func Enable(feature int, enabled bool) {
 	Feature[feature] = enabled
 	switch feature {
 	case Look:
-		x, y := window.GetCursorPos()
+		x, y := Window.GetCursorPos()
 		camera.LastX = x
 		camera.LastY = y
 	case PointerLock:

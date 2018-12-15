@@ -1,6 +1,8 @@
 package in3D
 
-import "github.com/go-gl/glfw/v3.2/glfw"
+import (
+	"github.com/go-gl/glfw/v3.2/glfw"
+)
 
 // SceneLogic :
 type SceneLogic func(s *SceneData)
@@ -29,8 +31,7 @@ func NewPosition(x, y, z float32) Position {
 
 var (
 
-	// unexported
-	window       *glfw.Window
+	Window       *glfw.Window
 	camera       *Camera
 	lightManager *LightManager
 

@@ -32,7 +32,7 @@ func NewCamera() *Camera {
 	//    45° Field of View,
 	//    width:height ratio,
 	//    display range : 0.1 unit <-> 1000 units
-	w, h := window.GetSize()
+	w, h := Window.GetSize()
 	ratio := float32(w) / float32(h)
 	projection := mgl32.Perspective(mgl32.DegToRad(45.0), ratio, 0.1, 11000)
 
@@ -48,7 +48,7 @@ func (c *Camera) MouseControls() {
 	glfw.PollEvents()
 
 	if Feature[Look] {
-		x, y := window.GetCursorPos()
+		x, y := Window.GetCursorPos()
 
 		sensitivity := float32(0.1)
 		c.YRotation += -float32(c.LastX-x) * sensitivity
@@ -73,35 +73,35 @@ func (c *Camera) KeyControls() {
 		return
 	}
 	// Press w
-	if window.GetKey(glfw.KeyW) == glfw.Press {
+	if Window.GetKey(glfw.KeyW) == glfw.Press {
 		// move forward
 		c.X += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
 		c.Z -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
 		c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation)))) * c.Speed
 	}
 	// Press A
-	if window.GetKey(glfw.KeyA) == glfw.Press {
+	if Window.GetKey(glfw.KeyA) == glfw.Press {
 		// Move left
 		c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
 		c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
 	}
 	// Press s
-	if window.GetKey(glfw.KeyS) == glfw.Press {
+	if Window.GetKey(glfw.KeyS) == glfw.Press {
 		// Move Backward
 		c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
 		c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
 		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation)))) * c.Speed
 	}
 	// Press d
-	if window.GetKey(glfw.KeyD) == glfw.Press {
+	if Window.GetKey(glfw.KeyD) == glfw.Press {
 		// Move Right
 		c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
 		c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
 	}
 	// Press space
-	if window.GetKey(glfw.KeySpace) == glfw.Press {
+	if Window.GetKey(glfw.KeySpace) == glfw.Press {
 		if Feature[FlyMode] {
-			if window.GetKey(glfw.KeyLeftShift) == glfw.Press {
+			if Window.GetKey(glfw.KeyLeftShift) == glfw.Press {
 				c.Y -= c.Speed
 			} else {
 				c.Y += c.Speed

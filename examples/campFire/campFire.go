@@ -39,6 +39,9 @@ func main() {
 	obj.YRotation = 110
 	objects = append(objects, obj)
 
+
+
+
 	for !in3D.ShouldClose() {
 		in3D.Update()
 		if in3D.Random(0, 100)%2 == 0 {
@@ -47,7 +50,6 @@ func main() {
 		for _, o := range objects {
 			o.Draw()
 		}
-		in3D.CenterWindow()
 		in3D.SwapBuffers()
 	}
 }
