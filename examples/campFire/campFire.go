@@ -39,8 +39,7 @@ func main() {
 	obj.YRotation = 110
 	objects = append(objects, obj)
 
-
-
+	in3D.MojaveWorkaround()
 
 	for !in3D.ShouldClose() {
 		in3D.Update()
