@@ -118,8 +118,8 @@ func (c *Camera) Update() {
 	c.MouseControls()
 	c.KeyControls()
 
-	translateMatrix := mgl32.Translate3D(-c.X, -c.Y, -c.Z)
-	modelMatrix := translateMatrix.Mul4(mgl32.Ident4())
+	modelMatrix := mgl32.Translate3D(-c.X, -c.Y, -c.Z)
+	// modelMatrix := translateMatrix.Mul4(mgl32.Ident4())
 
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(c.XRotation))
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(c.YRotation))

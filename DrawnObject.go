@@ -82,6 +82,7 @@ func NewMeshObject(position Position, mesh *Mesh, program uint32) *DrawnObject {
 func (d *DrawnObject) translateRotate() *mgl32.Mat4 {
 	model := mgl32.Translate3D(d.X, d.Y, d.Z).
 		Mul4(mgl32.Scale3D(d.Scale, d.Scale, d.Scale))
+
 	xrotMatrix := mgl32.HomogRotate3DX(mgl32.DegToRad(d.XRotation))
 	yrotMatrix := mgl32.HomogRotate3DY(mgl32.DegToRad(d.YRotation))
 	zrotMatrix := mgl32.HomogRotate3DZ(mgl32.DegToRad(d.ZRotation))
