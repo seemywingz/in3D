@@ -30,7 +30,7 @@ func NewPosition(x, y, z float32) Position {
 }
 
 var (
-
+	// Window : Exported reference to glfw window
 	Window       *glfw.Window
 	camera       *Camera
 	lightManager *LightManager
@@ -38,7 +38,7 @@ var (
 	// Feature : used to enable features
 	Feature map[int]bool
 
-	// Shader : map of gg provided shaders
+	// Shader : map of in3D provided shaders
 	Shader map[string]uint32
 
 	// Triangle :

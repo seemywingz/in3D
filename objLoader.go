@@ -204,7 +204,7 @@ func LoadObject(filename string, program uint32) *Mesh {
 	return &Mesh{materialGroups}
 }
 
-// LoadMaterials :
+// LoadMaterials : create material groups from wavefront data
 func LoadMaterials(filename string) map[string]*MaterialGroup {
 
 	file, ferr := os.Open(filename)
