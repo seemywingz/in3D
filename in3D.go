@@ -12,7 +12,7 @@ import (
 	"github.com/go-gl/glfw/v3.2/glfw"
 )
 
-// Init : initializes glfw and returns a Window to use, then InitGL
+// Init : initializes glfw and returns a Window to use, then initGL
 func Init(width, height int, title string) {
 	runtime.LockOSThread()
 
@@ -33,18 +33,15 @@ func Init(width, height int, title string) {
 		Window, err = glfw.CreateWindow(width, height, title, nil, nil)
 	}
 	EoE("Error Creating GLFW Window", err)
-	Window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
-	Window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
-	// TogglePointerLock()
 	Window.MakeContextCurrent()
-	InitGL()
-	InitFeatures()
+	initGL()
+	initShaders()
 	NewCamera()
 	NewLightManager()
 }
 
-// InitGL : initialize GL setting and print version
-func InitGL() {
+// initGL : initialize GL setting and print version
+func initGL() {
 	EoE("Error Initializing OpenGL", gl.Init())
 
 	gl.Enable(gl.DEPTH_TEST)
@@ -56,21 +53,10 @@ func InitGL() {
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	println("OpenGL version", version)
-	InitShaders()
 }
 
-// InitFeatures :
-func InitFeatures() {
-	Feature = make(map[int]bool)
-	Feature[Look] = false
-	Feature[KeyControls] = false
-	Feature[FlyMode] = false
-	Feature[PointerLock] = false
-}
-
-// InitShaders :
-func InitShaders() {
-	Shader = make(map[string]uint32)
+// initShaders :
+func initShaders() {
 	SetRelPath("shaders")
 	Shader["basic"] = NewShader("Vert.glsl", "basicFrag.glsl")
 	Shader["color"] = NewShader("Vert.glsl", "colorFrag.glsl")
@@ -184,6 +170,11 @@ func SwapBuffers() {
 	Window.SwapBuffers()
 }
 
+// // CloseWindow : Close Current GLFW Window
+// func CloseWindow() {
+//   glfw.
+// }
+
 // Update : Update OpenGL Scene by apply camera, then light object models
 func Update() {
 	camera.Update()
@@ -237,19 +228,31 @@ func MojaveWorkaround() {
 	Window.SetPos(x+1, y)
 }
 
+// SetFlyModeControls : Set Default Key controls for FlyMode
+func SetFlyModeControls() {
+	Keys[glfw.KeyW] = camera.MoveForward
+	Keys[glfw.KeyS] = camera.MoveBackward
+	Keys[glfw.KeyA] = camera.StrafeLeft
+	Keys[glfw.KeyD] = camera.StrafeRight
+	Keys[glfw.KeySpace] = camera.Fly
+}
+
 // Enable :
 func Enable(feature int, enabled bool) {
 
 	Feature[feature] = enabled
 	switch feature {
-	case Look:
+	case MouseControls:
 		x, y := Window.GetCursorPos()
 		camera.LastX = x
 		camera.LastY = y
+	case KeyControls:
+		SetFlyModeControls()
 	case PointerLock:
 		TogglePointerLock()
 	case FlyMode:
-		Feature[Look] = enabled
+		Feature[MouseControls] = enabled
 		Feature[KeyControls] = enabled
+		SetFlyModeControls()
 	}
 }

@@ -12,7 +12,7 @@ func main() {
 	in3D.SetClearColor(0.1, 0.1, 0.1, 1)
 	in3D.SetCameraPosition(in3D.NewPosition(0, 0.55, 2))
 	in3D.SetCameraSpeed(0.1)
-	// in3D.Enable(in3D.PointerLock, true)
+	in3D.Enable(in3D.PointerLock, true)
 	in3D.Enable(in3D.FlyMode, true)
 
 	light := in3D.NewLight()
@@ -21,6 +21,10 @@ func main() {
 	light.Draw = true
 	light.DrawnObject.Scale = 0.05
 	light.Radius = 10
+
+	in3D.Keys[in3D.KeyQ] = func() {
+		in3D.Window.SetShouldClose(true)
+	}
 
 	dx := float32(0.01)
 	n := float32(0)

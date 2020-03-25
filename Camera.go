@@ -47,7 +47,7 @@ func NewCamera() *Camera {
 func (c *Camera) MouseControls() {
 	glfw.PollEvents()
 
-	if Feature[Look] {
+	if Feature[MouseControls] {
 		x, y := Window.GetCursorPos()
 
 		sensitivity := float32(0.1)
@@ -67,47 +67,54 @@ func (c *Camera) MouseControls() {
 	}
 }
 
+// MoveForward : Move the Camera Forward Relative to its Object Model
+func (c *Camera) MoveForward() {
+	// move forward
+	c.X += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+	c.Z -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+	c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation)))) * c.Speed
+}
+
+// MoveBackward : Move the Camera Forward Relative to its Object Model
+func (c *Camera) MoveBackward() {
+	// Move Backward
+	c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+	c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+	c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation)))) * c.Speed
+}
+
+// StrafeLeft : Strafe left relative to camera object model
+func (c *Camera) StrafeLeft() {
+	// Move left
+	c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+	c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+}
+
+// StrafeRight : Strafe right relative to camera object model
+func (c *Camera) StrafeRight() {
+	// Move Right
+	c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+	c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
+}
+
+// Fly : Fly camera through object space
+func (c *Camera) Fly() {
+	if Window.GetKey(glfw.KeyLeftShift) == glfw.Press {
+		c.Y -= c.Speed
+	} else {
+		c.Y += c.Speed
+	}
+}
+
 // KeyControls : control the camera via the keyboard
 func (c *Camera) KeyControls() {
 	if !Feature[KeyControls] {
 		return
 	}
-	// Press w
-	if Window.GetKey(glfw.KeyW) == glfw.Press {
-		// move forward
-		c.X += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
-		c.Z -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
-		c.Y -= float32(math.Sin(float64(mgl32.DegToRad(c.XRotation)))) * c.Speed
-	}
-	// Press A
-	if Window.GetKey(glfw.KeyA) == glfw.Press {
-		// Move left
-		c.X -= float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
-		c.Z -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
-	}
-	// Press s
-	if Window.GetKey(glfw.KeyS) == glfw.Press {
-		// Move Backward
-		c.X -= float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
-		c.Z += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
-		c.Y += float32(math.Sin(float64(mgl32.DegToRad(c.XRotation)))) * c.Speed
-	}
-	// Press d
-	if Window.GetKey(glfw.KeyD) == glfw.Press {
-		// Move Right
-		c.X += float32(math.Cos(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
-		c.Z += float32(math.Sin(float64(mgl32.DegToRad(c.YRotation)))) * c.Speed
-	}
-	// Press space
-	if Window.GetKey(glfw.KeySpace) == glfw.Press {
-		if Feature[FlyMode] {
-			if Window.GetKey(glfw.KeyLeftShift) == glfw.Press {
-				c.Y -= c.Speed
-			} else {
-				c.Y += c.Speed
-			}
-		} else {
-			//jump
+
+	for key, action := range Keys {
+		if Window.GetKey(key) == glfw.Press {
+			action()
 		}
 	}
 }

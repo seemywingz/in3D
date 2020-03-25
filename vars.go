@@ -7,6 +7,9 @@ import (
 // SceneLogic :
 type SceneLogic func(s *SceneData)
 
+// KeyControl :
+type KeyControl func()
+
 // SceneData :
 type SceneData struct {
 	Position
@@ -36,10 +39,13 @@ var (
 	lightManager *LightManager
 
 	// Feature : used to enable features
-	Feature map[int]bool
+	Feature = make(map[int]bool)
 
 	// Shader : map of in3D provided shaders
-	Shader map[string]uint32
+	Shader = make(map[string]uint32)
+
+	// Keys : map of GLFW Keys and their Functions
+	Keys = make(map[glfw.Key]KeyControl)
 
 	// Triangle :
 	Triangle = []float32{
