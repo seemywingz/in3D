@@ -19,8 +19,8 @@ const (
 	PointerLock
 	// Look :
 	Look
-	// Move :
-	Move
+	// KeyControls :
+	KeyControls
 	// NoTexture :
 	NoTexture = 999
 )

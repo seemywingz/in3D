@@ -35,7 +35,7 @@ func Init(width, height int, title string) {
 	EoE("Error Creating GLFW Window", err)
 	Window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
 	Window.SetInputMode(glfw.StickyMouseButtonsMode, 1)
-	TogglePointerLock()
+	// TogglePointerLock()
 	Window.MakeContextCurrent()
 	InitGL()
 	InitFeatures()
@@ -63,7 +63,7 @@ func InitGL() {
 func InitFeatures() {
 	Feature = make(map[int]bool)
 	Feature[Look] = false
-	Feature[Move] = false
+	Feature[KeyControls] = false
 	Feature[FlyMode] = false
 	Feature[PointerLock] = false
 }
@@ -174,7 +174,7 @@ func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 	return program
 }
 
-// ShouldClose : wraper for glfw
+// ShouldClose : wrapper for glfw
 func ShouldClose() bool {
 	return Window.ShouldClose()
 }
@@ -184,7 +184,7 @@ func SwapBuffers() {
 	Window.SwapBuffers()
 }
 
-// Update :
+// Update : Update OpenGL Scene by apply camera, then light object models
 func Update() {
 	camera.Update()
 	lightManager.Update()
@@ -217,23 +217,24 @@ func SetClearColor(r, g, b, a float32) {
 
 // TogglePointerLock :
 func TogglePointerLock() {
-	fmt.Println("PointerLock Enabled:", Feature[PointerLock])
 	if Feature[PointerLock] {
+		fmt.Println("PointerLock Enabled")
 		x, y := Window.GetCursorPos()
 		camera.LastX = x
 		camera.LastY = y
 		Window.SetInputMode(glfw.CursorMode, glfw.CursorDisabled)
 	} else {
+		fmt.Println("PointerLock Disabled")
 		Window.SetInputMode(glfw.CursorMode, glfw.CursorNormal)
 	}
 }
 
 // MojaveWorkaround : move window 1 pixel as OpenGL workaround -- https://github.com/glfw/glfw/issues/1334
-func MojaveWorkaround()  {
+func MojaveWorkaround() {
 	// macOS Mojave workaround
 	x, y := Window.GetPos()
 	Update()
-	Window.SetPos(x + 1, y)
+	Window.SetPos(x+1, y)
 }
 
 // Enable :
@@ -249,6 +250,6 @@ func Enable(feature int, enabled bool) {
 		TogglePointerLock()
 	case FlyMode:
 		Feature[Look] = enabled
-		Feature[Move] = enabled
+		Feature[KeyControls] = enabled
 	}
 }

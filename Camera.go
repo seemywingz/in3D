@@ -69,7 +69,7 @@ func (c *Camera) MouseControls() {
 
 // KeyControls : control the camera via the keyboard
 func (c *Camera) KeyControls() {
-	if !Feature[Move] {
+	if !Feature[KeyControls] {
 		return
 	}
 	// Press w
