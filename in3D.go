@@ -170,11 +170,6 @@ func SwapBuffers() {
 	Window.SwapBuffers()
 }
 
-// // CloseWindow : Close Current GLFW Window
-// func CloseWindow() {
-//   glfw.
-// }
-
 // Update : Update OpenGL Scene by apply camera, then light object models
 func Update() {
 	camera.Update()
@@ -230,11 +225,11 @@ func MojaveWorkaround() {
 
 // SetFlyModeControls : Set Default Key controls for FlyMode
 func SetFlyModeControls() {
-	Keys[glfw.KeyW] = camera.MoveForward
-	Keys[glfw.KeyS] = camera.MoveBackward
-	Keys[glfw.KeyA] = camera.StrafeLeft
-	Keys[glfw.KeyD] = camera.StrafeRight
-	Keys[glfw.KeySpace] = camera.Fly
+	KeyAction[KeyW] = camera.MoveForward
+	KeyAction[KeyS] = camera.MoveBackward
+	KeyAction[KeyA] = camera.StrafeLeft
+	KeyAction[KeyD] = camera.StrafeRight
+	KeyAction[KeySpace] = camera.Fly
 }
 
 // Enable :

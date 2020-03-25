@@ -22,7 +22,8 @@ func main() {
 	light.DrawnObject.Scale = 0.05
 	light.Radius = 10
 
-	in3D.Keys[in3D.KeyQ] = func() {
+	// Close Window When Escape is Pressed
+	in3D.KeyAction[in3D.KeyEscape] = func() {
 		in3D.Window.SetShouldClose(true)
 	}
 

@@ -112,7 +112,7 @@ func (c *Camera) KeyControls() {
 		return
 	}
 
-	for key, action := range Keys {
+	for key, action := range KeyAction {
 		if Window.GetKey(key) == glfw.Press {
 			action()
 		}

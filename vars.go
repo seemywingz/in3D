@@ -44,8 +44,8 @@ var (
 	// Shader : map of in3D provided shaders
 	Shader = make(map[string]uint32)
 
-	// Keys : map of GLFW Keys and their Functions
-	Keys = make(map[glfw.Key]KeyControl)
+	// KeyAction : map of GLFW Keys and their Functions
+	KeyAction = make(map[glfw.Key]KeyControl)
 
 	// Triangle :
 	Triangle = []float32{
