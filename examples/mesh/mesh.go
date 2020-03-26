@@ -14,6 +14,10 @@ func main() {
 	in3D.SetCameraSpeed(0.1)
 	in3D.Enable(in3D.PointerLock, true)
 	in3D.Enable(in3D.FlyMode, true)
+	// Close Window When Escape is Pressed
+	in3D.KeyAction[in3D.KeyEscape] = func() {
+		in3D.Window.SetShouldClose(true)
+	}
 
 	light := in3D.NewLight()
 	// light.Specular = []float32{50, 50, 50}
@@ -21,11 +25,6 @@ func main() {
 	light.Draw = true
 	light.DrawnObject.Scale = 0.05
 	light.Radius = 10
-
-	// Close Window When Escape is Pressed
-	in3D.KeyAction[in3D.KeyEscape] = func() {
-		in3D.Window.SetShouldClose(true)
-	}
 
 	dx := float32(0.01)
 	n := float32(0)
