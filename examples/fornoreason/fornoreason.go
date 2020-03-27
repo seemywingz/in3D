@@ -48,6 +48,10 @@ func main() {
 	in3D.Enable(in3D.FlyMode, true)
 	light := in3D.NewLight()
 	light.Draw = true
+	// Close Window When Escape is Pressed
+	in3D.KeyAction[in3D.KeyEscape] = func() {
+		in3D.Exit()
+	}
 
 	loadTextures()
 	min, max := -20, 20

@@ -165,6 +165,11 @@ func ShouldClose() bool {
 	return Window.ShouldClose()
 }
 
+// Exit : Initiate GLFW Shutdown Sequence
+func Exit() {
+	Window.SetShouldClose(true)
+}
+
 // SwapBuffers : wrapper for glfw
 func SwapBuffers() {
 	Window.SwapBuffers()

@@ -24,7 +24,7 @@ func main() {
 
 	// Close Window When Escape is Pressed
 	in3D.KeyAction[in3D.KeyEscape] = func() {
-		in3D.Window.SetShouldClose(true)
+		in3D.Exit()
 	}
 
 	dx := float32(0.01)
