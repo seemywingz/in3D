@@ -26,6 +26,11 @@ func main() {
 	light.DrawnObject.Scale = 0.05
 	light.Radius = 10
 
+	// Close Window When Escape is Pressed
+	in3D.KeyAction[in3D.KeyEscape] = func() {
+		in3D.Exit()
+	}
+
 	dx := float32(0.01)
 	n := float32(0)
 	light.SceneLogic = func(s *in3D.SceneData) {
