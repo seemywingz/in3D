@@ -1,4 +1,4 @@
-package in3D
+package in3d
 
 import (
 	"github.com/go-gl/gl/v4.1-core/gl"

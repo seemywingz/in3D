@@ -1,4 +1,4 @@
-package in3D
+package in3d
 
 import (
 	"math"

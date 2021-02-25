@@ -1,4 +1,4 @@
-package in3D
+package in3d
 
 import "github.com/go-gl/glfw/v3.3/glfw"
 
@@ -7,8 +7,8 @@ const (
 	MaxLights = 10
 	// Press :
 	Press = glfw.Press
-	// Releasese :
-	Releasese = glfw.Release
+	// Release :
+	Release = glfw.Release
 )
 
 const (

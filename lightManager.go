@@ -1,4 +1,4 @@
-package in3D
+package in3d
 
 import (
 	"errors"
@@ -34,8 +34,8 @@ func NewLightManager() *LightManager {
 // NewLight :
 func NewLight() *Light {
 	return BuildLight(
-		NewPosition(0, 0, 0), // position
-		50,                   // radius
+		NewPosition(0, 0, 0),     // position
+		50,                       // radius
 		[]float32{0.2, 0.2, 0.2}, // ambiant intensity
 		[]float32{1, 1, 1},       // diffuse intensity
 		[]float32{1, 1, 1},       // specular intensity
