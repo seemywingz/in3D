@@ -4,7 +4,7 @@ import (
 	"fmt"
 	_ "image/jpeg" // include jpeg support
 	_ "image/png"  // include png support
-	"io/ioutil"
+	"os"
 	"runtime"
 	"strings"
 
@@ -81,19 +81,21 @@ func MakeVAO(points []float32, program uint32) uint32 {
 
 	vertAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vert\x00")))
 	gl.EnableVertexAttribArray(vertAttrib)
-	gl.VertexAttribPointer(vertAttrib, 3, gl.FLOAT, false, 11*4, gl.PtrOffset(0))
+	// gl.VertexAttribPointer(vertAttrib, 3, gl.FLOAT, false, 11*4, gl.PtrOffset(0))
+	gl.VertexAttribPointerWithOffset(vertAttrib, 3, gl.FLOAT, false, 11*4, 0)
 
 	vertTexCoordAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertTexCoord\x00")))
 	gl.EnableVertexAttribArray(vertTexCoordAttrib)
-	gl.VertexAttribPointer(vertTexCoordAttrib, 2, gl.FLOAT, false, 11*4, gl.PtrOffset(3*4))
+	// gl.VertexAttribPointer(vertTexCoordAttrib, 2, gl.FLOAT, false, 11*4, gl.PtrOffset(3*4))
+	gl.VertexAttribPointerWithOffset(vertTexCoordAttrib, 2, gl.FLOAT, false, 11*4, 3*4)
 
 	vertNormalAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertNormal\x00")))
 	gl.EnableVertexAttribArray(vertNormalAttrib)
-	gl.VertexAttribPointer(vertNormalAttrib, 3, gl.FLOAT, true, 11*4, gl.PtrOffset(5*4))
+	gl.VertexAttribPointerWithOffset(vertNormalAttrib, 3, gl.FLOAT, true, 11*4, 5*4)
 
 	vertTangentAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertTangent\x00")))
 	gl.EnableVertexAttribArray(vertTangentAttrib)
-	gl.VertexAttribPointer(vertTangentAttrib, 3, gl.FLOAT, true, 11*4, gl.PtrOffset(8*4))
+	gl.VertexAttribPointerWithOffset(vertTangentAttrib, 3, gl.FLOAT, true, 11*4, 8*4)
 
 	return vao
 }
@@ -125,7 +127,7 @@ func CompileShader(source string, shaderType uint32) uint32 {
 // CompileShaderFromFile : create gl shader from source string
 func CompileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
 
-	source, err := ioutil.ReadFile(sourceFile)
+	source, err := os.ReadFile(sourceFile)
 	EoE("Error Reading Source File", err)
 
 	return CompileShader(string(source)+"\x00", shaderType)
