@@ -1,10 +1,13 @@
-module github.com/seemywingz/in3d
+module github.com/seemywingz/in3D
 
-go 1.15
+go 1.20
+
+replace github.com/seemywingz/in3D => /Users/kevin.jayne/.go/src/github.com/seemywingz/in3D
 
 require (
-	github.com/go-gl/gl v0.0.0-20190320180904-bf2b1f2f34d7 // indirect
-	github.com/go-gl/glfw v0.0.0-20201108214237-06ea97f0c265 // indirect
-	github.com/go-gl/mathgl v1.0.0 // indirect
-	github.com/seemywingz/in3D v0.0.0-20200327012642-8fec50ae6a70 // indirect
+	github.com/go-gl/gl v0.0.0-20211210172815-726fda9656d6
+	github.com/go-gl/glfw/v3.3/glfw v0.0.0-20221017161538-93cebf72946b
+	github.com/go-gl/mathgl v1.0.0
 )
+
+require golang.org/x/image v0.0.0-20190321063152-3fc05d484e9f // indirect

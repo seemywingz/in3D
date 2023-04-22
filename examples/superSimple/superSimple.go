@@ -1,34 +1,34 @@
 package main
 
 import (
-	"github.com/seemywingz/in3D"
+	in3d "github.com/seemywingz/in3D"
 )
 
 func main() {
 
-	in3D.Init(800, 600, "Simple Cube in3D")
-	// in3D.NewLight().Position =
-	// 	in3D.Position{X: 10, Y: 1, Z: 10}
+	in3d.Init(800, 600, "Simple Cube in3D")
+	in3d.NewLight().Position =
+		in3d.Position{X: 10, Y: 1, Z: 10}
 
-	in3D.SetRelPath("../assets/textures")
-	// texture := in3D.NewTexture("seemywingz.jpg")
-	color := []float32{0.1, 0.1, 0.1}
+	in3d.SetRelPath("../assets/textures")
+	texture := in3d.NewTexture("seemywingz.jpg")
+	color := []float32{0.81, 0.81, 0.81}
 
-	obj := in3D.NewPointsObject(
-		in3D.NewPosition(0, 0, -7),
-		in3D.Cube,
-		in3D.NoTexture,
+	obj := in3d.NewPointsObject(
+		in3d.NewPosition(0, 0, -7),
+		in3d.Cube,
+		texture,
 		color,
-		in3D.Shader["color"],
+		in3d.Shader["phong"],
 	)
-	obj.SceneLogic = func(s *in3D.SceneData) {
+	obj.SceneLogic = func(s *in3d.SceneData) {
 		s.XRotation += 0.1
 		s.YRotation += 0.1
 	}
 
-	for !in3D.ShouldClose() {
-		in3D.Update()
+	for !in3d.ShouldClose() {
+		in3d.Update()
 		obj.Draw()
-		in3D.SwapBuffers()
+		in3d.SwapBuffers()
 	}
 }
