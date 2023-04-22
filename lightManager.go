@@ -59,7 +59,7 @@ func NewColorLight(amb, dif, spec []float32) *Light {
 func BuildLight(position Position, radius float32, amb, dif, spec []float32, draw bool) *Light {
 	n := len(lightManager.Lights)
 	if n > MaxLights {
-		EoE("Error adding New Light:", errors.New("Max lights reached "+string(MaxLights)))
+		EoE("Error adding New Light:", errors.New("Max lights reached "+string(rune(MaxLights))))
 	}
 	fmt.Println("Adding Light:", n)
 

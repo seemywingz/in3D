@@ -19,7 +19,7 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 
 		rand.NewSource(time.Now().UnixNano())
 		x, y, z := in3d.Random(min, max), in3d.Random(min, max), in3d.Random(min, max)
-		rx, ry, rz := in3d.Randomf(), in3d.Randomf(), in3d.Randomf()
+		rx, ry, rz := in3d.RandomF(), in3d.RandomF(), in3d.RandomF()
 		if i%101 == 0 {
 			color := []float32{rx, ry, rz}
 			roamingLight := in3d.NewColorLight([]float32{0.1, 0.1, 0.1}, color, color)

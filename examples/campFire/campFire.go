@@ -44,7 +44,7 @@ func main() {
 	for !in3d.ShouldClose() {
 		in3d.Update()
 		if in3d.Random(0, 100)%2 == 0 {
-			flickerLight.Radius = in3d.Randomf() * 20
+			flickerLight.Radius = in3d.RandomF() * 20
 		}
 		for _, o := range objects {
 			o.Draw()

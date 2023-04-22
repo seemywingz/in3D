@@ -172,7 +172,7 @@ func LoadObject(filename string, program uint32) *Mesh {
 			normals = append(normals, n)
 		case "f":
 			if len(fields) != 4 {
-				EoE("unsupported face:"+string(len(fields))+" "+line, errors.New(filename))
+				EoE("unsupported face:"+string(rune(len(fields)))+" "+line, errors.New(filename))
 			}
 			var (
 				vi, ui, ni []int

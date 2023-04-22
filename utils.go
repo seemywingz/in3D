@@ -41,13 +41,13 @@ func SetRelPath(relPath string) {
 
 // Random : return pseudo random number in range
 func Random(min, max int) int {
-	rand.Seed(time.Now().UnixNano())
+	rand.NewSource(time.Now().UnixNano())
 	return rand.Intn(max-min) + min
 }
 
-// Randomf : return pseudo random float32 number in range
-func Randomf() float32 {
-	rand.Seed(time.Now().UnixNano())
+// RandomF : return pseudo random float32 number in range
+func RandomF() float32 {
+	rand.NewSource(time.Now().UnixNano())
 	return rand.Float32()
 }
 
