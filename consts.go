@@ -4,7 +4,7 @@ import "github.com/go-gl/glfw/v3.3/glfw"
 
 const (
 	// MaxLights :
-	MaxLights = 10
+	MaxLights = 42
 	// Press :
 	Press = glfw.Press
 	// Release :
@@ -12,6 +12,8 @@ const (
 )
 
 const (
+	// iota is a predeclared identifier that represents successive integer constants.
+	// It is commonly used in Go for creating a set of related constants that have a sequence of values.
 	_ = iota
 	// FlyMode : Allow "Flying" Through Scene
 	FlyMode
