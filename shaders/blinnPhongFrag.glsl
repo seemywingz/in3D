@@ -40,6 +40,7 @@ float dinstance(vec3 p0, vec3 p1){
 }
 
 void main() {
+  // For each light source calculate the ambient, diffuse and specular components using the Phong model
   for(int i=0;i<maxLights;++i) {
     vec3 L = normalize(Light[i].lightPos - fragPos);
     vec3 N = normalize(fragNoraml);

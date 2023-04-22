@@ -15,12 +15,12 @@ func main() {
 
 	moonColor := []float32{0.8, 0.8, 1}
 	moon := in3d.NewLight()
-	moon.Difffuse = moonColor
+	moon.Diffuse = moonColor
 	moon.Position = in3d.NewPosition(100, 800, 0)
 	moon.Radius = 1000
 
 	fireLight := in3d.NewLight()
-	fireLight.Difffuse = []float32{10, 5, 1}
+	fireLight.Diffuse = []float32{10, 5, 1}
 	fireLight.Specular = []float32{1, 0, 0}
 	fireLight.Position = in3d.NewPosition(0, 45, 10)
 	fireLight.Radius = 25

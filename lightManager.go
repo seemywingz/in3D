@@ -16,7 +16,7 @@ type LightManager struct {
 type Light struct {
 	Radius   float32
 	Ambient  []float32
-	Difffuse []float32
+	Diffuse  []float32
 	Specular []float32
 	SceneData
 	Draw        bool
@@ -91,7 +91,7 @@ func (manager *LightManager) Update() {
 		if light.Draw {
 			light.DrawnObject.Position = light.Position
 			for _, mg := range light.DrawnObject.Mesh.MaterialGroups {
-				mg.Material.Diffuse = light.Difffuse
+				mg.Material.Diffuse = light.Diffuse
 			}
 			light.DrawnObject.Draw()
 		}
@@ -108,7 +108,7 @@ func (manager *LightManager) Update() {
 			gl.Uniform1f(LRadID, light.Radius)
 			gl.Uniform3fv(LPosID, 1, &[]float32{light.X, light.Y, light.Z}[0])
 			gl.Uniform3fv(AmbID, 1, &light.Ambient[0])
-			gl.Uniform3fv(DifID, 1, &light.Difffuse[0])
+			gl.Uniform3fv(DifID, 1, &light.Diffuse[0])
 			gl.Uniform3fv(SpecID, 1, &light.Specular[0])
 		}
 	}

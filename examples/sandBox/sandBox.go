@@ -23,7 +23,7 @@ func main() {
 	sun := in3d.NewLight()
 	sun.Position = in3d.NewPosition(100, 100, 3)
 	sun.Ambient = []float32{1, 1, 1}
-	sun.Difffuse = []float32{1, 1, 1}
+	sun.Diffuse = []float32{1, 1, 1}
 	sun.Specular = []float32{1, 1, 1}
 	sun.Draw = true
 	sun.Radius = 10000
@@ -31,7 +31,7 @@ func main() {
 	light := in3d.NewLight()
 	light.Position = in3d.NewPosition(0, 0, 1.5)
 	light.Ambient = []float32{0.7, 0.7, 0.7}
-	light.Difffuse = []float32{10, 10, 10}
+	light.Diffuse = []float32{10, 10, 10}
 	light.Specular = []float32{10, 10, 10}
 	light.Draw = true
 	light.Radius = 10
