@@ -1,6 +1,6 @@
 module github.com/seemywingz/in3D
 
-go 1.20
+go 1.21.3
 
 // replace github.com/seemywingz/in3D => /Users/kevin.jayne/.go/src/github.com/seemywingz/in3D
 
