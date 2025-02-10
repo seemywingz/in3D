@@ -161,6 +161,12 @@ func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 	return program
 }
 
+func DrawObjects(objects []*DrawnObject) {
+	for _, object := range objects {
+		object.Draw()
+	}
+}
+
 // ShouldClose : wrapper for glfw
 func ShouldClose() bool {
 	return Window.ShouldClose()

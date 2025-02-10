@@ -59,9 +59,7 @@ func main() {
 
 	for !in3d.ShouldClose() {
 		in3d.Update()
-		for _, o := range objects {
-			o.Draw()
-		}
+		in3d.DrawObjects(objects)
 		in3d.SwapBuffers()
 	}
 }
