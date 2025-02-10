@@ -42,10 +42,8 @@ float dinstance(vec3 p0, vec3 p1){
 }
 
 void main() {
-
   vec3 textr = texture(TEXTURE, fragTexCoord).rgb;
   if (textr == vec3(0,0,0)) {
-    // if no texture, set color to white
     textr = vec3(1,1,1);
   }
 
@@ -55,6 +53,7 @@ void main() {
   vec3 N = normalize(fragTBN * normal); 
   vec3 V = normalize(-fragPos);
   
+  vec4 color = vec4(0.0);
   for(int i=0;i<maxLights;++i) {
     vec3 L = normalize(Light[i].lightPos - fragPos);
 
@@ -68,16 +67,15 @@ void main() {
       float eConservation = ( x + Material.shininess ) / ( x * pi );
       specular = eConservation * pow(specAngle, Material.shininess);
     }
-    float diffuse = max(dot(normalize(fragNoraml), normalize(Light[i].lightPos)), 0.0);
 
-    float
-      dist = distance(fragPos, Light[i].lightPos),
-      att = clamp(1.0 - dist*dist/(Light[i].lightRad*Light[i].lightRad), 0.0, 1.0); att *= att;
+    float dist = distance(fragPos, Light[i].lightPos);
+    float att = clamp(1.0 - dist*dist/(Light[i].lightRad*Light[i].lightRad), 0.0, 1.0); 
+    att *= att;
     
-    finalColor +=  vec4( att * textr *(Light[i].Iamb +
+    color +=  vec4( att * textr *(Light[i].Iamb +
                       lambertian * Light[i].Idif +
                       specular * Light[i].Ispec ) ,1);
   }
   vec4 matColor =  vec4((Material.Iamb * Material.Idif * Material.Ispec),1);
-  finalColor = matColor * finalColor;
+  finalColor = matColor * color; // Ensure the final color is set to finalColor
 }

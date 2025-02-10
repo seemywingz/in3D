@@ -5,11 +5,9 @@ import (
 )
 
 func main() {
-
 	var objects []*in3d.DrawnObject
 
 	in3d.Init(800, 600, "Wavefront Loader")
-	// in3d.SetClearColor(0.1, 0.1, 0.1, 1)
 	in3d.SetCameraPosition(in3d.NewPosition(0, 0.55, 2))
 	in3d.SetCameraSpeed(0.01)
 	in3d.Enable(in3d.PointerLock, true)
@@ -30,7 +28,6 @@ func main() {
 	sky.Scale = 10000
 	objects = append(objects, sky)
 
-	// all models are from: https://www.blendswap.com/
 	model = "buddha"
 	in3d.SetRelPath("../assets/models/" + model)
 
