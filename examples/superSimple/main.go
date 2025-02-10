@@ -12,13 +12,12 @@ func main() {
 
 	in3d.SetRelPath("../assets/textures")
 	texture := in3d.NewTexture("seemywingz.jpg")
-	// color := []float32{1.0, 0.10, 0.10}
 
 	obj := in3d.NewPointsObject(
 		in3d.NewPosition(0, 0, -7),
 		in3d.Cube,
 		texture,
-		in3d.Blue,
+		in3d.White,
 		in3d.Shader["texture"],
 	)
 	obj.SceneLogic = func(s *in3d.SceneData) {
