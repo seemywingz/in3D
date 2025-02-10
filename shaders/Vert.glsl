@@ -8,14 +8,14 @@ in vec3 vertNormal;
 
 out vec3 fragPos;
 out vec2 fragTexCoord;
-out vec3 fragNoraml;
+out vec3 fragNormal;
 
-void main(){
-  vec4 fragPos4 = MODEL * vec4(vert, 1.0);
+void main() {
+    vec4 fragPos4 = MODEL * vec4(vert, 1.0);
 
-  fragTexCoord = vertTexCoord;
-  fragPos =  fragPos4.xyz / fragPos4.w;
-  fragNoraml = (NormalMatrix * vec4(vertNormal, 0.0)).xyz;
+    fragTexCoord = vertTexCoord;
+    fragPos = fragPos4.xyz / fragPos4.w;
+    fragNormal = normalize((NormalMatrix * vec4(vertNormal, 0.0)).xyz);
 
-  gl_Position =  MVP * MODEL * vec4(vert, 1.0);
+    gl_Position = MVP * fragPos4;
 }

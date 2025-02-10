@@ -1,24 +1,22 @@
 package main
 
 import (
-	in3d "github.com/seemywingz/in3D"
+	in3d "in3D"
 )
 
 func main() {
 
 	in3d.Init(800, 600, "Simple Cube in3D")
-	in3d.NewLight().Position =
-		in3d.Position{X: 10, Y: 1, Z: 10}
+	in3d.NewLight()
 
 	in3d.SetRelPath("../assets/textures")
 	texture := in3d.NewTexture("seemywingz.jpg")
-	color := []float32{0.81, 0.81, 0.81}
 
 	obj := in3d.NewPointsObject(
 		in3d.NewPosition(0, 0, -7),
 		in3d.Cube,
 		texture,
-		color,
+		in3d.White,
 		in3d.Shader["phong"],
 	)
 	obj.SceneLogic = func(s *in3d.SceneData) {

@@ -10,13 +10,14 @@ import (
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
+	"github.com/seemywingz/go-toolbox"
 )
 
 // Init : initializes glfw and returns a Window to use, then initGL
 func Init(width, height int, title string) {
 	runtime.LockOSThread()
 
-	EoE("Error Initializing GLFW", glfw.Init())
+	toolbox.EoE(glfw.Init(), "Error Initializing GLFW")
 	glfw.WindowHint(glfw.Resizable, glfw.True)
 	glfw.WindowHint(glfw.ContextVersionMajor, 4)
 	glfw.WindowHint(glfw.ContextVersionMinor, 1)
@@ -32,7 +33,7 @@ func Init(width, height int, title string) {
 	} else {
 		Window, err = glfw.CreateWindow(width, height, title, nil, nil)
 	}
-	EoE("Error Creating GLFW Window", err)
+	toolbox.EoE(err, "Error Creating GLFW Window")
 	Window.MakeContextCurrent()
 	initGL()
 	initShaders()
@@ -42,14 +43,16 @@ func Init(width, height int, title string) {
 
 // initGL : initialize GL setting and print version
 func initGL() {
-	EoE("Error Initializing OpenGL", gl.Init())
+	toolbox.EoE(gl.Init(), "Error Initializing OpenGL")
 
 	gl.Enable(gl.DEPTH_TEST)
+	gl.DepthFunc(gl.LESS)
+
+	gl.Enable(gl.CULL_FACE) // Enable Backface Culling
+	gl.CullFace(gl.BACK)    // Cull Backfaces
 
 	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 	gl.Enable(gl.BLEND)
-
-	gl.DepthFunc(gl.LESS)
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	println("OpenGL version", version)
@@ -57,19 +60,17 @@ func initGL() {
 
 // initShaders :
 func initShaders() {
-	SetRelPath("shaders")
+	toolbox.SetRelPath("shaders")
 	Shader["basic"] = NewShader("Vert.glsl", "basicFrag.glsl")
 	Shader["color"] = NewShader("Vert.glsl", "colorFrag.glsl")
 	Shader["texture"] = NewShader("Vert.glsl", "textureFrag.glsl")
-	Shader["fixedLight"] = NewShader("Vert.glsl", "fixedLightFrag.glsl")
 	Shader["phong"] = NewShader("Vert.glsl", "blinnPhongFrag.glsl")
 	Shader["normalMap"] = NewShader("normalMapVert.glsl", "normalMapFrag.glsl")
-	Shader["in3D"] = NewShader("in3dVert.glsl", "in3DFrag.glsl")
+	// Shader["in3D"] = NewShader("in3dVert.glsl", "in3DFrag.glsl")
 }
 
 // MakeVAO : initializes and returns a vertex array from the points provided.
 func MakeVAO(points []float32, program uint32) uint32 {
-
 	var vao uint32
 	gl.GenVertexArrays(1, &vao)
 	gl.BindVertexArray(vao)
@@ -81,12 +82,10 @@ func MakeVAO(points []float32, program uint32) uint32 {
 
 	vertAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vert\x00")))
 	gl.EnableVertexAttribArray(vertAttrib)
-	// gl.VertexAttribPointer(vertAttrib, 3, gl.FLOAT, false, 11*4, gl.PtrOffset(0))
 	gl.VertexAttribPointerWithOffset(vertAttrib, 3, gl.FLOAT, false, 11*4, 0)
 
 	vertTexCoordAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertTexCoord\x00")))
 	gl.EnableVertexAttribArray(vertTexCoordAttrib)
-	// gl.VertexAttribPointer(vertTexCoordAttrib, 2, gl.FLOAT, false, 11*4, gl.PtrOffset(3*4))
 	gl.VertexAttribPointerWithOffset(vertTexCoordAttrib, 2, gl.FLOAT, false, 11*4, 3*4)
 
 	vertNormalAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertNormal\x00")))
@@ -118,7 +117,7 @@ func CompileShader(source string, shaderType uint32) uint32 {
 		log := strings.Repeat("\x00", int(logLength+1))
 		gl.GetShaderInfoLog(shader, logLength, nil, gl.Str(log))
 
-		EoE("Failed to Compile Source ", fmt.Errorf("failed to compile %v: %v", source, log))
+		toolbox.EoE(fmt.Errorf("failed to compile %v: %v", source, log), "Failed to Compile Source ")
 	}
 
 	return shader
@@ -128,7 +127,7 @@ func CompileShader(source string, shaderType uint32) uint32 {
 func CompileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
 
 	source, err := os.ReadFile(sourceFile)
-	EoE("Error Reading Source File", err)
+	toolbox.EoE(err, "Error Reading Source File")
 
 	return CompileShader(string(source)+"\x00", shaderType)
 }
@@ -154,7 +153,7 @@ func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 		log := strings.Repeat("\x00", int(logLength+1))
 		gl.GetProgramInfoLog(program, logLength, nil, gl.Str(log))
 
-		EoE("Error Linking Shader Program", fmt.Errorf("failed to link program: %v", log))
+		toolbox.EoE(fmt.Errorf("failed to link program: %v", log), "Error Linking Shader Program:\n")
 	}
 
 	gl.DeleteShader(vertexShader)

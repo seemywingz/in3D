@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	in3d "github.com/seemywingz/in3D"
+	in3d "in3D"
 )
 
 var (

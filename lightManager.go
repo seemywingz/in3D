@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
+	"github.com/seemywingz/go-toolbox"
 )
 
 // LightManager :
@@ -35,10 +36,10 @@ func NewLightManager() *LightManager {
 func NewLight() *Light {
 	return BuildLight(
 		NewPosition(0, 0, 0),     // position
-		50,                       // radius
-		[]float32{0.2, 0.2, 0.2}, // ambiant intensity
-		[]float32{1, 1, 1},       // diffuse intensity
-		[]float32{1, 1, 1},       // specular intensity
+		60,                       // radius
+		[]float32{1.0, 1.0, 1.0}, // ambiant intensity
+		[]float32{1.0, 1.0, 1.0}, // diffuse intensity
+		[]float32{1.0, 1.0, 1.0}, // specular intensity
 		false,                    // draw
 	)
 }
@@ -59,7 +60,7 @@ func NewColorLight(amb, dif, spec []float32) *Light {
 func BuildLight(position Position, radius float32, amb, dif, spec []float32, draw bool) *Light {
 	n := len(lightManager.Lights)
 	if n > MaxLights {
-		EoE("Error adding New Light:", errors.New("max lights reached "+fmt.Sprint(MaxLights)))
+		toolbox.EoE(errors.New("max lights reached "+fmt.Sprint(MaxLights)), "Error adding New Light:")
 	}
 	fmt.Println("Adding Light:", n)
 

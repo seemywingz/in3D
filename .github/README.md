@@ -52,11 +52,18 @@ func main() {
 
 ### Installation on Ubuntu
 ```
-apt-get install libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev
+sudo apt install libgl1-mesa-dev libxrandr-dev libxcursor-dev libxi-dev libxinerama-dev
 
 go get github.com/seemywingz/in3D
 ```  
-##### Make sure you are using the prorietary driver provided by the vendor of your graphics card 
+### Installation on Fedora
+```sh
+sudo dnf install -y libXxf86vm-devel  mesa-libGL-devel mesa-libGLES-devel libXcursor-devel libXrandr-devel libXinerama-devel libXi-devel libX11-devel
+
+go get github.com/seemywingz/in3D
+```
+
+##### Make sure OpenGL 4.1 is supported by your system, drivers and hardware
   
 ##### Note:
 ###### Some Names and method may change until version 1.0 is tagged

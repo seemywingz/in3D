@@ -7,19 +7,20 @@ import (
 	"os"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
+	"github.com/seemywingz/go-toolbox"
 )
 
 // NewTexture : greate GL reference to provided texture
 func NewTexture(file string) uint32 {
 	imgFile, err := os.Open(file)
-	EoE("Error Loading Texture", err)
+	toolbox.EoE(err, "Error Loading Texture")
 
 	img, _, err := image.Decode(imgFile)
-	EoE("Error Decoding Image", err)
+	toolbox.EoE(err, "Error Decoding Image")
 
 	rgba := image.NewRGBA(img.Bounds())
 	if rgba.Stride != rgba.Rect.Size().X*4 {
-		EoE("Error Getting RGB Strride", errors.New("unsupported stride"))
+		toolbox.EoE(errors.New("unsupported stride"), "Error Getting RGB Strride")
 	}
 	draw.Draw(rgba, rgba.Bounds(), img, image.Point{0, 0}, draw.Src)
 
