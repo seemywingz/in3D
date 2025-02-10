@@ -43,7 +43,7 @@ func main() {
 
 	model := "sky"
 	skyShader := in3d.Shader["texture"]
-	in3d.SetRelPath("../assets/models/" + model)
+	in3d.SetDir("../assets/models/" + model)
 	skymesh := in3d.LoadOBJ(model+".obj", skyShader)
 	sky := in3d.NewMeshObject(in3d.Position{}, skymesh, skyShader)
 	sky.Scale = 10000
@@ -51,7 +51,7 @@ func main() {
 
 	model = "buddha"
 	meshShader := in3d.Shader["phong"]
-	in3d.SetRelPath("../assets/models/" + model)
+	in3d.SetDir("../assets/models/" + model)
 	mesh := in3d.LoadOBJ(model+".obj", meshShader)
 	meshObject := in3d.NewMeshObject(in3d.NewPosition(-0.5, 0, 0), mesh, meshShader)
 	meshObject.YRotation = 90

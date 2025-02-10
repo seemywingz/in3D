@@ -9,7 +9,7 @@ func main() {
 	in3d.Init(800, 600, "Simple Cube in3D")
 	in3d.NewLight()
 
-	in3d.SetRelPath("../assets/textures")
+	in3d.SetDir("../assets/textures")
 	texture := in3d.NewTexture("seemywingz.jpg")
 
 	obj := in3d.NewPointsObject(

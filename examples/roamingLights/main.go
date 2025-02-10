@@ -63,7 +63,7 @@ func randLights(numberOfLights, min, max int) {
 func loadTextures() {
 	texture = make(map[string]uint32)
 	texture["none"] = in3d.NoTexture
-	in3d.SetRelPath("../assets/textures")
+	in3d.SetDir("../assets/textures")
 	texture["box"] = in3d.NewTexture("box.jpg")
 	texture["box1"] = in3d.NewTexture("box1.jpg")
 }

@@ -22,14 +22,14 @@ func main() {
 
 	model := "sky"
 	skyShader := in3d.Shader["texture"]
-	in3d.SetRelPath("../assets/models/" + model)
+	in3d.SetDir("../assets/models/" + model)
 	skymesh := in3d.LoadOBJ(model+".obj", skyShader)
 	sky := in3d.NewMeshObject(in3d.Position{}, skymesh, skyShader)
 	sky.Scale = 10000
 	objects = append(objects, sky)
 
 	model = "buddha"
-	in3d.SetRelPath("../assets/models/" + model)
+	in3d.SetDir("../assets/models/" + model)
 
 	meshShader := in3d.Shader["phong"]
 	mesh := in3d.LoadOBJ(model+".obj", meshShader)

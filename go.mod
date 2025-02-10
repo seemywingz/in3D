@@ -18,6 +18,7 @@ require (
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-sixel v0.0.5 // indirect
+	github.com/qmuntal/gltf v0.28.0 // indirect
 	github.com/seemywingz/go-toolbox v0.0.0-20250210182555-9d5da7407e45 // indirect
 	github.com/soniakeys/quant v1.0.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect

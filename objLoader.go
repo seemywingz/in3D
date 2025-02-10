@@ -11,43 +11,18 @@ import (
 	"github.com/seemywingz/go-toolbox"
 )
 
-// Mesh :
-type Mesh struct {
-	MaterialGroups map[string]*MaterialGroup
-}
-
-// MaterialGroup :
-type MaterialGroup struct {
-	Material  *Material
-	Faces     []*Face
-	VAO       uint32
-	VertCount int32
-}
-
-// Material represents a material
-type Material struct {
-	Name       string
-	Ambient    []float32
-	Diffuse    []float32
-	Specular   []float32
-	Shininess  float32
-	DiffuseTex uint32
-	NormalTex  uint32
-}
-
-// Face :
-type Face struct {
-	VertID []int
-	UVID   []int
-	NormID []int
-}
-
 func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32, program uint32) {
 	var (
 		vao []float32
 	)
 
 	for _, f := range group.Faces {
+		if f.VertID[0]-1 < 0 || f.VertID[0]-1 >= len(vertexs) ||
+			f.VertID[1]-1 < 0 || f.VertID[1]-1 >= len(vertexs) ||
+			f.VertID[2]-1 < 0 || f.VertID[2]-1 >= len(vertexs) {
+			continue
+		}
+
 		vec0 := mgl32.NewVecNFromData(vertexs[f.VertID[0]-1])
 		vec1 := mgl32.NewVecNFromData(vertexs[f.VertID[1]-1])
 		vec2 := mgl32.NewVecNFromData(vertexs[f.VertID[2]-1])
@@ -188,6 +163,9 @@ func LoadOBJ(filename string, program uint32) *Mesh {
 				sui, err := strconv.Atoi(faceStr[1])
 				ui = append(ui, sui)
 				toolbox.EoE(err, "unsupported face uv index")
+			}
+			if materialGroups[currentGroup] == nil {
+				materialGroups[currentGroup] = &MaterialGroup{}
 			}
 			materialGroups[currentGroup].Faces = append(materialGroups[currentGroup].Faces, &Face{vi, ui, ni})
 		}

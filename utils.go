@@ -8,16 +8,19 @@ import (
 	"regexp"
 	"runtime"
 	"time"
+
+	"github.com/seemywingz/go-toolbox"
 )
 
-// SetRelPath : resolves the absolute path for provided relative path.
-func SetRelPath(relPath string) error {
+// SetDir : resolves the absolute path for provided relative path.
+func SetDir(relPath string) {
 	if _, filename, _, ok := runtime.Caller(1); ok {
 		re := regexp.MustCompile("[a-zA-Z0-9-]*.go$")
 		path := filepath.Join(re.ReplaceAllString(filename, ""), relPath)
-		return os.Chdir(path)
+		fmt.Println("Setting Path to:", path)
+		toolbox.EoE(os.Chdir(path), "Error Setting Directory")
 	} else {
-		return fmt.Errorf("Error Getting Caller Location: %s", filename)
+		toolbox.EoE(fmt.Errorf("Error Setting Directory"), "Error Setting Directory")
 	}
 }
 

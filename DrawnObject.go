@@ -1,6 +1,8 @@
 package in3d
 
 import (
+	"fmt"
+
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/mathgl/mgl32"
 )
@@ -92,6 +94,18 @@ func (d *DrawnObject) translateRotate() *mgl32.Mat4 {
 
 // Draw : draw the object
 func (d *DrawnObject) Draw() {
+	if d.Mesh == nil {
+		fmt.Println("Error: DrawnObject Mesh is nil")
+		return
+	}
+	if d.Mesh.MaterialGroups == nil {
+		fmt.Println("Error: DrawnObject MaterialGroups is nil")
+		return
+	}
+	if d.Program == 0 {
+		fmt.Println("Error: Shader Program is not initialized")
+		return
+	}
 
 	if d.SceneLogic != nil {
 		d.SceneLogic(&d.SceneData)
@@ -106,31 +120,37 @@ func (d *DrawnObject) Draw() {
 	gl.UniformMatrix4fv(d.NormalMatrixID, 1, false, &normalMatrix[0])
 
 	for _, m := range d.Mesh.MaterialGroups {
+		if m.VAO == 0 {
+			fmt.Printf("Warning: VAO for MaterialGroup '%s' is not initialized\n", m.Material.Name)
+			continue
+		}
+
 		gl.UseProgram(d.Program)
 		gl.BindVertexArray(m.VAO)
 
-		// Material
+		// Material settings
 		gl.Uniform3fv(d.IambID, 1, &m.Material.Ambient[0])
 		gl.Uniform3fv(d.IspecID, 1, &m.Material.Specular[0])
 		gl.Uniform3fv(d.IdifID, 1, &m.Material.Diffuse[0])
 		gl.Uniform1f(d.ShininessID, m.Material.Shininess)
 
+		// Bind textures
 		gl.Uniform1i(d.TextureID, 0)
 		gl.Uniform1i(d.NormalMapID, 1)
 
-		// Bind our diffuse texture in Texture Unit 0
 		gl.ActiveTexture(gl.TEXTURE0)
 		gl.BindTexture(gl.TEXTURE_2D, m.Material.DiffuseTex)
 
 		gl.ActiveTexture(gl.TEXTURE1)
 		gl.BindTexture(gl.TEXTURE_2D, m.Material.NormalTex)
 
+		// Draw object
 		gl.DrawArrays(gl.TRIANGLES, 0, m.VertCount)
 
+		// Unbind textures
 		gl.ActiveTexture(gl.TEXTURE0)
 		gl.BindTexture(gl.TEXTURE_2D, 0)
 		gl.ActiveTexture(gl.TEXTURE1)
 		gl.BindTexture(gl.TEXTURE_2D, 0)
 	}
-
 }

@@ -36,7 +36,7 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 func loadTextures() {
 	texture = make(map[string]uint32)
 	texture["none"] = in3d.NoTexture
-	in3d.SetRelPath("../assets/textures")
+	in3d.SetDir("../assets/textures")
 	texture["box"] = in3d.NewTexture("box.jpg")
 }
 

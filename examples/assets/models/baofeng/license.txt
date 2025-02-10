@@ -1,0 +1,11 @@
+Model Information:
+* title:	Handheld Portable Radio – Walkie Talkie
+* source:	https://sketchfab.com/3d-models/handheld-portable-radio-walkie-talkie-282d16b8d5a84343953eb6d8d135722a
+* author:	Andrzej Borkowski (https://sketchfab.com/abg_3d)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Handheld Portable Radio – Walkie Talkie" (https://sketchfab.com/3d-models/handheld-portable-radio-walkie-talkie-282d16b8d5a84343953eb6d8d135722a) by Andrzej Borkowski (https://sketchfab.com/abg_3d) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

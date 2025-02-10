@@ -134,7 +134,6 @@ func CompileShaderFromFile(sourceFile string, shaderType uint32) uint32 {
 
 // NewShader : create GL shader program from provided GLSL source files
 func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
-
 	vertexShader := CompileShaderFromFile(vertexShaderSourceFile, gl.VERTEX_SHADER)
 	fragmentShader := CompileShaderFromFile(fragmentShaderSourceFile, gl.FRAGMENT_SHADER)
 
@@ -153,7 +152,8 @@ func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 		log := strings.Repeat("\x00", int(logLength+1))
 		gl.GetProgramInfoLog(program, logLength, nil, gl.Str(log))
 
-		toolbox.EoE(fmt.Errorf("failed to link program: %v", log), "Error Linking Shader Program:\n")
+		fmt.Println("Error Linking Shader Program:\n", log)
+		os.Exit(1)
 	}
 
 	gl.DeleteShader(vertexShader)

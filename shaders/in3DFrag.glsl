@@ -33,9 +33,13 @@ void main() {
   }
 
   vec3 normal = texture(NORMAL_MAP, fragTexCoord).rgb;
-  normal = normalize(normal * 2.0 - 1.0);   
+  if (normal == vec3(0,0,0)) {
+      normal = vec3(0.5, 0.5, 1.0); // Default normal if missing
+  }
+  normal = normalize(normal * 2.0 - 1.0);
 
-  vec3 N = normalize(fragTBN * normal); 
+
+  vec3 N = normalize(fragTBN * normal);
   vec3 V = normalize(-fragPos);
   
   vec4 color = vec4(0.0);

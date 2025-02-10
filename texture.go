@@ -2,6 +2,7 @@ package in3d
 
 import (
 	"errors"
+	"fmt"
 	"image"
 	"image/draw"
 	"os"
@@ -13,10 +14,19 @@ import (
 // NewTexture : greate GL reference to provided texture
 func NewTexture(file string) uint32 {
 	imgFile, err := os.Open(file)
-	toolbox.EoE(err, "Error Loading Texture")
+	if err != nil {
+		fmt.Printf("Error: Unable to open texture file %s: %v\n", file, err)
+		return NoTexture
+	}
+	defer imgFile.Close()
 
 	img, _, err := image.Decode(imgFile)
-	toolbox.EoE(err, "Error Decoding Image")
+	if err != nil {
+		fmt.Printf("Error: Failed to decode texture file %s: %v\n", file, err)
+		return NoTexture
+	}
+
+	fmt.Printf("Texture loaded successfully: %s\n", file)
 
 	rgba := image.NewRGBA(img.Bounds())
 	if rgba.Stride != rgba.Rect.Size().X*4 {
