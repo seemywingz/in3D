@@ -66,7 +66,7 @@ func initShaders() {
 	Shader["texture"] = NewShader("Vert.glsl", "textureFrag.glsl")
 	Shader["phong"] = NewShader("Vert.glsl", "blinnPhongFrag.glsl")
 	Shader["normalMap"] = NewShader("normalMapVert.glsl", "normalMapFrag.glsl")
-	// Shader["in3D"] = NewShader("in3dVert.glsl", "in3DFrag.glsl")
+	Shader["in3D"] = NewShader("in3dVert.glsl", "in3DFrag.glsl")
 }
 
 // MakeVAO : initializes and returns a vertex array from the points provided.

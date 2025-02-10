@@ -112,7 +112,7 @@ func LoadObject(filename string, program uint32) *Mesh {
 	normals := [][]float32{}
 	uvs := [][]float32{}
 
-	var materialGroups map[string]*MaterialGroup
+	var materialGroups map[string]*MaterialGroup = make(map[string]*MaterialGroup)
 
 	currentGroup := "string"
 	scanner := bufio.NewScanner(file)
