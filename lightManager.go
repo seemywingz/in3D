@@ -37,9 +37,9 @@ func NewLight() *Light {
 	return BuildLight(
 		NewPosition(0, 0, 0),     // position
 		50,                       // radius
-		[]float32{0.2, 0.2, 0.2}, // ambiant intensity
-		[]float32{1, 1, 1},       // diffuse intensity
-		[]float32{1, 1, 1},       // specular intensity
+		[]float32{1.0, 1.0, 1.0}, // ambiant intensity
+		[]float32{1.0, 1.0, 1.0}, // diffuse intensity
+		[]float32{1.0, 1.0, 1.0}, // specular intensity
 		false,                    // draw
 	)
 }

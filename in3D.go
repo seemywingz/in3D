@@ -59,13 +59,13 @@ func initGL() {
 // initShaders :
 func initShaders() {
 	toolbox.SetRelPath("shaders")
-	Shader["basic"] = NewShader("Vert.glsl", "basicFrag.glsl")
-	Shader["color"] = NewShader("Vert.glsl", "colorFrag.glsl")
-	Shader["texture"] = NewShader("Vert.glsl", "textureFrag.glsl")
-	Shader["fixedLight"] = NewShader("Vert.glsl", "fixedLightFrag.glsl")
+	// Shader["basic"] = NewShader("Vert.glsl", "basicFrag.glsl")
+	// Shader["color"] = NewShader("Vert.glsl", "colorFrag.glsl")
+	// Shader["texture"] = NewShader("Vert.glsl", "textureFrag.glsl")
+	// Shader["fixedLight"] = NewShader("Vert.glsl", "fixedLightFrag.glsl")
 	Shader["phong"] = NewShader("Vert.glsl", "blinnPhongFrag.glsl")
-	Shader["normalMap"] = NewShader("normalMapVert.glsl", "normalMapFrag.glsl")
-	Shader["in3D"] = NewShader("in3dVert.glsl", "in3DFrag.glsl")
+	// Shader["normalMap"] = NewShader("normalMapVert.glsl", "normalMapFrag.glsl")
+	// Shader["in3D"] = NewShader("in3dVert.glsl", "in3DFrag.glsl")
 }
 
 // MakeVAO : initializes and returns a vertex array from the points provided.
@@ -155,7 +155,7 @@ func NewShader(vertexShaderSourceFile, fragmentShaderSourceFile string) uint32 {
 		log := strings.Repeat("\x00", int(logLength+1))
 		gl.GetProgramInfoLog(program, logLength, nil, gl.Str(log))
 
-		toolbox.EoE(fmt.Errorf("failed to link program: %v", log), "Error Linking Shader Program")
+		toolbox.EoE(fmt.Errorf("failed to link program: %v", log), "Error Linking Shader Program:\n")
 	}
 
 	gl.DeleteShader(vertexShader)

@@ -7,8 +7,7 @@ import (
 func main() {
 
 	in3d.Init(800, 600, "Simple Cube in3D")
-	in3d.NewLight().Position =
-		in3d.Position{X: 10, Y: 1, Z: 10}
+	in3d.NewLight()
 
 	in3d.SetRelPath("../assets/textures")
 	texture := in3d.NewTexture("seemywingz.jpg")
