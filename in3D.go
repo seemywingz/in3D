@@ -46,11 +46,13 @@ func initGL() {
 	toolbox.EoE(gl.Init(), "Error Initializing OpenGL")
 
 	gl.Enable(gl.DEPTH_TEST)
+	gl.DepthFunc(gl.LESS)
+
+	gl.Enable(gl.CULL_FACE) // Enable Backface Culling
+	gl.CullFace(gl.BACK)    // Cull Backfaces
 
 	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 	gl.Enable(gl.BLEND)
-
-	gl.DepthFunc(gl.LESS)
 
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	println("OpenGL version", version)
@@ -69,7 +71,6 @@ func initShaders() {
 
 // MakeVAO : initializes and returns a vertex array from the points provided.
 func MakeVAO(points []float32, program uint32) uint32 {
-
 	var vao uint32
 	gl.GenVertexArrays(1, &vao)
 	gl.BindVertexArray(vao)
@@ -81,12 +82,10 @@ func MakeVAO(points []float32, program uint32) uint32 {
 
 	vertAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vert\x00")))
 	gl.EnableVertexAttribArray(vertAttrib)
-	// gl.VertexAttribPointer(vertAttrib, 3, gl.FLOAT, false, 11*4, gl.PtrOffset(0))
 	gl.VertexAttribPointerWithOffset(vertAttrib, 3, gl.FLOAT, false, 11*4, 0)
 
 	vertTexCoordAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertTexCoord\x00")))
 	gl.EnableVertexAttribArray(vertTexCoordAttrib)
-	// gl.VertexAttribPointer(vertTexCoordAttrib, 2, gl.FLOAT, false, 11*4, gl.PtrOffset(3*4))
 	gl.VertexAttribPointerWithOffset(vertTexCoordAttrib, 2, gl.FLOAT, false, 11*4, 3*4)
 
 	vertNormalAttrib := uint32(gl.GetAttribLocation(program, gl.Str("vertNormal\x00")))

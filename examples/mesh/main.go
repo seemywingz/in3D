@@ -41,33 +41,21 @@ func main() {
 		s.Position.Z = n
 	}
 
-	model := "sky"
-	skyShader := in3d.Shader["texture"]
-	in3d.SetRelPath("../assets/models/" + model)
-	skymesh := in3d.LoadObject(model+".obj", skyShader)
-	sky := in3d.NewMeshObject(in3d.Position{}, skymesh, skyShader)
-	sky.Scale = 10000
-	objects = append(objects, sky)
+	// model := "sky"
+	// skyShader := in3d.Shader["texture"]
+	// in3d.SetRelPath("../assets/models/" + model)
+	// skymesh := in3d.LoadObject(model+".obj", skyShader)
+	// sky := in3d.NewMeshObject(in3d.Position{}, skymesh, skyShader)
+	// sky.Scale = 10000
+	// objects = append(objects, sky)
 
-	// rotateY := func(s *in3d.SceneData) {
-	// 	s.YRotation += 0.1
-	// }
-
-	// all models are from: https://www.blendswap.com/
-	model = "buddha"
-	meshShader := in3d.Shader["normalMap"]
+	model := "buddha"
+	meshShader := in3d.Shader["phong"]
 	in3d.SetRelPath("../assets/models/" + model)
 	mesh := in3d.LoadObject(model+".obj", meshShader)
 	meshObject := in3d.NewMeshObject(in3d.NewPosition(-0.5, 0, 0), mesh, meshShader)
 	meshObject.YRotation = 90
 	objects = append(objects, meshObject)
-
-	model = "buddha"
-	meshShader = in3d.Shader["phong"]
-	mesh = in3d.LoadObject(model+".obj", meshShader)
-	buddha := in3d.NewMeshObject(in3d.NewPosition(0.5, 0, 0), mesh, meshShader)
-	buddha.YRotation = -90
-	objects = append(objects, buddha)
 
 	for !in3d.ShouldClose() {
 		in3d.Update()

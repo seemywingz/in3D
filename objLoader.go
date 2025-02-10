@@ -47,8 +47,7 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 		vao []float32
 	)
 
-	for _, f := range group.Faces { // use face data to construct GL VAO: XYZ UV [3]normal [3]tangent
-		// This is UGLY!!
+	for _, f := range group.Faces {
 		vec0 := mgl32.NewVecNFromData(vertexs[f.VertID[0]-1])
 		vec1 := mgl32.NewVecNFromData(vertexs[f.VertID[1]-1])
 		vec2 := mgl32.NewVecNFromData(vertexs[f.VertID[2]-1])
@@ -64,7 +63,6 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 		tangent := mgl32.NewVecNFromData([]float32{0, 0, 0})
 
 		if f.UVID[0] >= 0 {
-			// if we have UV mappings, calculate tangentent and bitangent for normal map
 			uv0 = mgl32.NewVecNFromData(uvs[f.UVID[0]-1])
 			uv1 = mgl32.NewVecNFromData(uvs[f.UVID[1]-1])
 			uv2 = mgl32.NewVecNFromData(uvs[f.UVID[2]-1])
@@ -76,16 +74,13 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 			dUV2 := uv2.Sub(nil, uv0)
 			x, y, z := 0, 1, 2
 			f := 1.0 / (dUV1.Get(x)*dUV2.Get(y) - dUV2.Get(x)*dUV1.Get(y))
-			// print(f)
 
 			tangent.Set(x, f*(dUV2.Get(y)*e1.Get(x)-dUV1.Get(y)*e2.Get(x)))
 			tangent.Set(y, f*(dUV2.Get(y)*e1.Get(y)-dUV1.Get(y)*e2.Get(y)))
 			tangent.Set(z, f*(dUV2.Get(y)*e1.Get(z)-dUV1.Get(y)*e2.Get(z)))
 			tangent = tangent.Normalize(nil)
-			// println(tangent)
 		}
 
-		// This is UGLY!!
 		vao = append(vao, vec0.Raw()...)
 		vao = append(vao, uv0.Raw()...)
 		vao = append(vao, normal0...)
@@ -103,7 +98,7 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 	}
 
 	group.VAO = MakeVAO(vao, program)
-	group.VertCount = int32(len(vao))
+	group.VertCount = int32(len(vao) / 11)
 }
 
 // LoadObject : opens a wavefront file and parses it into Material Groups
