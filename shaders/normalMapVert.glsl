@@ -6,18 +6,17 @@ in vec3 vert;
 in vec2 vertTexCoord;
 in vec3 vertNormal;
 in vec3 vertTangent;
-// in vec3 vertBitangent;
 
 out vec3 fragPos;
 out vec2 fragTexCoord;
-out vec3 fragNormal; // Corrected typo
+out vec3 fragNormal;
 out mat3 fragTBN;
 
 void main(){
   vec4 fragPos4 = MODEL * vec4(vert, 1.0);
   fragTexCoord = vertTexCoord;
   fragPos =  fragPos4.xyz / fragPos4.w;
-  fragNormal = (NormalMatrix * vec4(vertNormal, 0.0)).xyz; // Corrected typo
+  fragNormal = (NormalMatrix * vec4(vertNormal, 0.0)).xyz;
 
   vec3 N = normalize(vec3(MODEL * vec4(vertNormal,    0.0)));
   vec3 T = normalize(vec3(MODEL * vec4(vertTangent,   0.0)));

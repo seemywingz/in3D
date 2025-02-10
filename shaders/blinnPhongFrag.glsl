@@ -8,7 +8,7 @@ uniform mat4 MVP, MODEL;
 uniform vec4 COLOR;
 
 in vec3 fragPos;
-in vec3 fragNormal;  // Corrected typo
+in vec3 fragNormal;
 in vec2 fragTexCoord;
 
 out vec4 finalColor;
@@ -35,7 +35,7 @@ void main() {
 
     for(int i = 0; i < maxLights; ++i) {
         vec3 L = normalize(Light[i].lightPos - fragPos);
-        vec3 N = normalize(fragNormal); // Ensure we are using the corrected name
+        vec3 N = normalize(fragNormal);
         vec3 V = normalize(-fragPos);
 
         float lambertian = max(dot(N, L), 0.0);
