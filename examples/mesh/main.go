@@ -41,15 +41,15 @@ func main() {
 		s.Position.Z = n
 	}
 
-	// model := "sky"
-	// skyShader := in3d.Shader["texture"]
-	// in3d.SetRelPath("../assets/models/" + model)
-	// skymesh := in3d.LoadObject(model+".obj", skyShader)
-	// sky := in3d.NewMeshObject(in3d.Position{}, skymesh, skyShader)
-	// sky.Scale = 10000
-	// objects = append(objects, sky)
+	model := "sky"
+	skyShader := in3d.Shader["texture"]
+	in3d.SetRelPath("../assets/models/" + model)
+	skymesh := in3d.LoadObject(model+".obj", skyShader)
+	sky := in3d.NewMeshObject(in3d.Position{}, skymesh, skyShader)
+	sky.Scale = 10000
+	objects = append(objects, sky)
 
-	model := "buddha"
+	model = "buddha"
 	meshShader := in3d.Shader["phong"]
 	in3d.SetRelPath("../assets/models/" + model)
 	mesh := in3d.LoadObject(model+".obj", meshShader)
