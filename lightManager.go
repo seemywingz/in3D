@@ -36,7 +36,7 @@ func NewLightManager() *LightManager {
 func NewLight() *Light {
 	return BuildLight(
 		NewPosition(0, 0, 0),     // position
-		50,                       // radius
+		60,                       // radius
 		[]float32{1.0, 1.0, 1.0}, // ambiant intensity
 		[]float32{1.0, 1.0, 1.0}, // diffuse intensity
 		[]float32{1.0, 1.0, 1.0}, // specular intensity

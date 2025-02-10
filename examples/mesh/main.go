@@ -1,7 +1,7 @@
 package main
 
 import (
-	in3d "github.com/seemywingz/in3D"
+	in3d "in3D"
 )
 
 func main() {

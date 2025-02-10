@@ -59,12 +59,11 @@ func initGL() {
 // initShaders :
 func initShaders() {
 	toolbox.SetRelPath("shaders")
-	// Shader["basic"] = NewShader("Vert.glsl", "basicFrag.glsl")
-	// Shader["color"] = NewShader("Vert.glsl", "colorFrag.glsl")
-	// Shader["texture"] = NewShader("Vert.glsl", "textureFrag.glsl")
-	// Shader["fixedLight"] = NewShader("Vert.glsl", "fixedLightFrag.glsl")
+	Shader["basic"] = NewShader("Vert.glsl", "basicFrag.glsl")
+	Shader["color"] = NewShader("Vert.glsl", "colorFrag.glsl")
+	Shader["texture"] = NewShader("Vert.glsl", "textureFrag.glsl")
 	Shader["phong"] = NewShader("Vert.glsl", "blinnPhongFrag.glsl")
-	// Shader["normalMap"] = NewShader("normalMapVert.glsl", "normalMapFrag.glsl")
+	Shader["normalMap"] = NewShader("normalMapVert.glsl", "normalMapFrag.glsl")
 	// Shader["in3D"] = NewShader("in3dVert.glsl", "in3DFrag.glsl")
 }
 
