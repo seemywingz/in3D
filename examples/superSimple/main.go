@@ -7,8 +7,8 @@ import (
 func main() {
 
 	in3d.Init(800, 600, "Simple Cube in3D")
-	// in3d.NewLight().Position =
-	// 	in3d.Position{X: 10, Y: 1, Z: 10}
+	in3d.NewLight().Position =
+		in3d.Position{X: 10, Y: 1, Z: 10}
 
 	in3d.SetRelPath("../assets/textures")
 	texture := in3d.NewTexture("seemywingz.jpg")
@@ -18,7 +18,7 @@ func main() {
 		in3d.Cube,
 		texture,
 		in3d.White,
-		in3d.Shader["texture"],
+		in3d.Shader["phong"],
 	)
 	obj.SceneLogic = func(s *in3d.SceneData) {
 		s.XRotation += 0.1

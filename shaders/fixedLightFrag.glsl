@@ -5,7 +5,7 @@ uniform mat4 MVP, MODEL;
 uniform vec4 COLOR;
 
 // TODO: store light data in go program
-const vec3 lightPos = vec3(0.0, 0.0, 0.0);
+const vec3 lightPos = vec3(0.0, 1.0, 0.0);
 const vec3 Iamb = vec3(0.1, 0.1, 0.1)*1;
 const vec3 Idif = vec3(0.1, 0.1, 0.1)*3;
 const vec3 Ispec = vec3(0.1, 0.1, 0.1)*10;
