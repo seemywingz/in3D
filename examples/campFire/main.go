@@ -34,7 +34,7 @@ func main() {
 	// all models are from: https://www.blendswap.com/
 	objFile := "campFire"
 	in3d.SetRelPath("../assets/models/" + objFile)
-	mesh := in3d.LoadObject(objFile+".obj", in3d.Shader["phong"])
+	mesh := in3d.LoadOBJ(objFile+".obj", in3d.Shader["phong"])
 	obj := in3d.NewMeshObject(in3d.Position{}, mesh, in3d.Shader["phong"])
 	obj.YRotation = 110
 	objects = append(objects, obj)

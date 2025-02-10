@@ -101,9 +101,9 @@ func buildVAOforMatGroup(group *MaterialGroup, vertexs, uvs, normals [][]float32
 	group.VertCount = int32(len(vao) / 11)
 }
 
-// LoadObject : opens a wavefront file and parses it into Material Groups
+// LoadOBJ : opens a wavefront file and parses it into Material Groups
 // TODO: Fix  UV coords, they are upside down...
-func LoadObject(filename string, program uint32) *Mesh {
+func LoadOBJ(filename string, program uint32) *Mesh {
 	file, ferr := os.Open(filename)
 	toolbox.EoE(ferr, "Error Opening File")
 	defer file.Close()
