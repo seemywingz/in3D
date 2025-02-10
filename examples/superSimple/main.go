@@ -7,19 +7,19 @@ import (
 func main() {
 
 	in3d.Init(800, 600, "Simple Cube in3D")
-	in3d.NewLight().Position =
-		in3d.Position{X: 10, Y: 1, Z: 10}
+	// in3d.NewLight().Position =
+	// 	in3d.Position{X: 10, Y: 1, Z: 10}
 
-	// in3d.SetRelPath("../assets/textures")
-	// texture := in3d.NewTexture("seemywingz.jpg")
+	in3d.SetRelPath("../assets/textures")
+	texture := in3d.NewTexture("seemywingz.jpg")
 	// color := []float32{1.0, 0.10, 0.10}
 
 	obj := in3d.NewPointsObject(
 		in3d.NewPosition(0, 0, -7),
 		in3d.Cube,
-		in3d.NoTexture,
+		texture,
 		in3d.Blue,
-		in3d.Shader["color"],
+		in3d.Shader["texture"],
 	)
 	obj.SceneLogic = func(s *in3d.SceneData) {
 		s.XRotation += 0.1
