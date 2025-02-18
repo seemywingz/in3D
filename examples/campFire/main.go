@@ -2,6 +2,8 @@ package main
 
 import (
 	in3d "in3D"
+
+	"github.com/seemywingz/go-toolbox"
 )
 
 func main() {
@@ -43,8 +45,8 @@ func main() {
 
 	for !in3d.ShouldClose() {
 		in3d.Update()
-		if in3d.Random(0, 100)%2 == 0 {
-			flickerLight.Radius = in3d.RandomF() * 20
+		if toolbox.RandInt(0, 100)%2 == 0 {
+			flickerLight.Radius = toolbox.RandFloat() * 20
 		}
 		for _, o := range objects {
 			o.Draw()
