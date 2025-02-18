@@ -24,7 +24,7 @@ func main() {
 	light.Position = in3d.NewPosition(0, 1, 1)
 	light.Draw = true
 	light.DrawnObject.Scale = 0.05
-	light.Radius = 10
+	light.Radius = 100
 
 	dx := float32(0.01)
 	n := float32(0)
@@ -36,20 +36,19 @@ func main() {
 		s.Position.Z = n
 	}
 
-	// model := "sky"
-	// skyShader := in3d.Shader["texture"]
-	// in3d.SetRelPath("../assets/models/" + model)
-	// skymesh := in3d.LoadOBJ(model+".obj", skyShader)
-	// sky := in3d.NewMeshObject(in3d.Position{}, skymesh, skyShader)
-	// sky.Scale = 10000
-	// objects = append(objects, sky)
+	// model := "baofeng"
+	// meshShader := in3d.Shader["in3D"]
+	// in3d.SetDir("../assets/models/")
+	// mesh := in3d.LoadGLTF(model, meshShader)
+	// meshObject := in3d.NewMeshObject(in3d.NewPosition(-0.5, 0, 0), mesh, meshShader)
+	// meshObject.Scale = 1.0
+	// meshObject.YRotation = 90
+	// objects = append(objects, meshObject)
 
-	model := "baofeng"
 	meshShader := in3d.Shader["in3D"]
-	in3d.SetDir("../assets/models/")
-	mesh := in3d.LoadGLTF(model, meshShader)
+	in3d.SetDir("../assets/models/buddha")
+	mesh := in3d.LoadOBJ("buddha.obj", meshShader)
 	meshObject := in3d.NewMeshObject(in3d.NewPosition(-0.5, 0, 0), mesh, meshShader)
-	meshObject.Scale = 1.0
 	meshObject.YRotation = 90
 	objects = append(objects, meshObject)
 
