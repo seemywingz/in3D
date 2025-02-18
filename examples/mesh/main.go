@@ -50,7 +50,7 @@ func main() {
 	objects = append(objects, sky)
 
 	model = "buddha"
-	meshShader := in3d.Shader["phong"]
+	meshShader := in3d.Shader["in3D"]
 	in3d.SetDir("../assets/models/" + model)
 	mesh := in3d.LoadOBJ(model+".obj", meshShader)
 	meshObject := in3d.NewMeshObject(in3d.NewPosition(-0.5, 0, 0), mesh, meshShader)

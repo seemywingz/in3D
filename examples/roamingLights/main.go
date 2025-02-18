@@ -5,6 +5,8 @@ import (
 	"time"
 
 	in3d "in3D"
+
+	"github.com/seemywingz/go-toolbox"
 )
 
 var (
@@ -15,7 +17,7 @@ var (
 func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr uint32) {
 	for i := 0; i < numberOfObjects; i++ {
 		rand.NewSource(time.Now().UnixNano())
-		x, y, z := in3d.Random(min, max), in3d.Random(min, max), in3d.Random(min, max)
+		x, y, z := toolbox.RandInt(min, max), toolbox.RandInt(min, max), toolbox.RandInt(min, max)
 		color := []float32{1, 1, 1}
 		d := in3d.NewPointsObject(
 			in3d.NewPosition(float32(x), float32(y), float32(z)),
@@ -23,11 +25,6 @@ func randObjects(numberOfObjects, min, max int, points []float32, textr, shadr u
 			textr,
 			color,
 			shadr)
-		// d.SceneLogic = func(s *in3d.SceneData) {
-		// s.XRotation += rx
-		// s.YRotation += ry
-		// s.ZRotation += rz
-		// }
 		drawnObjects = append(drawnObjects, d)
 	}
 }
@@ -37,8 +34,8 @@ func randLights(numberOfLights, min, max int) {
 	for i := 0; i < numberOfLights; i++ {
 
 		rand.NewSource(time.Now().UnixNano())
-		x, y, z := in3d.Random(min, max), in3d.Random(min, max), in3d.Random(min, max)
-		rx, ry, rz := in3d.RandomF(), in3d.RandomF(), in3d.RandomF()
+		x, y, z := toolbox.RandInt(min, max), toolbox.RandInt(min, max), toolbox.RandInt(min, max)
+		rx, ry, rz := toolbox.RandFloat(), toolbox.RandFloat(), toolbox.RandFloat()
 		color := []float32{rx, ry, rz}
 		roamingLight := in3d.NewColorLight([]float32{0.1, 0.1, 0.1}, color, color)
 		roamingLight.Position = in3d.NewPosition(float32(x), float32(y), float32(z))
